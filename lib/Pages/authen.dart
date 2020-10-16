@@ -95,13 +95,7 @@ class _AuthenState extends State<Authen> {
         // color: Colors.white,ß
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: <Color>[
-                  Colors.orange,
-                  Colors.orange[900],
-                ])
+         
             //color: Colors.blue,
 
             //border: Border.all(color:Colors.red),
