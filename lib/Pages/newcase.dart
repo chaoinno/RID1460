@@ -15,7 +15,7 @@ class _NewcaseState extends State<Newcase> {
           constraints: BoxConstraints.expand(),
           decoration: BoxDecoration(
               image: DecorationImage(
-            image: AssetImage("images/bg-main.png"),
+            image: AssetImage("images/bg1.png"),
             fit: BoxFit.cover,
           )),
           child: Center(
@@ -78,7 +78,7 @@ class _NewcaseState extends State<Newcase> {
               height: 25,
               width: 25,
             ),
-            title: Text('หน้าหลัก'),
+            label : 'หน้าหลัก',
           ),
           BottomNavigationBarItem(
             icon: Image(
@@ -86,7 +86,7 @@ class _NewcaseState extends State<Newcase> {
               height: 25,
               width: 25,
             ),
-             title: Text('ประวัติการแจ้งเรื่อง'),
+             label : 'ประวัติการแจ้งเรื่อง',
           ),
           BottomNavigationBarItem(
             icon: Image(
@@ -94,7 +94,7 @@ class _NewcaseState extends State<Newcase> {
               height: 25,
               width: 25,
             ),
-             title: Text('ข่าวสาร'),
+             label : 'ข่าวสาร',
           ),
         ],
       ),
