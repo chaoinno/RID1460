@@ -1,21 +1,56 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Newcase extends StatefulWidget {
+  final String title;
+
+  const Newcase({Key key, this.title}) : super(key: key);
   @override
   _NewcaseState createState() => _NewcaseState();
 }
 
 class _NewcaseState extends State<Newcase> {
+  String title;
+  Future<void>readSharedPreferance()async{
+    try {
+      SharedPreferences sharedPreferences =await SharedPreferences.getInstance();
+      List<String> read = sharedPreferences.getStringList('User');
+      String email = read[0];
+      String password =read[1];
+      print('================>'+email);
+      print('================>'+password);
+    } catch (e) {
+    }
+  }
+  Future<void> getApi(String id) async {
+    String url  = "http://203.113.14.18/TestApi/api/Employee/Get/"+id;
+    Dio dio = new Dio();
+    try {
+      Response response = await dio.get(url);
+      var result = response.data;
+      print(result);
+    } catch (e) {
+    }
+  }
+  @override
+  void initState() {
+    readSharedPreferance();
+    getApi('1');
+    // TODO: implement initState
+    title = widget.title;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: Text("แจ้งเรื่องร้องเรียนใหม่")),
+      appBar: AppBar(centerTitle: true, title: Text("${widget.title}แจ้งเรื่องร้องเรียนใหม่ $title")),
       body: Center(
         child: Container(
           constraints: BoxConstraints.expand(),
           decoration: BoxDecoration(
               image: DecorationImage(
-            image: AssetImage("images/bg-main.png"),
+            image: AssetImage("images/bg1.png"),
             fit: BoxFit.cover,
           )),
           child: Center(
@@ -86,23 +121,24 @@ class _NewcaseState extends State<Newcase> {
               height: 25,
               width: 25,
             ),
-             title: Text('ประวัติการแจ้งเรื่อง'),
+             title: Text('ประวัติ'),
           ),
           BottomNavigationBarItem(
             icon: Image(
               image: AssetImage("images/tools-and-utensils.png"),
               height: 25,
-              width: 25,
+             // width: 25,
             ),
              title: Text('ข่าวสาร'),
           ),
             BottomNavigationBarItem(
+              backgroundColor: Colors.red,
             icon: Image(
-              image: AssetImage(""),
+              image: AssetImage("images/tools-and-utensils.png"),
               height: 25,
-              width: 25,
+             // width: 25,
             ),
-             title: Text('เพิ่มเติม'),
+             title: Text('เพิ่มเติม',style: TextStyle(color:Colors.red),),
           ),
         ],
       ),
