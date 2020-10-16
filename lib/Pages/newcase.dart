@@ -121,11 +121,7 @@ class _NewcaseState extends State<Newcase> {
               height: 25,
               width: 25,
             ),
-<<<<<<< HEAD
              title: Text('ประวัติ'),
-=======
-             label : 'ประวัติการแจ้งเรื่อง',
->>>>>>> 0cd7a0b72cdc000dd5f7ec85127a81b540aa2048
           ),
           BottomNavigationBarItem(
             icon: Image(
@@ -133,7 +129,6 @@ class _NewcaseState extends State<Newcase> {
               height: 25,
              // width: 25,
             ),
-<<<<<<< HEAD
              title: Text('ข่าวสาร'),
           ),
             BottomNavigationBarItem(
@@ -144,9 +139,6 @@ class _NewcaseState extends State<Newcase> {
              // width: 25,
             ),
              title: Text('เพิ่มเติม',style: TextStyle(color:Colors.red),),
-=======
-             label : 'ข่าวสาร',
->>>>>>> 0cd7a0b72cdc000dd5f7ec85127a81b540aa2048
           ),
         ],
       ),
