@@ -96,14 +96,6 @@ class _NewcaseState extends State<Newcase> {
             ),
              title: Text('ข่าวสาร'),
           ),
-            BottomNavigationBarItem(
-            icon: Image(
-              image: AssetImage(""),
-              height: 25,
-              width: 25,
-            ),
-             title: Text('เพิ่มเติม'),
-          ),
         ],
       ),
     );
