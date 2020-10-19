@@ -89,6 +89,26 @@ class _NewcaseState extends State<Newcase> {
                                   //fontWeight: FontWeight.bold
                                 )),
                           )),
+                      Container(
+                        height: 10,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: TextFormField(
+                          onSaved: (String string) {},
+                          decoration: InputDecoration(hintText: 'ประเภทเรื่อง'),
+                        ),
+                      ),
+                      Container(
+                        height: 10,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: TextFormField(
+                          onSaved: (String string) {},
+                          decoration: InputDecoration(hintText: 'รายละเอียด'),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -96,7 +116,7 @@ class _NewcaseState extends State<Newcase> {
                   height: 25,
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.2,
+                  height: MediaQuery.of(context).size.height * 0.225,
                   width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
@@ -122,6 +142,40 @@ class _NewcaseState extends State<Newcase> {
                                   //fontWeight: FontWeight.bold
                                 )),
                           )),
+                      Container(
+                        height: 15,
+                      ),
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
+                          color: Colors.grey,
+                        ),
+                        child: Center(
+                          child: Text("เลือกไฟล์เอกสาร",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.white,
+                                //fontWeight: FontWeight.bold
+                              )),
+                        ),
+                      ),
+                      Container(
+                        height: 15,
+                      ),
+                      Container(
+                        child: Center(
+                          child: Text("FileName.file",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.grey,
+                                //fontWeight: FontWeight.bold
+                              )),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -130,11 +184,11 @@ class _NewcaseState extends State<Newcase> {
           ),
         ),
       ),
-
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Container(
           child: Container(
         height: MediaQuery.of(context).size.height * 0.05,
-        width: MediaQuery.of(context).size.width * 0.9,
+        width: MediaQuery.of(context).size.width * 0.8,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15.0),
           color: Colors.orange,
@@ -172,7 +226,7 @@ class _NewcaseState extends State<Newcase> {
             icon: Image(
               image: AssetImage("images/writing (1).png"),
               height: 25,
-              color: Colors.black,
+              color: Colors.grey,
               //width: 25,
             ),
             label: 'แจ้งเรื่องร้องเรียนใหม่',
@@ -189,6 +243,7 @@ class _NewcaseState extends State<Newcase> {
             icon: Image(
               image: AssetImage("images/more.png"),
               height: 25,
+              color: Colors.grey,
               // width: 25,
             ),
             label: 'เพิ่มเติม',
