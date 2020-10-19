@@ -12,6 +12,19 @@ class Authen extends StatefulWidget {
 class _AuthenState extends State<Authen> {
   String email, password;
   final fromkey = GlobalKey<FormState>();
+
+  Widget logo() {
+    return Container(
+      margin: const EdgeInsets.only(top: 20.0),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("images/RID-logo-cmyk-TH.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
   Widget titleform() {
     return Container(
       height: MediaQuery.of(context).size.height * 0.09,
@@ -96,7 +109,39 @@ class _AuthenState extends State<Authen> {
     );
   }
 
-  Widget loginButtom() {
+  Widget forgotButton() {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        margin: const EdgeInsets.only(top: 20.0),
+        decoration: BoxDecoration(),
+        child: Center(
+          child: Text(
+            'ลืมรหัสผ่าน',
+            style: TextStyle(color: Colors.grey),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget registerButton() {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        margin: const EdgeInsets.only(top: 20.0),
+        decoration: BoxDecoration(),
+        child: Center(
+          child: Text(
+            'ลงทะเบียนสมาชิกใหม่',
+            style: TextStyle(color: Colors.orange),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget loginButton() {
     return InkWell(
       onTap: () {
         fromkey.currentState.save();
@@ -120,7 +165,8 @@ class _AuthenState extends State<Authen> {
         // print("object");
       },
       child: Container(
-        height: 30,
+        margin: const EdgeInsets.only(top: 20.0),
+        height: 40,
         width: MediaQuery.of(context).size.width * 0.7,
         // color: Colors.white,ß
         decoration: BoxDecoration(
@@ -141,20 +187,41 @@ class _AuthenState extends State<Authen> {
     );
   }
 
+  Widget facebookButton() {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        margin: const EdgeInsets.only(top: 20.0),
+        height: 40,
+        width: MediaQuery.of(context).size.width * 0.7,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          color: Colors.orange,
+        ),
+        child: Center(
+          child: Text(
+            'เข้าสู่ระบบด้วย FACEBOOK',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> loginApi() async {
     String url = '';
     Dio dio = new Dio();
-    Response response = await dio.post(url, data: {
-      "email":email,
-      "password":password,
-    },
-    //options:  Options(contentType: Headers.formUrlEncodedContentType)
+    Response response = await dio.post(
+      url,
+      data: {
+        "email": email,
+        "password": password,
+      },
+      //options:  Options(contentType: Headers.formUrlEncodedContentType)
     );
-    
+
     var result = response.data;
     //ถ้าข้อมูลList
-     
-
   }
 
   Future<void> saveSharePerence() async {
@@ -180,26 +247,46 @@ class _AuthenState extends State<Authen> {
           ),
         ),
         child: Center(
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.6,
-            width: MediaQuery.of(context).size.width * 0.9,
-            // color: Colors.white,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              color: Colors.white,
-              //border: Border.all(color:Colors.red),
-            ),
-            child: Form(
-              key: fromkey,
-              child: Column(
-                children: [
-                  titleform(),
-                  emailForm(),
-                  passwordForm(),
-                  loginButtom(),
-                ],
+          child: Column(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width * 0.4,
+                height: MediaQuery.of(context).size.width * 0.5,
+                child: logo(),
               ),
-            ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: MediaQuery.of(context).size.height * 0.5,
+                // color: Colors.white,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Colors.white,
+                  //border: Border.all(color:Colors.red),
+                ),
+                child: Form(
+                  key: fromkey,
+                  child: Column(
+                    children: [
+                      titleform(),
+                      emailForm(),
+                      passwordForm(),
+                      loginButton(),
+                      facebookButton(),
+                      Row(
+                        children: [
+                          Container(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: forgotButton()),
+                          Container(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: registerButton()),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
