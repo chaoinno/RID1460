@@ -1,22 +1,20 @@
 import 'package:RID1460/Pages/newcase.dart';
-import 'package:RID1460/Pages/registration.dart';
 import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Authen extends StatefulWidget {
+class Registration extends StatefulWidget {
   @override
-  _AuthenState createState() => _AuthenState();
+  _RegistrationState createState() => _RegistrationState();
 }
 
-class _AuthenState extends State<Authen> {
+class _RegistrationState extends State<Registration> {
   String email, password;
   final fromkey = GlobalKey<FormState>();
 
   Widget logo() {
     return Container(
-      margin: const EdgeInsets.only(top: 20.0),
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage("images/RID-logo-cmyk-TH.png"),
@@ -26,7 +24,7 @@ class _AuthenState extends State<Authen> {
     );
   }
 
-  Widget titleform() {
+  Widget titleform(String title) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.09,
       width: MediaQuery.of(context).size.width * 0.9,
@@ -41,7 +39,7 @@ class _AuthenState extends State<Authen> {
       ),
       child: Center(
           child: Text(
-        "เข้าสู่ระบบ",
+        title,
         style: TextStyle(
             fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.bold),
       )),
@@ -128,11 +126,7 @@ class _AuthenState extends State<Authen> {
 
   Widget registerButton() {
     return InkWell(
-      onTap: () {
-        MaterialPageRoute materialPageRoute = MaterialPageRoute(
-            builder: (BuildContext context) => Registration());
-        Navigator.of(context).push(materialPageRoute);
-      },
+      onTap: () {},
       child: Container(
         margin: const EdgeInsets.only(top: 20.0),
         decoration: BoxDecoration(),
@@ -196,7 +190,7 @@ class _AuthenState extends State<Authen> {
     return InkWell(
       onTap: () {},
       child: Container(
-        margin: const EdgeInsets.only(top: 20.0),
+        margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
         height: 40,
         width: MediaQuery.of(context).size.width * 0.7,
         decoration: BoxDecoration(
@@ -205,7 +199,7 @@ class _AuthenState extends State<Authen> {
         ),
         child: Center(
           child: Text(
-            'เข้าสู่ระบบด้วย FACEBOOK',
+            'ลงทะเบียนด้วย FACEBOOK',
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -241,9 +235,7 @@ class _AuthenState extends State<Authen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("Authen"),
-      // ),
+      appBar: AppBar(centerTitle: true, title: Text("ลงทะเบียนสมาชิก")),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -255,13 +247,11 @@ class _AuthenState extends State<Authen> {
           child: Column(
             children: [
               Container(
-                width: MediaQuery.of(context).size.width * 0.4,
-                height: MediaQuery.of(context).size.width * 0.5,
-                child: logo(),
+                width: MediaQuery.of(context).size.width * 0.7,
+                child: facebookButton(),
               ),
               Container(
                 width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.5,
                 // color: Colors.white,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
@@ -272,25 +262,31 @@ class _AuthenState extends State<Authen> {
                   key: fromkey,
                   child: Column(
                     children: [
-                      titleform(),
+                      titleform("ข้อมูลเข้าใช้ระบบ"),
                       emailForm(),
                       passwordForm(),
-                      loginButton(),
-                      facebookButton(),
-                      Row(
-                        children: [
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: forgotButton()),
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: registerButton()),
-                        ],
-                      ),
+                      passwordForm(),
                     ],
                   ),
                 ),
               ),
+              /*Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                // color: Colors.white,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Colors.white,
+                  //border: Border.all(color:Colors.red),
+                ),
+                child: Form(
+                  key: fromkey,
+                  child: Column(
+                    children: [
+                      titleform("ข้อมูลสมาชิก"),
+                    ],
+                  ),
+                ),
+              ),*/
             ],
           ),
         ),

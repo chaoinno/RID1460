@@ -116,7 +116,7 @@ class _NewcaseState extends State<Newcase> {
               height: 25,
               //width: 25,
             ),
-            label : 'หน้าหลัก',
+            title: Text('หน้าหลัก'),
           ),
           BottomNavigationBarItem(
             icon: Image(
