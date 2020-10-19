@@ -153,8 +153,6 @@ class _AuthenState extends State<Authen> {
     
     var result = response.data;
     //ถ้าข้อมูลList
-     
-
   }
 
   Future<void> saveSharePerence() async {

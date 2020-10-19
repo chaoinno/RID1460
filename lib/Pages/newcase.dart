@@ -44,7 +44,8 @@ class _NewcaseState extends State<Newcase> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: Text("${widget.title}แจ้งเรื่องร้องเรียนใหม่ $title")),
+      //appBar: AppBar(centerTitle: true, title: Text("${widget.title}แจ้งเรื่องร้องเรียนใหม่ $title")),
+      appBar: AppBar(centerTitle: true, title: Text("แจ้งเรื่องร้องเรียนใหม่")),
       body: Center(
         child: Container(
           constraints: BoxConstraints.expand(),
@@ -84,6 +85,7 @@ class _NewcaseState extends State<Newcase> {
                 ],
               ),
             ),
+            
           ),
         ),
       ),
@@ -106,12 +108,13 @@ class _NewcaseState extends State<Newcase> {
         ),
       )),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Image(
               image: AssetImage("images/home-icon-silhouette.png"),
               height: 25,
-              width: 25,
+              //width: 25,
             ),
             label : 'หน้าหลัก',
           ),
@@ -121,7 +124,16 @@ class _NewcaseState extends State<Newcase> {
               height: 25,
               width: 25,
             ),
-             title: Text('ประวัติ'),
+             label : 'ประวัติการแจ้งเรื่อง',
+          ),
+          BottomNavigationBarItem(
+            icon: Image(
+              image: AssetImage("images/writing (1).png"),
+              height: 25,
+              color: Colors.black,
+              //width: 25,
+            ),
+            label : 'แจ้งเรื่องร้องเรียนใหม่',
           ),
           BottomNavigationBarItem(
             icon: Image(
@@ -129,16 +141,15 @@ class _NewcaseState extends State<Newcase> {
               height: 25,
              // width: 25,
             ),
-             title: Text('ข่าวสาร'),
+             label: 'ข่าวสาร',
           ),
             BottomNavigationBarItem(
-              backgroundColor: Colors.red,
             icon: Image(
-              image: AssetImage("images/tools-and-utensils.png"),
+              image: AssetImage("images/more.png"),
               height: 25,
              // width: 25,
             ),
-             title: Text('เพิ่มเติม',style: TextStyle(color:Colors.red),),
+             label : 'เพิ่มเติม',
           ),
         ],
       ),
