@@ -11,7 +11,7 @@ class Authen extends StatefulWidget {
 }
 
 class _AuthenState extends State<Authen> {
-  String email, password;
+  String email, password, confirmPassword;
   final fromkey = GlobalKey<FormState>();
 
   Widget logo() {
@@ -262,11 +262,17 @@ class _AuthenState extends State<Authen> {
               Container(
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: MediaQuery.of(context).size.height * 0.5,
-                // color: Colors.white,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   color: Colors.white,
-                  //border: Border.all(color:Colors.red),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
+                    )
+                  ],
                 ),
                 child: Form(
                   key: fromkey,
