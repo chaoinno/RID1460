@@ -1,3 +1,5 @@
+import 'package:RID1460/Pages/authen.dart';
+import 'package:RID1460/Pages/home.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,9 +28,19 @@ class _NewcaseState extends State<Newcase> {
 
   int _selectedIndex = 2;
 
-    void _onItemTapped(int index) {
+  void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      if (index == 0) {
+        MaterialPageRoute materialPageRoute =
+            MaterialPageRoute(builder: (BuildContext context) => Home());
+        Navigator.of(context).pop();
+        Navigator.of(context).push(materialPageRoute);
+      }
+      //MaterialPageRoute materialPageRoute =
+      // MaterialPageRoute(builder: (BuildContext context) => Authen());
+      //Navigator.of(context).pop();
+      //Navigator.of(context).push(materialPageRoute);
     });
   }
 
@@ -97,14 +109,15 @@ class _NewcaseState extends State<Newcase> {
                                   //fontWeight: FontWeight.bold
                                 )),
                           )),
-                          Container(
+                      Container(
                         height: 10,
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.6,
                         child: TextFormField(
                           onSaved: (String string) {},
-                          decoration: InputDecoration(hintText: 'เบอร์โทรศัพท์'),
+                          decoration:
+                              InputDecoration(hintText: 'เบอร์โทรศัพท์'),
                         ),
                       ),
                       Container(
@@ -230,7 +243,7 @@ class _NewcaseState extends State<Newcase> {
               height: 25,
               //width: 25,
             ),
-            title : Text('หน้าหลัก'),
+            title: Text('หน้าหลัก'),
           ),
           BottomNavigationBarItem(
             icon: Image(
@@ -238,16 +251,16 @@ class _NewcaseState extends State<Newcase> {
               height: 25,
               width: 25,
             ),
-            title : Text('ประวัติการแจ้งเรื่อง'),
+            title: Text('ประวัติการแจ้งเรื่อง'),
           ),
           BottomNavigationBarItem(
-            icon: Image(            
+            icon: Image(
               image: AssetImage("images/writing (1).png"),
               height: 25,
               color: Colors.orange,
               //width: 25,
             ),
-             title : Text('แจ้งเรื่องร้องเรียนใหม่'),
+            title: Text('แจ้งเรื่องร้องเรียนใหม่'),
           ),
           BottomNavigationBarItem(
             icon: Image(
@@ -255,7 +268,7 @@ class _NewcaseState extends State<Newcase> {
               height: 25,
               // width: 25,
             ),
-             title : Text('ข่าวสาร'),
+            title: Text('ข่าวสาร'),
           ),
           BottomNavigationBarItem(
             icon: Image(
@@ -264,11 +277,12 @@ class _NewcaseState extends State<Newcase> {
               color: Colors.grey,
               // width: 25,
             ),
-             title : Text('เพิ่มเติม'),
+            title: Text('เพิ่มเติม'),
           ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.orange,
+        onTap: _onItemTapped,
       ),
     );
   }
