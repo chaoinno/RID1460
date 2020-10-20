@@ -1,3 +1,4 @@
+import 'package:RID1460/Pages/home.dart';
 import 'package:RID1460/Pages/newcase.dart';
 import 'package:RID1460/Pages/registration.dart';
 import 'package:RID1460/Utilities/nomal_dialog.dart';
@@ -162,8 +163,7 @@ class _AuthenState extends State<Authen> {
         }
         saveSharePerence();
         MaterialPageRoute materialPageRoute = MaterialPageRoute(
-            builder: (BuildContext context) => Newcase(
-                  title: email,
+            builder: (BuildContext context) => Home(
                 ));
         Navigator.of(context).pop();
         Navigator.of(context).push(materialPageRoute);
