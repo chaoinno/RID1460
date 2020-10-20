@@ -1,4 +1,5 @@
 import 'package:RID1460/Pages/authen.dart';
+import 'package:RID1460/Pages/home.dart';
 import 'package:RID1460/Pages/newcase.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Authen(),
-      //home: Newcase(),
+      //home: Home(),
     );
   }
 }
