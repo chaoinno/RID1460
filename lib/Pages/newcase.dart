@@ -24,6 +24,14 @@ class _NewcaseState extends State<Newcase> {
     } catch (e) {}
   }
 
+  int _selectedIndex = 2;
+
+    void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   Future<void> getApi(String id) async {
     String url = "http://203.113.14.18/TestApi/api/Employee/Get/" + id;
     Dio dio = new Dio();
@@ -89,6 +97,16 @@ class _NewcaseState extends State<Newcase> {
                                   //fontWeight: FontWeight.bold
                                 )),
                           )),
+                          Container(
+                        height: 10,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: TextFormField(
+                          onSaved: (String string) {},
+                          decoration: InputDecoration(hintText: 'เบอร์โทรศัพท์'),
+                        ),
+                      ),
                       Container(
                         height: 10,
                       ),
@@ -212,7 +230,7 @@ class _NewcaseState extends State<Newcase> {
               height: 25,
               //width: 25,
             ),
-            label: 'หน้าหลัก',
+            title : Text('หน้าหลัก'),
           ),
           BottomNavigationBarItem(
             icon: Image(
@@ -220,16 +238,16 @@ class _NewcaseState extends State<Newcase> {
               height: 25,
               width: 25,
             ),
-            label: 'ประวัติการแจ้งเรื่อง',
+            title : Text('ประวัติการแจ้งเรื่อง'),
           ),
           BottomNavigationBarItem(
-            icon: Image(
+            icon: Image(            
               image: AssetImage("images/writing (1).png"),
               height: 25,
-              color: Colors.grey,
+              color: Colors.orange,
               //width: 25,
             ),
-            label: 'แจ้งเรื่องร้องเรียนใหม่',
+             title : Text('แจ้งเรื่องร้องเรียนใหม่'),
           ),
           BottomNavigationBarItem(
             icon: Image(
@@ -237,7 +255,7 @@ class _NewcaseState extends State<Newcase> {
               height: 25,
               // width: 25,
             ),
-            label: 'ข่าวสาร',
+             title : Text('ข่าวสาร'),
           ),
           BottomNavigationBarItem(
             icon: Image(
@@ -246,9 +264,11 @@ class _NewcaseState extends State<Newcase> {
               color: Colors.grey,
               // width: 25,
             ),
-            label: 'เพิ่มเติม',
+             title : Text('เพิ่มเติม'),
           ),
         ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.orange,
       ),
     );
   }
