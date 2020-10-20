@@ -34,7 +34,6 @@ class _HomeState extends State<Home> {
         child: Image.asset(
           "images/home-btn1.png",
           width: MediaQuery.of(context).size.width * 0.95,
-          
         ),
       ),
     );
@@ -42,46 +41,46 @@ class _HomeState extends State<Home> {
 
   Widget historyANDnewsItem() {
     return InkWell(
-       // borderRadius: BorderRadius.circular(10.0),
+        // borderRadius: BorderRadius.circular(10.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            InkWell(
-              onTap: () {
-                //MaterialPageRoute materialPageRoute =
-                //MaterialPageRoute(builder: (BuildContext context) => );
-                //Navigator.of(context).push(materialPageRoute);
-              },
-              child: Container(
-                child: Image.asset(
-                  "images/home-btn3.png",
-                  width: MediaQuery.of(context).size.width * 0.47,
-                ),
-              ),
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        InkWell(
+          onTap: () {
+            //MaterialPageRoute materialPageRoute =
+            //MaterialPageRoute(builder: (BuildContext context) => );
+            //Navigator.of(context).push(materialPageRoute);
+          },
+          child: Container(
+            child: Image.asset(
+              "images/home-btn3.png",
+              width: MediaQuery.of(context).size.width * 0.47,
             ),
-            Container(
-              width: 5.0,
+          ),
+        ),
+        Container(
+          width: 5.0,
+        ),
+        InkWell(
+          onTap: () {
+            //MaterialPageRoute materialPageRoute =
+            //MaterialPageRoute(builder: (BuildContext context) => );
+            //Navigator.of(context).push(materialPageRoute);
+          },
+          child: Container(
+            child: Image.asset(
+              "images/home-btn4.png",
+              width: MediaQuery.of(context).size.width * 0.47,
             ),
-            InkWell(
-              onTap: () {
-                //MaterialPageRoute materialPageRoute =
-                //MaterialPageRoute(builder: (BuildContext context) => );
-                //Navigator.of(context).push(materialPageRoute);
-              },
-              child: Container(
-                child: Image.asset(
-                  "images/home-btn4.png",
-                  width: MediaQuery.of(context).size.width * 0.47,
-                ),
-              ),
-            ),
-          ],
-        ));
+          ),
+        ),
+      ],
+    ));
   }
 
   Widget contactItem() {
     return InkWell(
-     // borderRadius: BorderRadius.circular(10.0),
+      // borderRadius: BorderRadius.circular(10.0),
       onTap: () {
         //MaterialPageRoute materialPageRoute =
         //MaterialPageRoute(builder: (BuildContext context) => );
