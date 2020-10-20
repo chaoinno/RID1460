@@ -34,6 +34,7 @@ class _HomeState extends State<Home> {
         child: Image.asset(
           "images/home-btn1.png",
           width: MediaQuery.of(context).size.width * 0.95,
+          
         ),
       ),
     );
