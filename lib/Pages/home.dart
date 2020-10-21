@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:RID1460/Pages/contact.dart';
 import 'package:RID1460/Pages/newcase.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +35,7 @@ class _HomeState extends State<Home> {
         child: Image.asset(
           "images/home-btn1.png",
           width: MediaQuery.of(context).size.width * 0.95,
-          
+
         ),
       ),
     );
@@ -83,9 +84,9 @@ class _HomeState extends State<Home> {
     return InkWell(
       // borderRadius: BorderRadius.circular(10.0),
       onTap: () {
-        //MaterialPageRoute materialPageRoute =
-        //MaterialPageRoute(builder: (BuildContext context) => );
-        //Navigator.of(context).push(materialPageRoute);
+        MaterialPageRoute materialPageRoute =
+        MaterialPageRoute(builder: (BuildContext context) => Contact());
+        Navigator.of(context).push(materialPageRoute);
       },
       child: Container(
         child: Image.asset(
@@ -104,7 +105,6 @@ class _HomeState extends State<Home> {
       if (index == 2) {
         MaterialPageRoute materialPageRoute =
             MaterialPageRoute(builder: (BuildContext context) => Newcase());
-        Navigator.of(context).pop();
         Navigator.of(context).push(materialPageRoute);
       }
       //MaterialPageRoute materialPageRoute =
