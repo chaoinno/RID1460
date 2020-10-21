@@ -162,9 +162,8 @@ class _AuthenState extends State<Authen> {
           return;
         }
         saveSharePerence();
-        MaterialPageRoute materialPageRoute = MaterialPageRoute(
-            builder: (BuildContext context) => Home(
-                ));
+        MaterialPageRoute materialPageRoute =
+            MaterialPageRoute(builder: (BuildContext context) => Home());
         Navigator.of(context).pop();
         Navigator.of(context).push(materialPageRoute);
         // print("object");
@@ -216,14 +215,12 @@ class _AuthenState extends State<Authen> {
   Future<void> loginApi() async {
     String url = '';
     Dio dio = new Dio();
-    Response response = await dio.post(
-      url,
-      data: {
-        "email": email,
-        "password": password,
-      },
-      //options:  Options(contentType: Headers.formUrlEncodedContentType)
-    );
+    Response response = await dio.post(url,
+        data: {
+          "email": email,
+          "password": password,
+        },
+        options: Options(contentType: Headers.formUrlEncodedContentType));
 
     var result = response.data;
     //ถ้าข้อมูลList

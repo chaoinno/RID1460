@@ -1,5 +1,6 @@
 import 'package:RID1460/Pages/home.dart';
 import 'package:RID1460/Pages/newcase.dart';
+import 'package:RID1460/Pages/news.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -21,6 +22,10 @@ class _ContactState extends State<Contact> {
       } else if (index == 2) {
         MaterialPageRoute materialPageRoute =
             MaterialPageRoute(builder: (BuildContext context) => Newcase());
+        Navigator.of(context).push(materialPageRoute);
+      } else if (index == 3) {
+        MaterialPageRoute materialPageRoute =
+            MaterialPageRoute(builder: (BuildContext context) => News());
         Navigator.of(context).push(materialPageRoute);
       }
       //MaterialPageRoute materialPageRoute =
@@ -77,7 +82,7 @@ class _ContactState extends State<Contact> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(top: 20.0,left: 30.0),
+                      margin: const EdgeInsets.only(top: 20.0, left: 30.0),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text("อาคารศูนย์วิศวกรรมการชลประทานชั้น 1",
@@ -104,7 +109,7 @@ class _ContactState extends State<Contact> {
                     ),
                     Container(
                       margin: const EdgeInsets.only(left: 30.0),
-                     child: Align(
+                      child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text("กรุงเทพฯ 10300",
                             //textAlign: TextAlign.center,
@@ -117,7 +122,7 @@ class _ContactState extends State<Contact> {
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 20.0, left: 30.0),
-                     child: Align(
+                      child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text("โทร. 0-2669-3775",
                             //textAlign: TextAlign.center,
@@ -155,12 +160,11 @@ class _ContactState extends State<Contact> {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(top: 20.0),
-                      child: Image.asset(
-                        "images/map.png",
-                        width: MediaQuery.of(context).size.width * 0.85,
-                      )
-                    ),
+                        margin: const EdgeInsets.only(top: 20.0),
+                        child: Image.asset(
+                          "images/map.png",
+                          width: MediaQuery.of(context).size.width * 0.85,
+                        )),
                   ],
                 ),
               ),

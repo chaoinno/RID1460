@@ -1,5 +1,6 @@
 import 'package:RID1460/Pages/authen.dart';
 import 'package:RID1460/Pages/home.dart';
+import 'package:RID1460/Pages/news.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +37,10 @@ class _NewcaseState extends State<Newcase> {
             MaterialPageRoute(builder: (BuildContext context) => Home());
         Navigator.of(context).pop();
         Navigator.of(context).push(materialPageRoute);
+      } else if (index == 3) {
+        MaterialPageRoute materialPageRoute =
+            MaterialPageRoute(builder: (BuildContext context) => News());
+        Navigator.of(context).push(materialPageRoute);
       }
       //MaterialPageRoute materialPageRoute =
       // MaterialPageRoute(builder: (BuildContext context) => Authen());
@@ -44,8 +49,12 @@ class _NewcaseState extends State<Newcase> {
     });
   }
 
-  Future<void> getApi(String id) async {
-    String url = "http://203.113.14.18/TestApi/api/Employee/Get/" + id;
+  Future<void> getApi(String session, userid) async {
+    String url =
+        "http://1.179.246.34/OPPP_Test/webservice.asmx/checksession?sessionid=" +
+            session +
+            "&userid=" +
+            userid;
     Dio dio = new Dio();
     try {
       Response response = await dio.get(url);
@@ -57,16 +66,18 @@ class _NewcaseState extends State<Newcase> {
   @override
   void initState() {
     readSharedPreferance();
-    getApi('1');
+    getApi('104', '3');
     // TODO: implement initState
     title = widget.title;
     super.initState();
   }
 
+  final List<String> _dropdownValues = ["GET", "DATA", "IN", "DATABASE"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //appBar: AppBar(centerTitle: true, title: Text("${widget.title}แจ้งเรื่องร้องเรียนใหม่ $title")),
+      //appBar: AppBar(centerTitle: true, title: Text("$title")),
       appBar: AppBar(centerTitle: true, title: Text("แจ้งเรื่องร้องเรียนใหม่")),
       body: Center(
         child: Container(
@@ -83,7 +94,7 @@ class _NewcaseState extends State<Newcase> {
                   height: 25,
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.4,
+                  height: MediaQuery.of(context).size.height * 0.45,
                   width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
@@ -113,7 +124,40 @@ class _NewcaseState extends State<Newcase> {
                         height: 10,
                       ),
                       Container(
-                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: Row(
+                          children: [
+                            Container(
+                              margin:
+                                  const EdgeInsets.only(top: 5.0, left: 30.0),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text("เบอร์โทรศัพท์",
+                                    //textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.black,
+                                      //fontWeight: FontWeight.bold
+                                    )),
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 5.0),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text("*",
+                                    //textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.red,
+                                      //fontWeight: FontWeight.bold
+                                    )),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 30.0, right: 30.0),
                         child: TextFormField(
                           onSaved: (String string) {},
                           decoration:
@@ -121,20 +165,92 @@ class _NewcaseState extends State<Newcase> {
                         ),
                       ),
                       Container(
-                        height: 10,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        child: TextFormField(
-                          onSaved: (String string) {},
-                          decoration: InputDecoration(hintText: 'ประเภทเรื่อง'),
+                        child: Row(
+                          children: [
+                            Container(
+                              margin:
+                                  const EdgeInsets.only(top: 5.0, left: 30.0),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text("ประเภทเรื่อง",
+                                    //textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.black,
+                                      //fontWeight: FontWeight.bold
+                                    )),
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 5.0),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text("*",
+                                    //textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.red,
+                                      //fontWeight: FontWeight.bold
+                                    )),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Container(
-                        height: 10,
+                        margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+                        child: DropdownButton(
+                         // dropdownColor: Colors.grey,
+                          items: _dropdownValues
+                              .map((value) => DropdownMenuItem(
+                                    child: Text(value),
+                                    value: value,
+                                  ))
+                              .toList(),
+                          onChanged: (String value) {
+                            setState((){
+                              value = value;
+                            });
+                          },
+                          isExpanded: true,
+                          hint: Text('ประเภทเรื่อง'),
+                        ),
                       ),
                       Container(
-                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: Row(
+                          children: [
+                            Container(
+                              margin:
+                                  const EdgeInsets.only(top: 5.0, left: 30.0),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text("รายละเอียด",
+                                    //textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.black,
+                                      //fontWeight: FontWeight.bold
+                                    )),
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 5.0),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text("*",
+                                    //textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.red,
+                                      //fontWeight: FontWeight.bold
+                                    )),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 30.0, right: 30.0),
                         child: TextFormField(
                           onSaved: (String string) {},
                           decoration: InputDecoration(hintText: 'รายละเอียด'),
@@ -144,10 +260,8 @@ class _NewcaseState extends State<Newcase> {
                   ),
                 ),
                 Container(
-                  height: 25,
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.225,
+                  margin: const EdgeInsets.only(top: 15.0,),
+                  height: MediaQuery.of(context).size.height * 0.2,
                   width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
@@ -174,9 +288,7 @@ class _NewcaseState extends State<Newcase> {
                                 )),
                           )),
                       Container(
-                        height: 15,
-                      ),
-                      Container(
+                        margin: const EdgeInsets.only(top:10.0),
                         height: MediaQuery.of(context).size.height * 0.05,
                         width: MediaQuery.of(context).size.width * 0.8,
                         decoration: BoxDecoration(
@@ -194,7 +306,7 @@ class _NewcaseState extends State<Newcase> {
                         ),
                       ),
                       Container(
-                        height: 15,
+                        height: 5.0,
                       ),
                       Container(
                         child: Center(

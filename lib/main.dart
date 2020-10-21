@@ -2,6 +2,7 @@ import 'package:RID1460/Pages/authen.dart';
 import 'package:RID1460/Pages/contact.dart';
 import 'package:RID1460/Pages/home.dart';
 import 'package:RID1460/Pages/newcase.dart';
+import 'package:RID1460/Pages/news.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -19,7 +20,6 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Authen(),
-      //home: Home(),
     );
   }
 }
