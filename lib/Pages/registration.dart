@@ -2,6 +2,7 @@ import 'package:RID1460/Pages/newcase.dart';
 import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Registration extends StatefulWidget {
@@ -10,7 +11,7 @@ class Registration extends StatefulWidget {
 }
 
 class _RegistrationState extends State<Registration> {
-  String email, password;
+  String email, password, confirmPassword, prefixName, firstName, lastName;
   final fromkey = GlobalKey<FormState>();
 
   Widget logo() {
@@ -63,13 +64,23 @@ class _RegistrationState extends State<Registration> {
               ),
             ),
           ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.6,
+          SizedBox(width: 15.0),
+          Flexible(
+            flex: 3,
             child: TextFormField(
+              autofocus: false,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                WhitelistingTextInputFormatter.digitsOnly
+              ],
               onSaved: (String string) {
                 email = string.trim();
               },
-              decoration: InputDecoration(hintText: 'อีเมล'),
+              validator: (value) => value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+              decoration: InputDecoration(
+                labelText: 'อีเมล (ID) *',
+                hintText: 'user@mail.com',
+              ),
             ),
           ),
         ],
@@ -94,13 +105,151 @@ class _RegistrationState extends State<Registration> {
               ),
             ),
           ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.6,
+          SizedBox(width: 15.0),
+          Flexible(
+            flex: 3,
             child: TextFormField(
+              autofocus: false,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                WhitelistingTextInputFormatter.digitsOnly
+              ],
               onSaved: (String string) {
                 password = string.trim();
               },
-              decoration: InputDecoration(hintText: 'รหัสผ่าน'),
+              validator: (value) => value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+              decoration: InputDecoration(
+                labelText: 'รหัสผ่าน *',
+                hintText: 'รหัสผ่าน',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget confirmPasswordForm() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.8,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Container(
+            // margin: EdgeInsets.all(10),
+            height: 40,
+            width: 40,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("images/key.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          SizedBox(width: 15.0),
+          Flexible(
+            flex: 3,
+            child: TextFormField(
+              autofocus: false,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                WhitelistingTextInputFormatter.digitsOnly
+              ],
+              onSaved: (String string) {
+                confirmPassword = string.trim();
+              },
+              validator: (value) => value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+              decoration: InputDecoration(
+                labelText: 'ยืนยันรหัสผ่าน *',
+                hintText: 'รหัสผ่าน',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget prefixNameForm() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.8,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Flexible(
+            flex: 3,
+            child: TextFormField(
+              autofocus: false,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                WhitelistingTextInputFormatter.digitsOnly
+              ],
+              onSaved: (String string) {
+                prefixName = string.trim();
+              },
+              validator: (value) => value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+              decoration: InputDecoration(
+                labelText: 'คำนำหน้าชื่อ *',
+                hintText: 'นาย / นางสาว / นาง / ฯลฯ',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget firstNameForm() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.38,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Flexible(
+            flex: 3,
+            child: TextFormField(
+              autofocus: false,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                WhitelistingTextInputFormatter.digitsOnly
+              ],
+              onSaved: (String string) {
+                prefixName = string.trim();
+              },
+              validator: (value) => value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+              decoration: InputDecoration(
+                labelText: 'ชื่อ *',
+                hintText: 'ชื่อ',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget lastNameForm() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.39,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Flexible(
+            flex: 3,
+            child: TextFormField(
+              autofocus: false,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                WhitelistingTextInputFormatter.digitsOnly
+              ],
+              onSaved: (String string) {
+                lastName = string.trim();
+              },
+              validator: (value) => value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+              decoration: InputDecoration(
+                labelText: 'นามสกุล *',
+                hintText: 'นามสกุล',
+              ),
             ),
           ),
         ],
@@ -243,53 +392,79 @@ class _RegistrationState extends State<Registration> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Center(
-          child: Column(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.7,
-                child: facebookButton(),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                // color: Colors.white,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: Colors.white,
-                  //border: Border.all(color:Colors.red),
+        child: ListView(scrollDirection: Axis.vertical, children: <Widget>[
+          Center(
+            child: Column(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  child: facebookButton(),
                 ),
-                child: Form(
-                  key: fromkey,
-                  child: Column(
-                    children: [
-                      titleform("ข้อมูลเข้าใช้ระบบ"),
-                      emailForm(),
-                      passwordForm(),
-                      passwordForm(),
+                Container(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
+                      )
                     ],
                   ),
-                ),
-              ),
-              /*Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                // color: Colors.white,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: Colors.white,
-                  //border: Border.all(color:Colors.red),
-                ),
-                child: Form(
-                  key: fromkey,
-                  child: Column(
-                    children: [
-                      titleform("ข้อมูลสมาชิก"),
-                    ],
+                  child: Form(
+                    key: fromkey,
+                    child: Column(
+                      children: [
+                        titleform("ข้อมูลเข้าใช้ระบบ"),
+                        emailForm(),
+                        passwordForm(),
+                        confirmPasswordForm(),
+                      ],
+                    ),
                   ),
                 ),
-              ),*/
-            ],
+                Container(
+                  margin: const EdgeInsets.only(top: 20.0),
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        )
+                      ]),
+                  child: Form(
+                    child: Column(
+                      children: [
+                        titleform("ข้อมูลสมาชิก"),
+                        prefixNameForm(),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: Row(
+                            children: [
+                              firstNameForm(),
+                              SizedBox(width: 10.0),
+                              lastNameForm()
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+        ]),
       ),
     );
   }
