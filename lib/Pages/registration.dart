@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum Gender { men, women }
+
 class Registration extends StatefulWidget {
   @override
   _RegistrationState createState() => _RegistrationState();
@@ -13,6 +15,13 @@ class Registration extends StatefulWidget {
 class _RegistrationState extends State<Registration> {
   String email, password, confirmPassword, prefixName, firstName, lastName;
   final fromkey = GlobalKey<FormState>();
+  int selectedRadio;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedRadio = 1;
+  }
 
   Widget logo() {
     return Container(
@@ -27,7 +36,7 @@ class _RegistrationState extends State<Registration> {
 
   Widget titleform(String title) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.09,
+      height: MediaQuery.of(context).size.height * 0.08,
       width: MediaQuery.of(context).size.width * 0.9,
       // color: Colors.white,
       decoration: BoxDecoration(
@@ -356,6 +365,50 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
+  setSelectedRadio(int val) {
+    setState(() {
+      selectedRadio = val;
+    });
+  }
+
+  Widget genderForm() {
+    return ButtonBar(
+      alignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Radio(
+          value: 1,
+          groupValue: selectedRadio,
+          activeColor: Colors.orange,
+          onChanged: (val) {
+            print("Radio $val");
+            setSelectedRadio(val);
+          },
+        ),
+        Text(
+          'ชาย',
+          style: new TextStyle(
+            fontSize: 17.0,
+          ),
+        ),
+        Radio(
+          value: 2,
+          groupValue: selectedRadio,
+          activeColor: Colors.orange,
+          onChanged: (val) {
+            print("Radio $val");
+            setSelectedRadio(val);
+          },
+        ),
+        Text(
+          'หญิง',
+          style: new TextStyle(
+            fontSize: 17.0,
+          ),
+        ),
+      ],
+    );
+  }
+
   Future<void> loginApi() async {
     String url = '';
     Dio dio = new Dio();
@@ -457,6 +510,18 @@ class _RegistrationState extends State<Registration> {
                             ],
                           ),
                         ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 10.0),
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: Text(
+                            'เพศ *',
+                            style: new TextStyle(
+                              color: Colors.black45,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                        genderForm(),
                       ],
                     ),
                   ),
