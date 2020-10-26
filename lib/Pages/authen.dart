@@ -6,6 +6,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'officer_webview.dart';
+
 class Authen extends StatefulWidget {
   @override
   _AuthenState createState() => _AuthenState();
@@ -164,7 +166,6 @@ class _AuthenState extends State<Authen> {
         saveSharePerence();
         MaterialPageRoute materialPageRoute =
             MaterialPageRoute(builder: (BuildContext context) => Home());
-        Navigator.of(context).pop();
         Navigator.of(context).push(materialPageRoute);
         // print("object");
       },
@@ -193,7 +194,11 @@ class _AuthenState extends State<Authen> {
 
   Widget facebookButton() {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        MaterialPageRoute materialPageRoute =
+            MaterialPageRoute(builder: (BuildContext context) => OfficerWebView());
+        Navigator.of(context).push(materialPageRoute);
+      },
       child: Container(
         margin: const EdgeInsets.only(top: 20.0),
         height: 40,

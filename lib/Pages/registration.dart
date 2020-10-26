@@ -1,11 +1,9 @@
-import 'package:RID1460/Pages/newcase.dart';
-import 'package:RID1460/Utilities/nomal_dialog.dart';
+
 import 'package:dio/dio.dart';
+import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-enum Gender { men, women }
 
 class Registration extends StatefulWidget {
   @override
@@ -13,14 +11,23 @@ class Registration extends StatefulWidget {
 }
 
 class _RegistrationState extends State<Registration> {
-  String email, password, confirmPassword, prefixName, firstName, lastName;
+  String email,
+      password,
+      confirmPassword,
+      prefixName,
+      firstName,
+      lastName,
+      nationalId,
+      address,
+      postalCode,
+      phoneNumber;
   final fromkey = GlobalKey<FormState>();
-  int selectedRadio;
+  int selectedGender, selectedSubDistrict, selectedDistrict, selectedProvince;
 
   @override
   void initState() {
     super.initState();
-    selectedRadio = 1;
+    selectedGender = 1;
   }
 
   Widget logo() {
@@ -77,11 +84,8 @@ class _RegistrationState extends State<Registration> {
           Flexible(
             flex: 3,
             child: TextFormField(
+              keyboardType: TextInputType.emailAddress,
               autofocus: false,
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                WhitelistingTextInputFormatter.digitsOnly
-              ],
               onSaved: (String string) {
                 email = string.trim();
               },
@@ -119,14 +123,12 @@ class _RegistrationState extends State<Registration> {
             flex: 3,
             child: TextFormField(
               autofocus: false,
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                WhitelistingTextInputFormatter.digitsOnly
-              ],
+              keyboardType: TextInputType.text,
               onSaved: (String string) {
                 password = string.trim();
               },
-              validator: (value) => value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+              validator: (value) =>
+                  value.length < 6 ? 'รหัสผ่านไม่น้อยกว่า 6 ตัวอักษร' : null,
               decoration: InputDecoration(
                 labelText: 'รหัสผ่าน *',
                 hintText: 'รหัสผ่าน',
@@ -160,14 +162,15 @@ class _RegistrationState extends State<Registration> {
             flex: 3,
             child: TextFormField(
               autofocus: false,
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.visiblePassword,
               inputFormatters: <TextInputFormatter>[
                 WhitelistingTextInputFormatter.digitsOnly
               ],
               onSaved: (String string) {
                 confirmPassword = string.trim();
               },
-              validator: (value) => value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+              validator: (value) =>
+                  value.length < 6 ? 'รหัสผ่านไม่น้อยกว่า 6 ตัวอักษร' : null,
               decoration: InputDecoration(
                 labelText: 'ยืนยันรหัสผ่าน *',
                 hintText: 'รหัสผ่าน',
@@ -189,10 +192,7 @@ class _RegistrationState extends State<Registration> {
             flex: 3,
             child: TextFormField(
               autofocus: false,
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                WhitelistingTextInputFormatter.digitsOnly
-              ],
+              keyboardType: TextInputType.text,
               onSaved: (String string) {
                 prefixName = string.trim();
               },
@@ -218,10 +218,7 @@ class _RegistrationState extends State<Registration> {
             flex: 3,
             child: TextFormField(
               autofocus: false,
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                WhitelistingTextInputFormatter.digitsOnly
-              ],
+              keyboardType: TextInputType.text,
               onSaved: (String string) {
                 prefixName = string.trim();
               },
@@ -247,10 +244,7 @@ class _RegistrationState extends State<Registration> {
             flex: 3,
             child: TextFormField(
               autofocus: false,
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                WhitelistingTextInputFormatter.digitsOnly
-              ],
+              keyboardType: TextInputType.text,
               onSaved: (String string) {
                 lastName = string.trim();
               },
@@ -266,78 +260,29 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  Widget forgotButton() {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        margin: const EdgeInsets.only(top: 20.0),
-        decoration: BoxDecoration(),
-        child: Center(
-          child: Text(
-            'ลืมรหัสผ่าน',
-            style: TextStyle(color: Colors.grey),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget registerButton() {
     return InkWell(
       onTap: () {},
       child: Container(
         margin: const EdgeInsets.only(top: 20.0),
-        decoration: BoxDecoration(),
-        child: Center(
-          child: Text(
-            'ลงทะเบียนสมาชิกใหม่',
-            style: TextStyle(color: Colors.orange),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget loginButton() {
-    return InkWell(
-      onTap: () {
-        fromkey.currentState.save();
-        if (email.isEmpty) {
-          print("email isEmpty");
-          normalDialog(context, 'Email', 'กรุณากรอก email');
-          return;
-        }
-        if (password.isEmpty) {
-          print("password isEmpty");
-          normalDialog(context, 'password', 'กรุณากรอก password');
-          return;
-        }
-        saveSharePerence();
-        MaterialPageRoute materialPageRoute = MaterialPageRoute(
-            builder: (BuildContext context) => Newcase(
-                  title: email,
-                ));
-        Navigator.of(context).pop();
-        Navigator.of(context).push(materialPageRoute);
-        // print("object");
-      },
-      child: Container(
-        margin: const EdgeInsets.only(top: 20.0),
         height: 40,
         width: MediaQuery.of(context).size.width * 0.7,
-        // color: Colors.white,ß
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
-
-          color: Colors.blue,
-
-          //border: Border.all(color:Colors.red),
+          color: Colors.orange,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12.withOpacity(0.2),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 3), // changes position of shadow
+            )
+          ],
         ),
-
         child: Center(
           child: Text(
-            'เข้าสู่ระบบ',
-            style: TextStyle(color: Colors.white),
+            'ลงทะเบียน',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -354,20 +299,28 @@ class _RegistrationState extends State<Registration> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           color: Colors.orange,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12.withOpacity(0.2),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 3), // changes position of shadow
+            )
+          ],
         ),
         child: Center(
           child: Text(
             'ลงทะเบียนด้วย FACEBOOK',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
       ),
     );
   }
 
-  setSelectedRadio(int val) {
+  setSelectedGenderRadio(int val) {
     setState(() {
-      selectedRadio = val;
+      selectedGender = val;
     });
   }
 
@@ -377,11 +330,11 @@ class _RegistrationState extends State<Registration> {
       children: <Widget>[
         Radio(
           value: 1,
-          groupValue: selectedRadio,
+          groupValue: selectedGender,
           activeColor: Colors.orange,
           onChanged: (val) {
             print("Radio $val");
-            setSelectedRadio(val);
+            setSelectedGenderRadio(val);
           },
         ),
         Text(
@@ -392,11 +345,11 @@ class _RegistrationState extends State<Registration> {
         ),
         Radio(
           value: 2,
-          groupValue: selectedRadio,
+          groupValue: selectedGender,
           activeColor: Colors.orange,
           onChanged: (val) {
             print("Radio $val");
-            setSelectedRadio(val);
+            setSelectedGenderRadio(val);
           },
         ),
         Text(
@@ -406,6 +359,240 @@ class _RegistrationState extends State<Registration> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget nationalIdForm() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.8,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Flexible(
+            flex: 3,
+            child: TextFormField(
+              autofocus: false,
+              keyboardType: TextInputType.number,
+              onSaved: (String string) {
+                nationalId = string.trim();
+              },
+              validator: (value) => value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+              decoration: InputDecoration(
+                labelText: 'รหัสประจำตัวประชาชน *',
+                hintText: 'รหัสประจำตัวประชาชน 13 หลัก',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget addressForm() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.8,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Flexible(
+            flex: 3,
+            child: TextFormField(
+              autofocus: false,
+              keyboardType: TextInputType.text,
+              onSaved: (String string) {
+                address = string.trim();
+              },
+              validator: (value) => value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+              decoration: InputDecoration(
+                labelText: 'ที่อยู่ *',
+                hintText: 'บ้านเลขที่ / ซอย / หมู่ / ถนน',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget provinceListViewForm() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.45,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(left: 20),
+            child: DropDownFormField(
+              titleText: 'จังหวัด *',
+              hintText: 'จังหวัด',
+              value: selectedProvince,
+              onSaved: (value) {
+                setState(() {
+                  selectedProvince = value;
+                });
+              },
+              onChanged: (newvalue) {
+                setState(() {
+                  selectedProvince = newvalue;
+                });
+              },
+              dataSource: [
+                {
+                  "display": "Running",
+                  "value": 1,
+                },
+                {
+                  "display": "Climbing",
+                  "value": 2,
+                },
+              ],
+              textField: 'display',
+              valueField: 'value',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget districtListViewForm() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.4,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(left: 5),
+            child: DropDownFormField(
+              titleText: 'อำเภอ *',
+              hintText: 'อำเภอ',
+              value: selectedDistrict,
+              onSaved: (value) {
+                setState(() {
+                  selectedDistrict = value;
+                });
+              },
+              onChanged: (newvalue) {
+                setState(() {
+                  selectedDistrict = newvalue;
+                });
+              },
+              dataSource: [
+                {
+                  "display": "Running",
+                  "value": 1,
+                },
+                {
+                  "display": "Climbing",
+                  "value": 2,
+                },
+              ],
+              textField: 'display',
+              valueField: 'value',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget subDistrictListViewForm() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.45,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(left: 20),
+            child: DropDownFormField(
+              titleText: 'ตำบล *',
+              hintText: 'ตำบล',
+              value: selectedSubDistrict,
+              onSaved: (value) {
+                setState(() {
+                  selectedSubDistrict = value;
+                });
+              },
+              onChanged: (newvalue) {
+                setState(() {
+                  selectedSubDistrict = newvalue;
+                });
+              },
+              dataSource: [
+                {
+                  "display": "Running",
+                  "value": 1,
+                },
+                {
+                  "display": "Climbing",
+                  "value": 2,
+                },
+              ],
+              textField: 'display',
+              valueField: 'value',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget postalCodeForm() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.39,
+      padding: EdgeInsets.only(left: 5, top: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Flexible(
+            flex: 3,
+            child: TextFormField(
+              autofocus: false,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                WhitelistingTextInputFormatter.digitsOnly
+              ],
+              onSaved: (String string) {
+                postalCode = string.trim();
+              },
+              validator: (value) => value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+              decoration: InputDecoration(
+                labelText: 'รหัสไปรษณีย์ *',
+                hintText: 'รหัสไปรษณีย์',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget phoneNumberForm() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.8,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Flexible(
+            flex: 3,
+            child: TextFormField(
+              autofocus: false,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                WhitelistingTextInputFormatter.digitsOnly
+              ],
+              onSaved: (String string) {
+                phoneNumber = string.trim();
+              },
+              validator: (value) => value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+              decoration: InputDecoration(
+                labelText: 'เบอร์โทรศัพท์ *',
+                hintText: 'เบอร์โทรศัพท์',
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -436,55 +623,39 @@ class _RegistrationState extends State<Registration> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(centerTitle: true, title: Text("ลงทะเบียนสมาชิก")),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("images/bg1.png"),
-            fit: BoxFit.cover,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onPanDown: (_) {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(centerTitle: true, title: Text("ลงทะเบียนสมาชิก")),
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("images/bg1.png"),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: ListView(scrollDirection: Axis.vertical, children: <Widget>[
-          Center(
-            child: Column(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  child: facebookButton(),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(bottom: 20.0),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      )
-                    ],
+          child: ListView(scrollDirection: Axis.vertical, children: <Widget>[
+            Center(
+              child: Column(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: facebookButton(),
                   ),
-                  child: Form(
-                    key: fromkey,
-                    child: Column(
-                      children: [
-                        titleform("ข้อมูลเข้าใช้ระบบ"),
-                        emailForm(),
-                        passwordForm(),
-                        confirmPasswordForm(),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 20.0),
-                  padding: const EdgeInsets.only(bottom: 20.0),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  decoration: BoxDecoration(
+                  Container(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
                       color: Colors.white,
                       boxShadow: [
@@ -494,42 +665,94 @@ class _RegistrationState extends State<Registration> {
                           blurRadius: 7,
                           offset: Offset(0, 3), // changes position of shadow
                         )
-                      ]),
-                  child: Form(
-                    child: Column(
-                      children: [
-                        titleform("ข้อมูลสมาชิก"),
-                        prefixNameForm(),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          child: Row(
-                            children: [
-                              firstNameForm(),
-                              SizedBox(width: 10.0),
-                              lastNameForm()
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 10.0),
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          child: Text(
-                            'เพศ *',
-                            style: new TextStyle(
-                              color: Colors.black45,
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ),
-                        genderForm(),
                       ],
                     ),
+                    child: Form(
+                      key: fromkey,
+                      child: Column(
+                        children: [
+                          titleform("ข้อมูลเข้าใช้ระบบ"),
+                          emailForm(),
+                          passwordForm(),
+                          confirmPasswordForm(),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                  Container(
+                    margin: const EdgeInsets.only(top: 20.0),
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          )
+                        ]),
+                    child: Form(
+                      child: Column(
+                        children: [
+                          titleform("ข้อมูลสมาชิก"),
+                          prefixNameForm(),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            child: Row(
+                              children: [
+                                firstNameForm(),
+                                SizedBox(width: 10.0),
+                                lastNameForm()
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 10.0),
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            child: Text(
+                              'เพศ *',
+                              style: new TextStyle(
+                                color: Colors.black45,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          ),
+                          genderForm(),
+                          nationalIdForm(),
+                          addressForm(),
+                          Container(
+                            child: Row(
+                              children: [
+                                provinceListViewForm(),
+                                districtListViewForm(),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            child: Row(
+                              children: [
+                                subDistrictListViewForm(),
+                                postalCodeForm(),
+                              ],
+                            ),
+                          ),
+                          phoneNumberForm(),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: registerButton(),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ]),
+          ]),
+        ),
       ),
     );
   }

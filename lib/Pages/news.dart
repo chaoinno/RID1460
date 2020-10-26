@@ -82,7 +82,6 @@ class _NewsState extends State<News> {
                 itemBuilder: (context, index) {
                   return ListTile(
                     title: Text("${items[index]}"),
-                    tileColor: Colors.white,
                   );
                 }),),
           ],
