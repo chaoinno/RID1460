@@ -1,11 +1,11 @@
 import 'package:RID1460/Pages/home.dart';
-import 'package:RID1460/Pages/newcase.dart';
 import 'package:RID1460/Pages/registration.dart';
 import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'bottom_nav_parent.dart';
 import 'officer_webview.dart';
 
 class Authen extends StatefulWidget {
@@ -196,7 +196,7 @@ class _AuthenState extends State<Authen> {
     return InkWell(
       onTap: () {
         MaterialPageRoute materialPageRoute =
-            MaterialPageRoute(builder: (BuildContext context) => OfficerWebView());
+            MaterialPageRoute(builder: (BuildContext context) => BottomNavBarParent());
         Navigator.of(context).push(materialPageRoute);
       },
       child: Container(

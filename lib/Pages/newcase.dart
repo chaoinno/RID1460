@@ -27,28 +27,6 @@ class _NewcaseState extends State<Newcase> {
     } catch (e) {}
   }
 
-  int _selectedIndex = 2;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      if (index == 0) {
-        MaterialPageRoute materialPageRoute =
-            MaterialPageRoute(builder: (BuildContext context) => Home());
-        Navigator.of(context).pop();
-        Navigator.of(context).push(materialPageRoute);
-      } else if (index == 3) {
-        MaterialPageRoute materialPageRoute =
-            MaterialPageRoute(builder: (BuildContext context) => News());
-        Navigator.of(context).push(materialPageRoute);
-      }
-      //MaterialPageRoute materialPageRoute =
-      // MaterialPageRoute(builder: (BuildContext context) => Authen());
-      //Navigator.of(context).pop();
-      //Navigator.of(context).push(materialPageRoute);
-    });
-  }
-
   Future<void> getApi(String session, userid) async {
     String url =
         "http://1.179.246.34/OPPP_Test/webservice.asmx/checksession?sessionid=" +
@@ -346,56 +324,6 @@ class _NewcaseState extends State<Newcase> {
               )),
         ),
       )),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Image(
-              image: AssetImage("images/home-icon-silhouette.png"),
-              height: 25,
-              //width: 25,
-            ),
-            title: Text('หน้าหลัก'),
-          ),
-          BottomNavigationBarItem(
-            icon: Image(
-              image: AssetImage("images/interface.png"),
-              height: 25,
-              width: 25,
-            ),
-            title: Text('ประวัติการแจ้งเรื่อง'),
-          ),
-          BottomNavigationBarItem(
-            icon: Image(
-              image: AssetImage("images/writing (1).png"),
-              height: 25,
-              color: Colors.orange,
-              //width: 25,
-            ),
-            title: Text('แจ้งเรื่องร้องเรียนใหม่'),
-          ),
-          BottomNavigationBarItem(
-            icon: Image(
-              image: AssetImage("images/tools-and-utensils.png"),
-              height: 25,
-              // width: 25,
-            ),
-            title: Text('ข่าวสาร'),
-          ),
-          BottomNavigationBarItem(
-            icon: Image(
-              image: AssetImage("images/more.png"),
-              height: 25,
-              color: Colors.grey,
-              // width: 25,
-            ),
-            title: Text('เพิ่มเติม'),
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.orange,
-        onTap: _onItemTapped,
-      ),
     );
   }
 }
