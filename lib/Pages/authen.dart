@@ -1,4 +1,4 @@
-import 'package:RID1460/Pages/home.dart';
+import 'package:RID1460/Pages/forgot_password.dart';
 import 'package:RID1460/Pages/registration.dart';
 import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:dio/dio.dart';
@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bottom_nav_parent.dart';
-import 'officer_webview.dart';
 
 class Authen extends StatefulWidget {
   @override
@@ -115,7 +114,11 @@ class _AuthenState extends State<Authen> {
 
   Widget forgotButton() {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        MaterialPageRoute materialPageRoute = MaterialPageRoute(
+            builder: (BuildContext context) => ForgotPassword());
+        Navigator.of(context).push(materialPageRoute);
+      },
       child: Container(
         margin: const EdgeInsets.only(top: 20.0),
         decoration: BoxDecoration(),
@@ -164,9 +167,9 @@ class _AuthenState extends State<Authen> {
           return;
         }
         saveSharePerence();
-        MaterialPageRoute materialPageRoute =
-            MaterialPageRoute(builder: (BuildContext context) => Home());
-        Navigator.of(context).push(materialPageRoute);
+        MaterialPageRoute materialPageRoute = MaterialPageRoute(
+            builder: (BuildContext context) => BottomNavBarParent());
+        Navigator.of(context).pushReplacement(materialPageRoute);
         // print("object");
       },
       child: Container(
@@ -195,9 +198,9 @@ class _AuthenState extends State<Authen> {
   Widget facebookButton() {
     return InkWell(
       onTap: () {
-        MaterialPageRoute materialPageRoute =
-            MaterialPageRoute(builder: (BuildContext context) => BottomNavBarParent());
-        Navigator.of(context).push(materialPageRoute);
+        // MaterialPageRoute materialPageRoute = MaterialPageRoute(
+        //     builder: (BuildContext context) => BottomNavBarParent());
+        // Navigator.of(context).push(materialPageRoute);
       },
       child: Container(
         margin: const EdgeInsets.only(top: 20.0),
@@ -242,61 +245,81 @@ class _AuthenState extends State<Authen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("Authen"),
-      // ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("images/bg1.png"),
-            fit: BoxFit.cover,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onPanDown: (_) {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        // appBar: AppBar(
+        //   title: Text("ลงชื่อเข้าใช้"),
+        // ),
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("images/bg1.png"),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: Center(
-          child: Column(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.4,
-                height: MediaQuery.of(context).size.width * 0.5,
-                child: logo(),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.5,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
-                    )
-                  ],
-                ),
-                child: Form(
-                  key: fromkey,
-                  child: Column(
-                    children: [
-                      titleform(),
-                      emailForm(),
-                      passwordForm(),
-                      loginButton(),
-                      facebookButton(),
-                      Row(
-                        children: [
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: forgotButton()),
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: registerButton()),
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            children: <Widget>[
+              Center(
+                child: Column(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      height: MediaQuery.of(context).size.width * 0.5,
+                      child: logo(),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          )
                         ],
                       ),
-                    ],
-                  ),
+                      child: Form(
+                        key: fromkey,
+                        child: Column(
+                          children: [
+                            titleform(),
+                            emailForm(),
+                            passwordForm(),
+                            loginButton(),
+                            facebookButton(),
+                            Row(
+                              children: [
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    child: forgotButton()),
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    child: registerButton()),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

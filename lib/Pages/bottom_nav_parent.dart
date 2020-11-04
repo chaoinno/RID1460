@@ -1,9 +1,9 @@
+import 'package:RID1460/Pages/case_history.dart';
 import 'package:RID1460/Pages/home.dart';
+import 'package:RID1460/Pages/more.dart';
 import 'package:RID1460/Pages/newcase.dart';
 import 'package:RID1460/Pages/news.dart';
 import 'package:flutter/material.dart';
-
-import 'authen.dart';
 import 'officer_webview.dart';
 
 class BottomNavBarParent extends StatefulWidget {
@@ -28,10 +28,10 @@ class _BottomNavBarParentState extends State<BottomNavBarParent>
 
     tabs = [
       Home(),
-      Authen(),
+      CaseHistory(),
       Newcase(),
       News(),
-      OfficerWebView(),
+      More(),
     ];
     controller = AnimationController(
       vsync: this,

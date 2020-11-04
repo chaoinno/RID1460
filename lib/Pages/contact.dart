@@ -1,6 +1,3 @@
-import 'package:RID1460/Pages/home.dart';
-import 'package:RID1460/Pages/newcase.dart';
-import 'package:RID1460/Pages/news.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 

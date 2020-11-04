@@ -1,8 +1,5 @@
 import 'package:RID1460/Pages/authen.dart';
-import 'package:RID1460/Pages/contact.dart';
-import 'package:RID1460/Pages/home.dart';
-import 'package:RID1460/Pages/newcase.dart';
-import 'package:RID1460/Pages/news.dart';
+import 'package:RID1460/Pages/bottom_nav_parent.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -19,7 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Authen(),
+      home: true ? Authen() : BottomNavBarParent(),
     );
   }
 }
