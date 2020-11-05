@@ -1,6 +1,7 @@
 import 'package:RID1460/Pages/authen.dart';
 import 'package:RID1460/Pages/officer_webview.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'contact.dart';
 
@@ -38,7 +39,10 @@ class _ListDemoState extends State<ListDemo> {
     );
   }
 
-  Future<void> logOutProcess() async {
+   Future<void> logOutProcess() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.clear();
+
     MaterialPageRoute pageRoute =
         MaterialPageRoute(builder: (BuildContext buildContext) {
       return Authen();
