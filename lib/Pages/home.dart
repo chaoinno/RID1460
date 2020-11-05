@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:RID1460/Pages/authen.dart';
 import 'package:RID1460/Pages/contact.dart';
 import 'package:RID1460/Pages/newcase.dart';
 import 'package:RID1460/Pages/news.dart';
@@ -85,7 +86,7 @@ class _HomeState extends State<Home> {
       // borderRadius: BorderRadius.circular(10.0),
       onTap: () {
         MaterialPageRoute materialPageRoute =
-            MaterialPageRoute(builder: (BuildContext context) => Contact());
+            MaterialPageRoute(builder: (BuildContext context) => Authen());
         Navigator.of(context).push(materialPageRoute);
       },
       child: Container(
@@ -95,27 +96,6 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-  }
-
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      if (index == 2) {
-        MaterialPageRoute materialPageRoute =
-            MaterialPageRoute(builder: (BuildContext context) => Newcase());
-        Navigator.of(context).push(materialPageRoute);
-      } else if (index == 3) {
-        MaterialPageRoute materialPageRoute =
-            MaterialPageRoute(builder: (BuildContext context) => News());
-        Navigator.of(context).push(materialPageRoute);
-      }
-      //MaterialPageRoute materialPageRoute =
-      // MaterialPageRoute(builder: (BuildContext context) => Authen());
-      //Navigator.of(context).pop();
-      //Navigator.of(context).push(materialPageRoute);
-    });
   }
 
   @override
@@ -128,24 +108,29 @@ class _HomeState extends State<Home> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
+        child: ListView(
+          scrollDirection: Axis.vertical,
           children: [
-            Container(
-              height: 40,
+            Column(
+              children: [
+                Container(
+                  height: 40,
+                ),
+                logo(),
+                Container(
+                  height: 20,
+                ),
+                newCaseItem(),
+                Container(
+                  height: 5,
+                ),
+                historyANDnewsItem(),
+                Container(
+                  height: 5,
+                ),
+                contactItem(),
+              ],
             ),
-            logo(),
-            Container(
-              height: 20,
-            ),
-            newCaseItem(),
-            Container(
-              height: 5,
-            ),
-            historyANDnewsItem(),
-            Container(
-              height: 5,
-            ),
-            contactItem(),
           ],
         ),
       ),

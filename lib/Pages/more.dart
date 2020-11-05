@@ -21,6 +21,33 @@ class ListDemo extends StatefulWidget {
 class _ListDemoState extends State<ListDemo> {
   Map<int, bool> countToValue = <int, bool>{};
 
+  Widget contactItem() {
+    return InkWell(
+      // borderRadius: BorderRadius.circular(10.0),
+      onTap: () {
+        MaterialPageRoute materialPageRoute =
+            MaterialPageRoute(builder: (BuildContext context) => Contact());
+        Navigator.of(context).push(materialPageRoute);
+      },
+      child: Container(
+        child: Image.asset(
+          "images/home-btn2.png",
+          width: MediaQuery.of(context).size.width * 0.95,
+        ),
+      ),
+    );
+  }
+
+  Future<void> logOutProcess() async {
+    MaterialPageRoute pageRoute =
+        MaterialPageRoute(builder: (BuildContext buildContext) {
+      return Authen();
+    });
+    Navigator.of(context).pushAndRemoveUntil(pageRoute, (Route<dynamic> route) {
+      return false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -185,9 +212,7 @@ class _ListDemoState extends State<ListDemo> {
                 ),
                 InkWell(
                   onTap: () {
-                    MaterialPageRoute materialPageRoute = MaterialPageRoute(
-                        builder: (BuildContext context) => Authen());
-                    Navigator.of(context).push(materialPageRoute);
+                    logOutProcess();
                   },
                   child: Container(
                     decoration: BoxDecoration(
