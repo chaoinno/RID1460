@@ -86,7 +86,7 @@ class _HomeState extends State<Home> {
       // borderRadius: BorderRadius.circular(10.0),
       onTap: () {
         MaterialPageRoute materialPageRoute =
-            MaterialPageRoute(builder: (BuildContext context) => Authen());
+            MaterialPageRoute(builder: (BuildContext context) => Contact());
         Navigator.of(context).push(materialPageRoute);
       },
       child: Container(
