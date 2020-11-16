@@ -1,9 +1,13 @@
-
+import 'package:RID1460/models/province.dart';
 import 'package:dio/dio.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 
 class Registration extends StatefulWidget {
   @override
@@ -28,6 +32,23 @@ class _RegistrationState extends State<Registration> {
   void initState() {
     super.initState();
     selectedGender = 1;
+  }
+
+  Future<void> registerProcess() async {
+    Navigator.of(context).pop();
+  }
+
+  List<Province> parseProvinces(String responseBody) {
+    final parsed = convert.jsonDecode(responseBody).cast<Map<String, dynamic>>();
+
+    return parsed.map<Province>((json) => Province.fromJson(json)).toList();
+  }
+
+  Future<List<Province>> fetchProvinces(http.Client client) async {
+    final response =
+        await client.get('http://1.179.246.34/OPPP_Test/wcfrest.svc/GetProvince');
+
+    return parseProvinces(response.body);
   }
 
   Widget logo() {
@@ -262,7 +283,9 @@ class _RegistrationState extends State<Registration> {
 
   Widget registerButton() {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        registerProcess();
+      },
       child: Container(
         margin: const EdgeInsets.only(top: 20.0),
         height: 40,
@@ -623,6 +646,9 @@ class _RegistrationState extends State<Registration> {
 
   @override
   Widget build(BuildContext context) {
+    var provinces = fetchProvinces(http.Client());
+   
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onPanDown: (_) {

@@ -9,9 +9,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   String email;
   final fromkey = GlobalKey<FormState>();
 
+  Future<void> changePasswordProcess() async {
+    Navigator.of(context).pop();
+  }
+
   Widget submitButton() {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        changePasswordProcess();
+      },
       child: Container(
         height: 40,
         width: MediaQuery.of(context).size.width * 0.7,
