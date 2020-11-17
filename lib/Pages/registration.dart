@@ -4,10 +4,8 @@ import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
+import 'dart:convert';
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 
 class Registration extends StatefulWidget {
   @override
@@ -26,10 +24,16 @@ class _RegistrationState extends State<Registration> {
       postalCode,
       phoneNumber;
   final fromkey = GlobalKey<FormState>();
-  int selectedGender, selectedSubDistrict, selectedDistrict, selectedProvince;
+  int selectedGender;
+  String selectedSubDistrict, selectedDistrict, selectedProvince;
+
+  static List provinces;
 
   @override
   void initState() {
+    parseProvinces('http://1.179.246.34/OPPP_Test/wcfrest.svc/GetProvince');
+    print(provinces);
+
     super.initState();
     selectedGender = 1;
   }
@@ -38,17 +42,35 @@ class _RegistrationState extends State<Registration> {
     Navigator.of(context).pop();
   }
 
-  List<Province> parseProvinces(String responseBody) {
-    final parsed = convert.jsonDecode(responseBody).cast<Map<String, dynamic>>();
+  static Future<void> parseProvinces(String url) async {
+    Response response = await Dio().get(url);
 
-    return parsed.map<Province>((json) => Province.fromJson(json)).toList();
-  }
+    var result = response.data;
+    Province collection = Province.fromJson(result);
+    Map<dynamic, dynamic> map = jsonDecode(collection.getProvinceResult);
 
-  Future<List<Province>> fetchProvinces(http.Client client) async {
-    final response =
-        await client.get('http://1.179.246.34/OPPP_Test/wcfrest.svc/GetProvince');
+    GetProvinceResult getProvinceResult = GetProvinceResult.fromJson(map);
+    provinces = new List();
 
-    return parseProvinces(response.body);
+    provinces = [
+      for (var item in getProvinceResult.value)
+        {
+          {
+            "label": "${ProvinceValue.fromJson(item).label}",
+            "value": "${ProvinceValue.fromJson(item).value}",
+          },
+        }
+    ];
+    // for (var item in getProvinceResult.value) {
+    //   ProvinceValue provinceValue = ProvinceValue.fromJson(item);
+    //   // print('value : ${value.value},labal : ${value.label}');
+    //   provinces.add(
+    //     {
+    //       "label": "${provinceValue.label}",
+    //       "value": "${provinceValue.value}",
+    //     },
+    //   );
+    // }
   }
 
   Widget logo() {
@@ -459,17 +481,8 @@ class _RegistrationState extends State<Registration> {
                   selectedProvince = newvalue;
                 });
               },
-              dataSource: [
-                {
-                  "display": "Running",
-                  "value": 1,
-                },
-                {
-                  "display": "Climbing",
-                  "value": 2,
-                },
-              ],
-              textField: 'display',
+              dataSource: provinces,
+              textField: 'label',
               valueField: 'value',
             ),
           ),
@@ -646,9 +659,6 @@ class _RegistrationState extends State<Registration> {
 
   @override
   Widget build(BuildContext context) {
-    var provinces = fetchProvinces(http.Client());
-   
-
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onPanDown: (_) {
