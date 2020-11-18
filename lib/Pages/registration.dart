@@ -1,4 +1,7 @@
+import 'package:RID1460/Utilities/global_resources.dart';
+import 'package:RID1460/models/child_area.dart';
 import 'package:RID1460/models/province.dart';
+import 'package:RID1460/models/zip_code.dart';
 import 'package:dio/dio.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +16,11 @@ class Registration extends StatefulWidget {
 }
 
 class _RegistrationState extends State<Registration> {
+//Fields
+  TextEditingController zipcodeController = new TextEditingController();
+
+//Variables
+
   String email,
       password,
       confirmPassword,
@@ -21,22 +29,28 @@ class _RegistrationState extends State<Registration> {
       lastName,
       nationalId,
       address,
-      postalCode,
-      phoneNumber;
+      phoneNumber,
+      postalCode;
   final fromkey = GlobalKey<FormState>();
   int selectedGender;
   String selectedSubDistrict, selectedDistrict, selectedProvince;
 
-  static List provinces;
+  static List provinces, childAreas, subChildAreas;
 
   @override
   void initState() {
-    parseProvinces('http://1.179.246.34/OPPP_Test/wcfrest.svc/GetProvince');
-    print(provinces);
+    provinces = [];
+    childAreas = [];
+    subChildAreas = [];
+
+    parseProvinces(
+        GlobalResources().apiHost + 'OPPP_Test/wcfrest.svc/GetProvince');
 
     super.initState();
     selectedGender = 1;
   }
+
+//Methods
 
   Future<void> registerProcess() async {
     Navigator.of(context).pop();
@@ -49,29 +63,64 @@ class _RegistrationState extends State<Registration> {
     Province collection = Province.fromJson(result);
     Map<dynamic, dynamic> map = jsonDecode(collection.getProvinceResult);
 
-    GetProvinceResult getProvinceResult = GetProvinceResult.fromJson(map);
-    provinces = new List();
-
-    provinces = [
-      for (var item in getProvinceResult.value)
-        {
-          {
-            "label": "${ProvinceValue.fromJson(item).label}",
-            "value": "${ProvinceValue.fromJson(item).value}",
-          },
-        }
-    ];
-    // for (var item in getProvinceResult.value) {
-    //   ProvinceValue provinceValue = ProvinceValue.fromJson(item);
-    //   // print('value : ${value.value},labal : ${value.label}');
-    //   provinces.add(
-    //     {
-    //       "label": "${provinceValue.label}",
-    //       "value": "${provinceValue.value}",
-    //     },
-    //   );
-    // }
+    GetProvinceResult provinceResults = GetProvinceResult.fromJson(map);
+    provinces = [];
+    for (var item in provinceResults.value) {
+      provinces.add({
+        "label": ProvinceValue.fromJson(item).label,
+        "value": ProvinceValue.fromJson(item).value
+      });
+    }
   }
+
+  static Future<void> parseChildAreas(String url) async {
+    Response response = await Dio().get(url);
+
+    var result = response.data;
+    ChildArea collection = ChildArea.fromJson(result);
+    Map<dynamic, dynamic> map = jsonDecode(collection.getChildAreaResult);
+
+    GetChildAreaResult childAreaResults = GetChildAreaResult.fromJson(map);
+    childAreas = [];
+    for (var item in childAreaResults.value) {
+      childAreas.add({
+        "label": ChildAreaValue.fromJson(item).label,
+        "value": ChildAreaValue.fromJson(item).value
+      });
+    }
+  }
+
+  static Future<void> parseSubChildAreas(String url) async {
+    Response response = await Dio().get(url);
+
+    var result = response.data;
+    ChildArea collection = ChildArea.fromJson(result);
+    Map<dynamic, dynamic> map = jsonDecode(collection.getChildAreaResult);
+
+    GetChildAreaResult subChildAreaResults = GetChildAreaResult.fromJson(map);
+    subChildAreas = [];
+    for (var item in subChildAreaResults.value) {
+      subChildAreas.add({
+        "label": ChildAreaValue.fromJson(item).label,
+        "value": ChildAreaValue.fromJson(item).value
+      });
+    }
+  }
+
+  void parseZipCode(String url) async {
+    print(url);
+    Response response = await Dio().get(url);
+    var result = response.data;
+    Zipcode collection = Zipcode.fromJson(result);
+    Map<dynamic, dynamic> map = jsonDecode(collection.getZipcodeResult);
+
+    GetZipcodeResult zipcodeResults = GetZipcodeResult.fromJson(map);
+    print(zipcodeResults.value);
+    postalCode = zipcodeResults.value.toString();
+    zipcodeController.text = zipcodeResults.value.toString();
+  }
+
+//Widgets
 
   Widget logo() {
     return Container(
@@ -479,6 +528,10 @@ class _RegistrationState extends State<Registration> {
               onChanged: (newvalue) {
                 setState(() {
                   selectedProvince = newvalue;
+                  selectedDistrict = null;
+                  parseChildAreas(GlobalResources().apiHost +
+                      'OPPP_Test/wcfrest.svc/GetChildArea?ref_id=' +
+                      selectedProvince);
                 });
               },
               dataSource: provinces,
@@ -511,19 +564,14 @@ class _RegistrationState extends State<Registration> {
               onChanged: (newvalue) {
                 setState(() {
                   selectedDistrict = newvalue;
+                  selectedSubDistrict = null;
+                  parseSubChildAreas(GlobalResources().apiHost +
+                      'OPPP_Test/wcfrest.svc/GetChildArea?ref_id=' +
+                      selectedDistrict);
                 });
               },
-              dataSource: [
-                {
-                  "display": "Running",
-                  "value": 1,
-                },
-                {
-                  "display": "Climbing",
-                  "value": 2,
-                },
-              ],
-              textField: 'display',
+              dataSource: childAreas,
+              textField: 'label',
               valueField: 'value',
             ),
           ),
@@ -552,19 +600,13 @@ class _RegistrationState extends State<Registration> {
               onChanged: (newvalue) {
                 setState(() {
                   selectedSubDistrict = newvalue;
+                  parseZipCode(GlobalResources().apiHost +
+                      'OPPP_Test/wcfrest.svc/GetZipcode?id=' +
+                      selectedDistrict);
                 });
               },
-              dataSource: [
-                {
-                  "display": "Running",
-                  "value": 1,
-                },
-                {
-                  "display": "Climbing",
-                  "value": 2,
-                },
-              ],
-              textField: 'display',
+              dataSource: subChildAreas,
+              textField: 'label',
               valueField: 'value',
             ),
           ),
@@ -596,6 +638,7 @@ class _RegistrationState extends State<Registration> {
                 labelText: 'รหัสไปรษณีย์ *',
                 hintText: 'รหัสไปรษณีย์',
               ),
+              controller: zipcodeController,
             ),
           ),
         ],
