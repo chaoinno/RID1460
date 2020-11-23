@@ -1,4 +1,4 @@
-import 'package:RID1460/Pages/authen.dart';
+import 'package:RID1460/Pages/intro.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Authen(),
+      home: Intro(),
     );
   }
 }
