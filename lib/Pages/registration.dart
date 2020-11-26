@@ -32,7 +32,7 @@ class _RegistrationState extends State<Registration> {
       phoneNumber,
       postalCode;
   final fromkey = GlobalKey<FormState>();
-  int selectedGender;
+  String selectedGender;
   String selectedSubDistrict, selectedDistrict, selectedProvince;
 
   static List provinces, childAreas, subChildAreas;
@@ -47,13 +47,35 @@ class _RegistrationState extends State<Registration> {
         GlobalResources().apiHost + 'OPPP_Test/wcfrest.svc/GetProvince');
 
     super.initState();
-    selectedGender = 1;
+    selectedGender = 'ชาย';
   }
 
 //Methods
 
   Future<void> registerProcess() async {
-    Navigator.of(context).pop();
+    String url = GlobalResources().apiHost + 'OPPP_Test/wcfrest.svc/register';
+    Dio dio = new Dio();
+    Response response = await dio.post(url,
+        data: {
+          "username": email,
+          "password": password,
+          "title": prefixName,
+          "firstname": firstName,
+          "lastname": lastName,
+          "gender": selectedGender,
+          "citizenid": nationalId,
+          "address": address,
+          "province": selectedProvince,
+          "district": selectedDistrict,
+          "subdistrict": selectedSubDistrict,
+          "zipcode": postalCode,
+          "tel": phoneNumber,
+        },
+        options: Options(contentType: Headers.formUrlEncodedContentType));
+    var result = response.data;
+    print(result);
+    //ถ้าข้อมูลList
+    // Navigator.of(context).pop();
   }
 
   static Future<void> parseProvinces(String url) async {
@@ -412,7 +434,7 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  setSelectedGenderRadio(int val) {
+  setSelectedGenderRadio(String val) {
     setState(() {
       selectedGender = val;
     });
@@ -423,7 +445,7 @@ class _RegistrationState extends State<Registration> {
       alignment: MainAxisAlignment.start,
       children: <Widget>[
         Radio(
-          value: 1,
+          value: 'ชาย',
           groupValue: selectedGender,
           activeColor: Colors.orange,
           onChanged: (val) {
@@ -438,7 +460,7 @@ class _RegistrationState extends State<Registration> {
           ),
         ),
         Radio(
-          value: 2,
+          value: 'หญิง',
           groupValue: selectedGender,
           activeColor: Colors.orange,
           onChanged: (val) {
@@ -675,21 +697,7 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  Future<void> loginApi() async {
-    String url = '';
-    Dio dio = new Dio();
-    Response response = await dio.post(
-      url,
-      data: {
-        "email": email,
-        "password": password,
-      },
-      //options:  Options(contentType: Headers.formUrlEncodedContentType)
-    );
-
-    var result = response.data;
-    //ถ้าข้อมูลList
-  }
+//Method
 
   Future<void> saveSharePerence() async {
     List<String> list = List();
