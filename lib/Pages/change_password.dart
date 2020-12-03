@@ -1,5 +1,12 @@
+import 'dart:convert';
+
+import 'package:RID1460/Utilities/global_resources.dart';
+import 'package:RID1460/Utilities/nomal_dialog.dart';
+import 'package:RID1460/models/web_api_result.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangePassword extends StatefulWidget {
   @override
@@ -7,12 +14,81 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
-  String oldPassword, password, confirmPassword;
+  String oldPassword, password, confirmPassword, sessionId;
   final fromkey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    readSharedPreferance();
+  }
+
+  Future<void> readSharedPreferance() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    List userInfo = sharedPreferences.getStringList('UserInfo');
+    print(userInfo);
+    setState(() {
+      sessionId = userInfo[6];
+    });
+  }
+
+  Future<void> normalDialog(
+      BuildContext context, String title, String massage) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext buildContext) {
+          return AlertDialog(
+            title: showTitile(title, massage),
+            actions: [
+              okButton(context),
+            ],
+          );
+        });
+  }
+
+  Future<void> changePasswordProcess() async {
+    String url = GlobalResources().apiHost +
+        'wcfrest.svc/changepassword?sessionid=$sessionId&newpassword=$password&oldpassword=$oldPassword';
+    print(url);
+    Dio dio = new Dio();
+    try {
+      Response response = await dio.put(url);
+      print(response);
+      var result = response.data;
+      WebApiResult collection =
+          WebApiResult.fromJson(result, 'changepasswordResult');
+      Map<dynamic, dynamic> map = jsonDecode(collection.collectionResult);
+      CollectionResult collectionResult = CollectionResult.fromJson(map);
+      if (collectionResult.result == 'error') {
+        normalDialog(context, 'เปลี่ยนรหัสผ่านไม่สำเร็จ', collectionResult.msg);
+      } else {
+        normalDialog(context, 'เปลี่ยนรหัสผ่านสำเร็จ', collectionResult.msg);
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   Widget submitButton() {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        fromkey.currentState.save();
+        if (oldPassword.isEmpty) {
+          normalDialog(context, 'ผิดพลาด', 'กรุณากรอกรหัสผ่านใหม่');
+          return;
+        }
+        if (password.isEmpty) {
+          normalDialog(context, 'ผิดพลาด', 'กรุณากรอกรหัสผ่านใหม่');
+          return;
+        }
+        if (confirmPassword.isEmpty) {
+          normalDialog(context, 'ผิดพลาด', 'กรุณากรอกรหัสผ่านใหม่');
+          return;
+        }
+        changePasswordProcess();
+      },
       child: Container(
         height: 40,
         width: MediaQuery.of(context).size.width * 0.7,
@@ -62,7 +138,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               autofocus: false,
               keyboardType: TextInputType.text,
               onSaved: (String string) {
-                password = string.trim();
+                oldPassword = string.trim();
               },
               validator: (value) =>
                   value.length < 1 ? 'ระบุรหัสผ่านเดิม' : null,
@@ -70,6 +146,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 labelText: 'รหัสผ่านเดิม *',
                 hintText: 'รหัสผ่าน',
               ),
+              obscureText: true,
             ),
           ),
         ],
@@ -109,6 +186,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 labelText: 'รหัสผ่านใหม่ *',
                 hintText: 'รหัสผ่าน',
               ),
+              obscureText: true,
             ),
           ),
         ],
@@ -148,6 +226,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 labelText: 'ยืนยันรหัสผ่านใหม่ *',
                 hintText: 'รหัสผ่าน',
               ),
+              obscureText: true,
             ),
           ),
         ],

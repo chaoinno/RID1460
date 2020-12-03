@@ -22,6 +22,13 @@ class ListDemo extends StatefulWidget {
 
 class _ListDemoState extends State<ListDemo> {
   Map<int, bool> countToValue = <int, bool>{};
+  String fullName, email;
+
+   @override
+  void initState() {
+    super.initState();
+    readSharedPreferance();
+  }
 
   Widget contactItem() {
     return InkWell(
@@ -38,6 +45,19 @@ class _ListDemoState extends State<ListDemo> {
         ),
       ),
     );
+  }
+
+  Future<void> readSharedPreferance() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    List userInfo = sharedPreferences.getStringList('UserInfo');
+    print(userInfo);
+    setState(() {
+      fullName = userInfo[1] + ' ' + userInfo[2];
+      email = userInfo[0];
+    });
+    print(fullName);
+    print(email);
   }
 
   Future<void> logOutProcess() async {
@@ -98,7 +118,7 @@ class _ListDemoState extends State<ListDemo> {
                     children: [
                       Container(
                         child: Text(
-                          'สมชาย รักษ์ชาติ',
+                          fullName ?? '',
                           style: TextStyle(
                             fontSize: 24.0,
                             fontWeight: FontWeight.bold,
@@ -106,7 +126,7 @@ class _ListDemoState extends State<ListDemo> {
                         ),
                       ),
                       Container(
-                        child: Text('data@email.com'),
+                        child: Text(email ?? ''),
                       ),
                     ],
                   ),

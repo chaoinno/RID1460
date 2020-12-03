@@ -1,8 +1,16 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:RID1460/Pages/forgot_password.dart';
 import 'package:RID1460/Pages/registration.dart';
+import 'package:RID1460/Utilities/global_resources.dart';
 import 'package:RID1460/Utilities/nomal_dialog.dart';
+import 'package:RID1460/models/login.dart';
+import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:imei_plugin/imei_plugin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bottom_nav_parent.dart';
@@ -13,8 +21,24 @@ class Authen extends StatefulWidget {
 }
 
 class _AuthenState extends State<Authen> {
+  static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+  Map<String, dynamic> _deviceData = <String, dynamic>{};
+
+//Fields
+
   String email, password, confirmPassword;
   final fromkey = GlobalKey<FormState>();
+
+  String imeiString;
+
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+    getImei();
+  }
+
+// Widgets
 
   Widget logo() {
     return Container(
@@ -105,6 +129,7 @@ class _AuthenState extends State<Authen> {
                 password = string.trim();
               },
               decoration: InputDecoration(hintText: 'รหัสผ่าน'),
+              obscureText: true,
             ),
           ),
         ],
@@ -166,10 +191,7 @@ class _AuthenState extends State<Authen> {
           normalDialog(context, 'password', 'กรุณากรอก password');
           return;
         }
-        saveSharePerence();
-        MaterialPageRoute materialPageRoute = MaterialPageRoute(
-            builder: (BuildContext context) => BottomNavBarParent());
-        Navigator.of(context).pushReplacement(materialPageRoute);
+        loginApi();
         // print("object");
       },
       child: Container(
@@ -220,27 +242,142 @@ class _AuthenState extends State<Authen> {
     );
   }
 
-  Future<void> loginApi() async {
-    String url = '';
-    Dio dio = new Dio();
-    Response response = await dio.post(url,
-        data: {
-          "email": email,
-          "password": password,
-        },
-        options: Options(contentType: Headers.formUrlEncodedContentType));
+// Methods
+  Future<void> initPlatformState() async {
+    Map<String, dynamic> deviceData;
 
-    var result = response.data;
-    //ถ้าข้อมูลList
+    try {
+      if (Platform.isAndroid) {
+        deviceData = _readAndroidBuildData(await deviceInfoPlugin.androidInfo);
+      } else if (Platform.isIOS) {
+        deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
+      }
+    } on PlatformException {
+      deviceData = <String, dynamic>{
+        'Error:': 'Failed to get platform version.'
+      };
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _deviceData = deviceData;
+    });
   }
 
-  Future<void> saveSharePerence() async {
-    List<String> list = List();
-    list.add(email);
-    list.add(password);
+  Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
+    return <String, dynamic>{
+      'version.securityPatch': build.version.securityPatch,
+      'version.sdkInt': build.version.sdkInt,
+      'version.release': build.version.release,
+      'version.previewSdkInt': build.version.previewSdkInt,
+      'version.incremental': build.version.incremental,
+      'version.codename': build.version.codename,
+      'version.baseOS': build.version.baseOS,
+      'board': build.board,
+      'bootloader': build.bootloader,
+      'brand': build.brand,
+      'device': build.device,
+      'display': build.display,
+      'fingerprint': build.fingerprint,
+      'hardware': build.hardware,
+      'host': build.host,
+      'id': build.id,
+      'manufacturer': build.manufacturer,
+      'model': build.model,
+      'product': build.product,
+      'supported32BitAbis': build.supported32BitAbis,
+      'supported64BitAbis': build.supported64BitAbis,
+      'supportedAbis': build.supportedAbis,
+      'tags': build.tags,
+      'type': build.type,
+      'isPhysicalDevice': build.isPhysicalDevice,
+      'androidId': build.androidId,
+      'systemFeatures': build.systemFeatures,
+    };
+  }
 
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setStringList('User', list);
+  Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
+    return <String, dynamic>{
+      'name': data.name,
+      'systemName': data.systemName,
+      'systemVersion': data.systemVersion,
+      'model': data.model,
+      'localizedModel': data.localizedModel,
+      'identifierForVendor': data.identifierForVendor,
+      'isPhysicalDevice': data.isPhysicalDevice,
+      'utsname.sysname:': data.utsname.sysname,
+      'utsname.nodename:': data.utsname.nodename,
+      'utsname.release:': data.utsname.release,
+      'utsname.version:': data.utsname.version,
+      'utsname.machine:': data.utsname.machine,
+    };
+  }
+
+  getImei() async {
+    var imei = await ImeiPlugin.getImei();
+
+    setState(() {
+      imeiString = imei.toString();
+    });
+    print('Running on $imei');
+  }
+
+  Future<void> loginApi() async {
+    String url = GlobalResources().apiHost + 'wcfrest.svc/login';
+    Dio dio = new Dio();
+
+    var param = {
+      "username": email,
+      "password": password,
+      "Searial": imeiString,
+      "TokenID": "",
+      "OS_Type": Platform.isAndroid
+          ? "android"
+          : Platform.isIOS
+              ? "iOS"
+              : "Unknown"
+    };
+
+    String paramJson = jsonEncode(param);
+    print(paramJson);
+    try {
+      Response response = await dio.post(url,
+          data: paramJson,
+          options: Options(headers: {
+            HttpHeaders.contentTypeHeader: "application/json",
+          }));
+      var result = response.data;
+      Login collection = Login.fromJson(result);
+      print(collection.loginResult);
+      Map<dynamic, dynamic> map = jsonDecode(collection.loginResult);
+      LoginResult collectionResult = LoginResult.fromJson(map);
+      if (collectionResult.result == 'success') {
+        List<String> list = List();
+        list.add(collectionResult.email);
+        list.add(collectionResult.firstname);
+        list.add(collectionResult.lastname);
+        list.add(collectionResult.msg);
+        list.add(collectionResult.result);
+        list.add(collectionResult.role);
+        list.add(collectionResult.sessionID);
+        list.add(collectionResult.telephone);
+        list.add(collectionResult.tokenID);
+        list.add(collectionResult.userID);
+
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        sharedPreferences.setStringList('UserInfo', list);
+
+        MaterialPageRoute materialPageRoute = MaterialPageRoute(
+            builder: (BuildContext context) => BottomNavBarParent());
+        Navigator.of(context).pushReplacement(materialPageRoute);
+      } else {
+        normalDialog(context, 'ผิดพลาด', collectionResult.msg);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override

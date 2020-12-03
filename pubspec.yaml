@@ -34,6 +34,8 @@ dependencies:
   custom_bottom_navigation_bar: ^0.0.1
   http: ^0.12.2
   xml2json: ^4.4.0
+  device_info: ^1.0.0
+  imei_plugin: ^1.1.6 #ดึงรหัสเครื่อง 
 
 dev_dependencies:
   flutter_test:

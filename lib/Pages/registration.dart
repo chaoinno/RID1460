@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:RID1460/Utilities/global_resources.dart';
+import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:RID1460/models/child_area.dart';
 import 'package:RID1460/models/province.dart';
+import 'package:RID1460/models/web_api_result.dart';
 import 'package:RID1460/models/zip_code.dart';
 import 'package:dio/dio.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
@@ -21,6 +25,7 @@ class _RegistrationState extends State<Registration> {
 
 //Variables
 
+  final fromkey = GlobalKey<FormState>();
   String email,
       password,
       confirmPassword,
@@ -30,10 +35,11 @@ class _RegistrationState extends State<Registration> {
       nationalId,
       address,
       phoneNumber,
-      postalCode;
-  final fromkey = GlobalKey<FormState>();
-  String selectedGender;
-  String selectedSubDistrict, selectedDistrict, selectedProvince;
+      postalCode,
+      selectedGender,
+      selectedSubDistrict,
+      selectedDistrict,
+      selectedProvince;
 
   static List provinces, childAreas, subChildAreas;
 
@@ -44,7 +50,7 @@ class _RegistrationState extends State<Registration> {
     subChildAreas = [];
 
     parseProvinces(
-        GlobalResources().apiHost + 'OPPP_Test/wcfrest.svc/GetProvince');
+        GlobalResources().apiHost + 'wcfrest.svc/GetProvince');
 
     super.initState();
     selectedGender = 'ชาย';
@@ -53,29 +59,46 @@ class _RegistrationState extends State<Registration> {
 //Methods
 
   Future<void> registerProcess() async {
-    String url = GlobalResources().apiHost + 'OPPP_Test/wcfrest.svc/register';
+    String url = GlobalResources().apiHost + 'wcfrest.svc/register';
+    print(url);
     Dio dio = new Dio();
-    Response response = await dio.post(url,
-        data: {
-          "username": email,
-          "password": password,
-          "title": prefixName,
-          "firstname": firstName,
-          "lastname": lastName,
-          "gender": selectedGender,
-          "citizenid": nationalId,
-          "address": address,
-          "province": selectedProvince,
-          "district": selectedDistrict,
-          "subdistrict": selectedSubDistrict,
-          "zipcode": postalCode,
-          "tel": phoneNumber,
-        },
-        options: Options(contentType: Headers.formUrlEncodedContentType));
-    var result = response.data;
-    print(result);
-    //ถ้าข้อมูลList
-    // Navigator.of(context).pop();
+    var param = {
+      "username": email,
+      "password": password,
+      "title": prefixName,
+      "firstname": firstName,
+      "lastname": lastName,
+      "gender": selectedGender,
+      "citizenid": nationalId,
+      "address": address,
+      "province": selectedProvince,
+      "district": selectedDistrict,
+      "subdistrict": selectedSubDistrict,
+      "zipcode": postalCode,
+      "tel": phoneNumber,
+    };
+    String paramJson = jsonEncode(param);
+    print(paramJson);
+    try {
+      Response response = await dio.post(url,
+          data: paramJson,
+          options: Options(headers: {
+            HttpHeaders.contentTypeHeader: "application/json",
+          }));
+      print(response);
+      var result = response.data;
+      WebApiResult collection = WebApiResult.fromJson(result, 'registerResult');
+      Map<dynamic, dynamic> map = jsonDecode(collection.collectionResult);
+      CollectionResult collectionResult = CollectionResult.fromJson(map);
+      if (collectionResult.result == 'error') {
+        normalDialog(context, 'ลงทะเบียนไม่สำเร็จ', collectionResult.msg);
+      }else{
+        normalDialog(context, 'ลงทะเบียนสำเร็จ', collectionResult.msg);
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   static Future<void> parseProvinces(String url) async {
@@ -334,7 +357,7 @@ class _RegistrationState extends State<Registration> {
               autofocus: false,
               keyboardType: TextInputType.text,
               onSaved: (String string) {
-                prefixName = string.trim();
+                firstName = string.trim();
               },
               validator: (value) => value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
               decoration: InputDecoration(
@@ -377,6 +400,7 @@ class _RegistrationState extends State<Registration> {
   Widget registerButton() {
     return InkWell(
       onTap: () {
+        fromkey.currentState.save();
         registerProcess();
       },
       child: Container(
@@ -552,7 +576,7 @@ class _RegistrationState extends State<Registration> {
                   selectedProvince = newvalue;
                   selectedDistrict = null;
                   parseChildAreas(GlobalResources().apiHost +
-                      'OPPP_Test/wcfrest.svc/GetChildArea?ref_id=' +
+                      'wcfrest.svc/GetChildArea?ref_id=' +
                       selectedProvince);
                 });
               },
@@ -588,7 +612,7 @@ class _RegistrationState extends State<Registration> {
                   selectedDistrict = newvalue;
                   selectedSubDistrict = null;
                   parseSubChildAreas(GlobalResources().apiHost +
-                      'OPPP_Test/wcfrest.svc/GetChildArea?ref_id=' +
+                      'wcfrest.svc/GetChildArea?ref_id=' +
                       selectedDistrict);
                 });
               },
@@ -623,7 +647,7 @@ class _RegistrationState extends State<Registration> {
                 setState(() {
                   selectedSubDistrict = newvalue;
                   parseZipCode(GlobalResources().apiHost +
-                      'OPPP_Test/wcfrest.svc/GetZipcode?id=' +
+                      'wcfrest.svc/GetZipcode?id=' +
                       selectedDistrict);
                 });
               },
@@ -732,45 +756,19 @@ class _RegistrationState extends State<Registration> {
             ),
           ),
           child: ListView(scrollDirection: Axis.vertical, children: <Widget>[
-            Center(
-              child: Column(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    child: facebookButton(),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
-                        )
-                      ],
+            Form(
+              key: fromkey,
+              child: Center(
+                child: Column(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: facebookButton(),
                     ),
-                    child: Form(
-                      key: fromkey,
-                      child: Column(
-                        children: [
-                          titleform("ข้อมูลเข้าใช้ระบบ"),
-                          emailForm(),
-                          passwordForm(),
-                          confirmPasswordForm(),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 20.0),
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    decoration: BoxDecoration(
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
                         color: Colors.white,
                         boxShadow: [
@@ -780,62 +778,91 @@ class _RegistrationState extends State<Registration> {
                             blurRadius: 7,
                             offset: Offset(0, 3), // changes position of shadow
                           )
-                        ]),
-                    child: Form(
-                      child: Column(
-                        children: [
-                          titleform("ข้อมูลสมาชิก"),
-                          prefixNameForm(),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            child: Row(
-                              children: [
-                                firstNameForm(),
-                                SizedBox(width: 10.0),
-                                lastNameForm()
-                              ],
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(top: 10.0),
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            child: Text(
-                              'เพศ *',
-                              style: new TextStyle(
-                                color: Colors.black45,
-                                fontSize: 16.0,
-                              ),
-                            ),
-                          ),
-                          genderForm(),
-                          nationalIdForm(),
-                          addressForm(),
-                          Container(
-                            child: Row(
-                              children: [
-                                provinceListViewForm(),
-                                districtListViewForm(),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            child: Row(
-                              children: [
-                                subDistrictListViewForm(),
-                                postalCodeForm(),
-                              ],
-                            ),
-                          ),
-                          phoneNumberForm(),
                         ],
                       ),
+                      child: Center(
+                        child: Column(
+                          children: [
+                            titleform("ข้อมูลเข้าใช้ระบบ"),
+                            emailForm(),
+                            passwordForm(),
+                            confirmPasswordForm(),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    child: registerButton(),
-                  ),
-                ],
+                    Container(
+                      margin: const EdgeInsets.only(top: 20.0),
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset:
+                                  Offset(0, 3), // changes position of shadow
+                            )
+                          ]),
+                      child: Center(
+                        child: Column(
+                          children: [
+                            titleform("ข้อมูลสมาชิก"),
+                            prefixNameForm(),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: Row(
+                                children: [
+                                  firstNameForm(),
+                                  SizedBox(width: 10.0),
+                                  lastNameForm()
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(top: 10.0),
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: Text(
+                                'เพศ *',
+                                style: new TextStyle(
+                                  color: Colors.black45,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                            genderForm(),
+                            nationalIdForm(),
+                            addressForm(),
+                            Container(
+                              child: Row(
+                                children: [
+                                  provinceListViewForm(),
+                                  districtListViewForm(),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              child: Row(
+                                children: [
+                                  subDistrictListViewForm(),
+                                  postalCodeForm(),
+                                ],
+                              ),
+                            ),
+                            phoneNumberForm(),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: registerButton(),
+                    ),
+                  ],
+                ),
               ),
             ),
           ]),
