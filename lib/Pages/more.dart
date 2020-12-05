@@ -1,5 +1,5 @@
-import 'package:RID1460/Pages/authen.dart';
 import 'package:RID1460/Pages/change_password.dart';
+import 'package:RID1460/Pages/intro.dart';
 import 'package:RID1460/Pages/officer_webview.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -68,7 +68,7 @@ class _ListDemoState extends State<ListDemo> {
 
   Route _createRoute() {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => Authen(),
+      pageBuilder: (context, animation, secondaryAnimation) => Intro(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(0.0, 1.0);
         var end = Offset.zero;

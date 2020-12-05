@@ -6,25 +6,26 @@ import 'package:RID1460/Pages/news.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBarParent extends StatefulWidget {
-  BottomNavBarParent({Key key}) : super(key: key);
+  final int defaultPageNo;
+  BottomNavBarParent({Key key, this.defaultPageNo}) : super(key: key);
   @override
   _BottomNavBarParentState createState() => _BottomNavBarParentState();
 }
 
 class _BottomNavBarParentState extends State<BottomNavBarParent>
     with SingleTickerProviderStateMixin<BottomNavBarParent> {
-  @override
-
   // Field
   int currentPage = 0;
   AnimationController controller;
   bool expanded = true;
-
   var tabs;
+
   @override
   void initState() {
     super.initState();
-
+    currentPage = widget.defaultPageNo != null
+        ? widget.defaultPageNo
+        : 0;
     tabs = [
       Home(),
       CaseHistory(),
@@ -43,7 +44,6 @@ class _BottomNavBarParentState extends State<BottomNavBarParent>
 
   @override
   Widget build(BuildContext context) {
-
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
@@ -76,7 +76,6 @@ class _BottomNavBarParentState extends State<BottomNavBarParent>
           setState(() {
             currentPage = value;
           });
-          
         },
         items: [
           BottomNavigationBarItem(
@@ -121,7 +120,6 @@ class _BottomNavBarParentState extends State<BottomNavBarParent>
           ),
         ],
       ),
-
       body: Container(
         child: tabs[currentPage],
       ),

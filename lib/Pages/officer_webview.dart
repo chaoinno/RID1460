@@ -21,7 +21,7 @@ class OfficerWebViewState extends State<OfficerWebView> {
       appBar: AppBar(centerTitle: true, title: Text("สำหรับเจ้าหน้าที่")),
       body: Container(
         child: WebView(
-          initialUrl: 'https://flutter.dev',
+          initialUrl: 'https://www.rid.go.th',
         ),
       ),
     );

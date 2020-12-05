@@ -1,3 +1,9 @@
+import 'dart:convert';
+
+import 'package:RID1460/Utilities/global_resources.dart';
+import 'package:RID1460/Utilities/nomal_dialog.dart';
+import 'package:RID1460/models/web_api_result.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -9,14 +15,59 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   String email;
   final fromkey = GlobalKey<FormState>();
 
-  Future<void> changePasswordProcess() async {
-    Navigator.of(context).pop();
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> normalDialog(
+      BuildContext context, String title, String massage) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext buildContext) {
+          return AlertDialog(
+            title: showTitile(title, massage),
+            actions: [
+              okButton(context),
+            ],
+          );
+        });
+  }
+
+  Future<void> forgotPasswordProcess() async {
+    String url = GlobalResources().apiHost +
+        'wcfrest.svc/resetpassword?username=$email';
+    print(url);
+    Dio dio = new Dio();
+    try {
+      Response response = await dio.get(url);
+      print(response);
+      var result = response.data;
+      WebApiResult collection =
+          WebApiResult.fromJson(result, 'resetpasswordResult');
+      Map<dynamic, dynamic> map = jsonDecode(collection.collectionResult);
+      CollectionResult collectionResult = CollectionResult.fromJson(map);
+      if (collectionResult.result == 'error') {
+        normalDialog(context, 'ผิดพลาด', collectionResult.msg);
+      } else {
+        normalDialog(context, 'ดำเนินการสำเร็จ', collectionResult.msg);
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   Widget submitButton() {
     return InkWell(
       onTap: () {
-        changePasswordProcess();
+        fromkey.currentState.save();
+        if (email.isEmpty) {
+          print("email isEmpty");
+          normalDialog(context, 'Email', 'กรุณากรอก email');
+          return;
+        }
+        forgotPasswordProcess();
       },
       child: Container(
         height: 40,

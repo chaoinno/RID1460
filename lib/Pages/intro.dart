@@ -1,6 +1,9 @@
 import 'dart:async';
-import 'package:RID1460/Pages/authen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'authen.dart';
+import 'bottom_nav_parent.dart';
 
 class Intro extends StatefulWidget {
   @override
@@ -8,13 +11,49 @@ class Intro extends StatefulWidget {
 }
 
 class _IntroState extends State<Intro> {
+  var userInfo;
 
   void initState() {
     super.initState();
-    Timer(
-        Duration(seconds: 3),
-        () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => Authen())));
+    readSharedPreferance();
+  }
+
+  Future<void> readSharedPreferance() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    userInfo = sharedPreferences.getStringList('UserInfo');
+    print(userInfo);
+    if (userInfo == null) {
+      Timer(
+          Duration(seconds: 3),
+          () => Navigator.of(context, rootNavigator: true).pushReplacement(
+                _createAuthenRoute(Authen()),
+              ));
+    } else {
+      Timer(
+          Duration(seconds: 3),
+          () => Navigator.of(context, rootNavigator: true).pushReplacement(
+                _createAuthenRoute(BottomNavBarParent()),
+              ));
+    }
+  }
+
+  Route _createAuthenRoute(var pageRouteBuilder) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => pageRouteBuilder,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(0.0, 1.0);
+        var end = Offset.zero;
+        var curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
   }
 
   @override

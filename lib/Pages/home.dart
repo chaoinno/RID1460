@@ -1,6 +1,7 @@
 import 'dart:ui';
 
-import 'package:RID1460/Pages/authen.dart';
+import 'package:RID1460/Pages/bottom_nav_parent.dart';
+import 'package:RID1460/Pages/case_history.dart';
 import 'package:RID1460/Pages/contact.dart';
 import 'package:RID1460/Pages/newcase.dart';
 import 'package:RID1460/Pages/news.dart';
@@ -12,6 +13,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  String fullName, email;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   Widget logo() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.3,
@@ -29,9 +37,11 @@ class _HomeState extends State<Home> {
     return InkWell(
       //borderRadius: BorderRadius.circular(10.0),
       onTap: () {
-        MaterialPageRoute materialPageRoute =
-            MaterialPageRoute(builder: (BuildContext context) => Newcase());
-        Navigator.of(context).push(materialPageRoute);
+        MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                builder: (BuildContext context) => BottomNavBarParent(
+                      defaultPageNo: 2,
+                    ));
+            Navigator.of(context).pushReplacement(materialPageRoute);
       },
       child: Container(
         child: Image.asset(
@@ -50,9 +60,11 @@ class _HomeState extends State<Home> {
       children: [
         InkWell(
           onTap: () {
-            //MaterialPageRoute materialPageRoute =
-            //MaterialPageRoute(builder: (BuildContext context) => );
-            //Navigator.of(context).push(materialPageRoute);
+            MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                builder: (BuildContext context) => BottomNavBarParent(
+                      defaultPageNo: 1,
+                    ));
+            Navigator.of(context).pushReplacement(materialPageRoute);
           },
           child: Container(
             child: Image.asset(
@@ -66,9 +78,11 @@ class _HomeState extends State<Home> {
         ),
         InkWell(
           onTap: () {
-            MaterialPageRoute materialPageRoute =
-                MaterialPageRoute(builder: (BuildContext context) => News());
-            Navigator.of(context).push(materialPageRoute);
+            MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                builder: (BuildContext context) => BottomNavBarParent(
+                      defaultPageNo: 3,
+                    ));
+            Navigator.of(context).pushReplacement(materialPageRoute);
           },
           child: Container(
             child: Image.asset(
