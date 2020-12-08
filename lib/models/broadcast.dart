@@ -1,46 +1,35 @@
 class Broadcast {
-  GetBroadcastResult getBroadcastResult;
+  var getBroadcastResult;
 
   Broadcast({this.getBroadcastResult});
 
   Broadcast.fromJson(Map<String, dynamic> json) {
-    getBroadcastResult = json['getBroadcastResult'] != null
-        ? new GetBroadcastResult.fromJson(json['getBroadcastResult'])
-        : null;
+    getBroadcastResult = json['getBroadcastResult'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.getBroadcastResult != null) {
-      data['getBroadcastResult'] = this.getBroadcastResult.toJson();
-    }
+    data['getBroadcastResult'] = this.getBroadcastResult;
     return data;
   }
 }
 
 class GetBroadcastResult {
-  List<BoardcastList> list;
+  var list;
   String result;
   String msg;
 
   GetBroadcastResult({this.list, this.result, this.msg});
 
   GetBroadcastResult.fromJson(Map<String, dynamic> json) {
-    if (json['list'] != null) {
-      list = new List<BoardcastList>();
-      json['list'].forEach((v) {
-        list.add(new BoardcastList.fromJson(v));
-      });
-    }
+    list = json['list'];
     result = json['result'];
     msg = json['msg'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.list != null) {
-      data['list'] = this.list.map((v) => v.toJson()).toList();
-    }
+    data['list'] = this.list;
     data['result'] = this.result;
     data['msg'] = this.msg;
     return data;

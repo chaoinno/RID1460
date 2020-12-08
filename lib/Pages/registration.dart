@@ -105,6 +105,7 @@ class _RegistrationState extends State<Registration> {
     Response response = await Dio().get(url);
 
     var result = response.data;
+    //print(result);
     Province collection = Province.fromJson(result);
     Map<dynamic, dynamic> map = jsonDecode(collection.getProvinceResult);
 

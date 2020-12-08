@@ -1,4 +1,10 @@
+import 'dart:convert';
+
 import 'package:RID1460/Pages/news_detail.dart';
+import 'package:RID1460/Utilities/global_resources.dart';
+import 'package:RID1460/Utilities/nomal_dialog.dart';
+import 'package:RID1460/models/broadcast.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class News extends StatefulWidget {
@@ -15,11 +21,47 @@ class News extends StatefulWidget {
   }
 }
 
-class _NewsState extends State<News>{
+class _NewsState extends State<News> {
   Map<int, bool> countToValue = <int, bool>{};
 
   String keyword;
+  List<BoardcastList> broadcastList = List<BoardcastList>();
 
+  @override
+  void initState() {
+    super.initState();
+    getBroadcasts();
+  }
+
+// Methods
+  Future<void> getBroadcasts() async {
+    String url = GlobalResources().apiHost + 'wcfrest.svc/getBroadcast';
+    print(url);
+    Dio dio = new Dio();
+    try {
+      Response response = await dio.get(url);
+      // print(response);
+      var result = response.data;
+      print(result);
+      Broadcast collection = Broadcast.fromJson(result);
+      Map<dynamic, dynamic> map = jsonDecode(collection.getBroadcastResult);
+      
+      GetBroadcastResult collectionResult = GetBroadcastResult.fromJson(map);
+      if (collectionResult.result == 'error') {
+        normalDialog(context, 'ผิดพลาด', collectionResult.msg);
+      } else {
+        for (var item in collection.getBroadcastResult) {
+          broadcastList.add(item);
+        }
+        int totalRows = collection.getBroadcastResult.lenght;
+        print('boardcast : {$totalRows} items');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+// Widgets
   Widget searchKeywordForm() {
     return Container(
       margin: const EdgeInsets.all(20.0),
@@ -83,7 +125,7 @@ class _NewsState extends State<News>{
                 Container(
                   child: searchKeywordForm(),
                 ),
-                for (int count in List.generate(9, (index) => index + 1))
+                for (var item in broadcastList)
                   InkWell(
                     onTap: () {
                       MaterialPageRoute materialPageRoute = MaterialPageRoute(
@@ -105,7 +147,7 @@ class _NewsState extends State<News>{
                           Container(
                             padding: EdgeInsets.all(2),
                             width: MediaQuery.of(context).size.width * 0.20,
-                            child: Image.asset("images/home-btn3.png"),
+                            child: Image.asset("images/RID-logo-cmyk-TH.png"),
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width * 0.80,
@@ -113,7 +155,7 @@ class _NewsState extends State<News>{
                               title: Row(
                                 children: [
                                   Text(
-                                    'เรื่องxxxxxxxxxxxxx xxxxxxxxxxxx x\nxxxx',
+                                    item.title,
                                     textAlign: TextAlign.left,
                                     maxLines: 2,
                                     softWrap: true,
@@ -122,12 +164,12 @@ class _NewsState extends State<News>{
                               ),
                               isThreeLine: true,
                               subtitle: Text(
-                                '01-01-2020 08:00',
+                                DateTime.now().toIso8601String(),
                                 style: TextStyle(
                                   color: Colors.orange,
                                 ),
                               ),
-                              selected: countToValue[count] ?? false,
+                              selected: false,
                               trailing: Container(
                                 padding: const EdgeInsets.only(top: 15.0),
                                 child: Icon(Icons.arrow_forward_ios),

@@ -69,11 +69,11 @@ class _ListDemoState extends State<ListDemo> {
 
   Future<void> logOutProcess() async {
     String url = GlobalResources().apiHost +
-        'wcfrest.svc/wcfrest.svc/logout?sessionid==$sessionId';
+        'wcfrest.svc/logout?sessionid=$sessionId';
     print(url);
     Dio dio = new Dio();
     try {
-      Response response = await dio.put(url);
+      Response response = await dio.delete(url);
       print(response);
       var result = response.data;
       WebApiResult collection =
