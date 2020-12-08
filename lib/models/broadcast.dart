@@ -22,7 +22,7 @@ class GetBroadcastResult {
   GetBroadcastResult({this.list, this.result, this.msg});
 
   GetBroadcastResult.fromJson(Map<String, dynamic> json) {
-    list = json['list'];
+    list = BroadcastList.fromJson(json['list']);
     result = json['result'];
     msg = json['msg'];
   }
@@ -36,14 +36,14 @@ class GetBroadcastResult {
   }
 }
 
-class BoardcastList {
+class BroadcastList {
   String id;
   String title;
   String detail;
 
-  BoardcastList({this.id, this.title, this.detail});
+  BroadcastList({this.id, this.title, this.detail});
 
-  BoardcastList.fromJson(Map<String, dynamic> json) {
+  BroadcastList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     detail = json['detail'];

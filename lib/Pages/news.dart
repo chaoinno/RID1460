@@ -25,7 +25,7 @@ class _NewsState extends State<News> {
   Map<int, bool> countToValue = <int, bool>{};
 
   String keyword;
-  List<BoardcastList> broadcastList = List<BoardcastList>();
+  List<BroadcastList> broadcastList = List<BroadcastList>();
 
   @override
   void initState() {
@@ -45,7 +45,7 @@ class _NewsState extends State<News> {
       print(result);
       Broadcast collection = Broadcast.fromJson(result);
       Map<dynamic, dynamic> map = jsonDecode(collection.getBroadcastResult);
-      
+
       GetBroadcastResult collectionResult = GetBroadcastResult.fromJson(map);
       if (collectionResult.result == 'error') {
         normalDialog(context, 'ผิดพลาด', collectionResult.msg);
