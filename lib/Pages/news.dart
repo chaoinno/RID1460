@@ -1,21 +1,21 @@
 import 'package:RID1460/Pages/news_detail.dart';
 import 'package:flutter/material.dart';
 
-class News extends StatelessWidget {
+class News extends StatefulWidget {
+  final int sessionId;
+  News({Key key, this.sessionId}) : super(key: key);
+
   @override
+  _NewsState createState() => _NewsState();
+
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ListDemo(),
+      home: News(),
     );
   }
 }
 
-class ListDemo extends StatefulWidget {
-  @override
-  _ListDemoState createState() => _ListDemoState();
-}
-
-class _ListDemoState extends State<ListDemo> {
+class _NewsState extends State<News>{
   Map<int, bool> countToValue = <int, bool>{};
 
   String keyword;

@@ -1,10 +1,7 @@
 import 'dart:ui';
 
 import 'package:RID1460/Pages/bottom_nav_parent.dart';
-import 'package:RID1460/Pages/case_history.dart';
 import 'package:RID1460/Pages/contact.dart';
-import 'package:RID1460/Pages/newcase.dart';
-import 'package:RID1460/Pages/news.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {

@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:RID1460/Pages/change_password.dart';
 import 'package:RID1460/Pages/intro.dart';
 import 'package:RID1460/Pages/officer_webview.dart';
+import 'package:RID1460/Utilities/global_resources.dart';
+import 'package:RID1460/Utilities/nomal_dialog.dart';
+import 'package:RID1460/models/web_api_result.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,9 +28,9 @@ class ListDemo extends StatefulWidget {
 
 class _ListDemoState extends State<ListDemo> {
   Map<int, bool> countToValue = <int, bool>{};
-  String fullName, email;
+  String fullName, email, sessionId;
 
-   @override
+  @override
   void initState() {
     super.initState();
     readSharedPreferance();
@@ -55,15 +61,35 @@ class _ListDemoState extends State<ListDemo> {
     setState(() {
       fullName = userInfo[1] + ' ' + userInfo[2];
       email = userInfo[0];
+      sessionId = userInfo[6];
     });
     print(fullName);
     print(email);
   }
 
   Future<void> logOutProcess() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String url = GlobalResources().apiHost +
+        'wcfrest.svc/wcfrest.svc/logout?sessionid==$sessionId';
+    print(url);
+    Dio dio = new Dio();
+    try {
+      Response response = await dio.put(url);
+      print(response);
+      var result = response.data;
+      WebApiResult collection =
+          WebApiResult.fromJson(result, 'logoutResult');
+      Map<dynamic, dynamic> map = jsonDecode(collection.collectionResult);
+      CollectionResult collectionResult = CollectionResult.fromJson(map);
+      if (collectionResult.result == 'error') {
+        normalDialog(context, 'ผิดพลาด', collectionResult.msg);
+      } else {
+        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.clear();
     Navigator.of(context, rootNavigator: true).pushReplacement(_createRoute());
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   Route _createRoute() {
