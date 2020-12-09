@@ -281,46 +281,49 @@ class _ChangePasswordState extends State<ChangePassword> {
               fit: BoxFit.cover,
             ),
           ),
-          child: Center(
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  margin: const EdgeInsets.all(20),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      )
-                    ],
-                  ),
-                  child: Form(
-                    key: fromkey,
-                    child: Column(
-                      children: [
-                        titleform(),
-                        oldPasswordForm(),
-                        passwordForm(),
-                        confirmPasswordForm(),
-                      ],
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            children: <Widget>[
+              Form(
+                key: fromkey,
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 15),
+                      margin: const EdgeInsets.all(20),
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          )
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          titleform(),
+                          oldPasswordForm(),
+                          passwordForm(),
+                          confirmPasswordForm(),
+                        ],
+                      ),
                     ),
-                  ),
+                    Container(
+                      child: Column(
+                        children: [
+                          submitButton(),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  child: Column(
-                    children: [
-                      submitButton(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

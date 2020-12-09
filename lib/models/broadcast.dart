@@ -22,13 +22,14 @@ class GetBroadcastResult {
   GetBroadcastResult({this.list, this.result, this.msg});
 
   GetBroadcastResult.fromJson(Map<String, dynamic> json) {
-    list = BroadcastList.fromJson(json['list']);
+    list = json['list'];
     result = json['result'];
     msg = json['msg'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+
     data['list'] = this.list;
     data['result'] = this.result;
     data['msg'] = this.msg;

@@ -2,6 +2,9 @@ import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:flutter/material.dart';
 
 class NewsDetail extends StatefulWidget {
+  final String id, title, detail, date;
+  NewsDetail({Key key, this.id, this.title, this.detail, this.date})
+      : super(key: key);
   @override
   _NewsDetailState createState() => _NewsDetailState();
 }
@@ -47,71 +50,77 @@ class _NewsDetailState extends State<NewsDetail> {
           title: Text('ข่าวสาร'),
         ),
         body: Container(
-          child: Center(
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 20),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: Row(
-                    children: [
-                      Text(
-                        'xxxxxxxxx xxxxxxxx',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.grey,
-                        width: 2.0,
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            children: <Widget>[
+              Form(
+                key: fromkey,
+                child: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 20),
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: Row(
+                        children: [
+                          Text(
+                            widget.title != null ? widget.title : 'Null',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  margin: const EdgeInsets.only(top: 20),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: Row(
-                    children: [
-                      Text(
-                        '01-01-2020 08:00',
-                        style: TextStyle(
-                          color: Colors.orange,
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey,
+                            width: 2.0,
+                          ),
                         ),
                       ),
-                    ],
-                  ),
+                      margin: const EdgeInsets.only(top: 20),
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: Row(
+                        children: [
+                          Text(
+                            widget.date,
+                            style: TextStyle(
+                              color: Colors.orange,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 20),
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: Row(
+                        children: [
+                          Text(
+                            widget.detail != null ? widget.detail : 'Null',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                          Text(
+                            '[ดาวน์โหลดเอกสาร]',
+                            style: TextStyle(
+                              color: Colors.lightBlue,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  margin: const EdgeInsets.only(top: 20),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: Row(
-                    children: [
-                      Text(
-                        'xxxxxxxxx xxxxxxxx',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                      Text(
-                        '[ดาวน์โหลดเอกสาร]',
-                        style: TextStyle(
-                          color: Colors.lightBlue,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
