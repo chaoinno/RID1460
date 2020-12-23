@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:RID1460/Pages/change_password.dart';
 import 'package:RID1460/Pages/intro.dart';
 import 'package:RID1460/Pages/officer_webview.dart';
+import 'package:RID1460/Pages/profile.dart';
 import 'package:RID1460/Utilities/global_resources.dart';
 import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:RID1460/models/web_api_result.dart';
@@ -183,21 +184,28 @@ class _ListDemoState extends State<ListDemo> {
                     ),
                   ),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.grey,
-                        width: 1.0,
+                InkWell(
+                  onTap: () {
+                    MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                        builder: (BuildContext context) => Profile());
+                    Navigator.of(context).push(materialPageRoute);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
                       ),
                     ),
-                  ),
-                  child: ListTile(
-                    title: Row(
-                      children: [
-                        Text('ข้อมูลส่วนตัว'),
-                      ],
+                    child: ListTile(
+                      title: Row(
+                        children: [
+                          Text('ข้อมูลส่วนตัว'),
+                        ],
+                      ),
                     ),
                   ),
                 ),
