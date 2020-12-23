@@ -36,6 +36,7 @@ dependencies:
   xml2json: ^4.4.0
   device_info: ^1.0.0
   imei_plugin: ^1.1.6 #ดึงรหัสเครื่อง 
+  google_fonts: ^1.1.1
 
 dev_dependencies:
   flutter_test:

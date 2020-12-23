@@ -164,15 +164,31 @@ class _NewsState extends State<News> {
                           Container(
                             width: MediaQuery.of(context).size.width * 0.80,
                             child: ListTile(
-                              title: Row(
+                              title: Column(
                                 children: [
-                                  Text(
-                                    item.title,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.left,
-                                    maxLines: 2,
-                                    softWrap: true,
-                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                       item.title.length >30? item.title.substring(0,30):item.title.substring(0,item.title.length),
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        maxLines: 2,
+                                        
+                                        softWrap: true,
+                                      ),
+                                    ],
+                                  ), item.title.length >30? Row(
+                                    children: [
+                                      Text(
+                                        item.title.length >30?  item.title.substring(30,item.title.length):"",
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        maxLines: 2,
+                                        
+                                        softWrap: true,
+                                      ),
+                                    ],
+                                  ):Container(),
                                 ],
                               ),
                               isThreeLine: true,

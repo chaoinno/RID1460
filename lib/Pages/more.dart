@@ -9,6 +9,7 @@ import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:RID1460/models/web_api_result.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'contact.dart';
@@ -127,7 +128,7 @@ class _ListDemoState extends State<ListDemo> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(centerTitle: true, title: Text("เพิ่มเติม")),
+        appBar: AppBar(centerTitle: true, title: Text("เพิ่มเติม",style: GoogleFonts.kanit(),)),
         body: ListTileTheme(
           selectedColor: shrineBrown900,
           child: Container(
@@ -146,7 +147,7 @@ class _ListDemoState extends State<ListDemo> {
                       Container(
                         child: Text(
                           fullName ?? '',
-                          style: TextStyle(
+                          style: GoogleFonts.kanit(
                             fontSize: 24.0,
                             fontWeight: FontWeight.bold,
                           ),
@@ -258,7 +259,7 @@ class _ListDemoState extends State<ListDemo> {
                       ),
                       child: Text(
                         'TH',
-                        style: TextStyle(color: Colors.white),
+                        style: GoogleFonts.kanit(color: Colors.white),
                       ),
                     ),
                   ),
