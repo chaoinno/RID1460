@@ -10,6 +10,7 @@ import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:imei_plugin/imei_plugin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -68,8 +69,13 @@ class _AuthenState extends State<Authen> {
       child: Center(
           child: Text(
         "เข้าสู่ระบบ",
-        style: TextStyle(
-            fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.bold),
+        style: GoogleFonts.kanit(
+          textStyle: TextStyle(
+            fontSize: 20.0,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       )),
     );
   }
@@ -150,7 +156,9 @@ class _AuthenState extends State<Authen> {
         child: Center(
           child: Text(
             'ลืมรหัสผ่าน',
-            style: TextStyle(color: Colors.grey),
+            style: GoogleFonts.kanit(
+              textStyle: TextStyle(color: Colors.grey),
+            ),
           ),
         ),
       ),
@@ -170,7 +178,9 @@ class _AuthenState extends State<Authen> {
         child: Center(
           child: Text(
             'ลงทะเบียนสมาชิกใหม่',
-            style: TextStyle(color: Colors.orange),
+            style: GoogleFonts.kanit(
+              textStyle: TextStyle(color: Colors.orange),
+            ),
           ),
         ),
       ),
@@ -210,7 +220,9 @@ class _AuthenState extends State<Authen> {
         child: Center(
           child: Text(
             'เข้าสู่ระบบ',
-            style: TextStyle(color: Colors.white),
+            style: GoogleFonts.kanit(
+              textStyle: TextStyle(color: Colors.white),
+            ),
           ),
         ),
       ),
@@ -235,7 +247,9 @@ class _AuthenState extends State<Authen> {
         child: Center(
           child: Text(
             'เข้าสู่ระบบด้วย FACEBOOK',
-            style: TextStyle(color: Colors.white),
+            style: GoogleFonts.kanit(
+              textStyle: TextStyle(color: Colors.white),
+            ),
           ),
         ),
       ),

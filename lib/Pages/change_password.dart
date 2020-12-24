@@ -6,6 +6,7 @@ import 'package:RID1460/models/web_api_result.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangePassword extends StatefulWidget {
@@ -43,6 +44,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             actions: [
               okButton(context),
             ],
+            titleTextStyle: GoogleFonts.kanit(),
           );
         });
   }
@@ -107,7 +109,11 @@ class _ChangePasswordState extends State<ChangePassword> {
         child: Center(
           child: Text(
             'ตั้งรหัสผ่านใหม่',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: GoogleFonts.kanit(
+              textStyle: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
       ),
@@ -250,8 +256,12 @@ class _ChangePasswordState extends State<ChangePassword> {
       child: Center(
           child: Text(
         "ระบุรหัสผ่าน",
-        style: TextStyle(
-            fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.bold),
+        style: GoogleFonts.kanit(
+          textStyle: TextStyle(
+            fontSize: 20.0,
+            color: Colors.white,
+          ),
+        ),
       )),
     );
   }
@@ -272,7 +282,10 @@ class _ChangePasswordState extends State<ChangePassword> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('เปลี่ยนรหัสผ่าน'),
+          title: Text(
+            'เปลี่ยนรหัสผ่าน',
+            style: GoogleFonts.kanit(),
+          ),
         ),
         body: Container(
           decoration: BoxDecoration(

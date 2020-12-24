@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Newcase extends StatefulWidget {
@@ -65,8 +66,12 @@ class _NewcaseState extends State<Newcase> {
       },
       child: Scaffold(
         //appBar: AppBar(centerTitle: true, title: Text("$title")),
-        appBar:
-            AppBar(centerTitle: true, title: Text("แจ้งเรื่องร้องเรียนใหม่")),
+        appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              "แจ้งเรื่องร้องเรียนใหม่",
+              style: GoogleFonts.kanit(),
+            )),
         body: Center(
           child: Container(
             constraints: BoxConstraints.expand(),

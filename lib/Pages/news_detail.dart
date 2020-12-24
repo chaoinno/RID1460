@@ -1,5 +1,6 @@
 import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class NewsDetail extends StatefulWidget {
   final String id, title, detail, date;
@@ -47,7 +48,10 @@ class _NewsDetailState extends State<NewsDetail> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('ข่าวสาร'),
+          title: Text(
+            'ข่าวสาร',
+            style: GoogleFonts.kanit(),
+          ),
         ),
         body: Container(
           child: ListView(

@@ -6,6 +6,7 @@ import 'package:RID1460/models/web_api_result.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
@@ -65,11 +66,16 @@ class _ProfileState extends State<Profile> {
         //border: Border.all(color:Colors.red),
       ),
       child: Center(
-          child: Text(
-        "ข้อมูลสมาชิก",
-        style: TextStyle(
-            fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.bold),
-      )),
+        child: Text(
+          "ข้อมูลสมาชิก",
+          style: GoogleFonts.kanit(
+            textStyle: TextStyle(
+              fontSize: 20.0,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -89,7 +95,10 @@ class _ProfileState extends State<Profile> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('ข้อมูลสมาชิก'),
+          title: Text(
+            'ข้อมูลสมาชิก',
+            style: GoogleFonts.kanit(),
+          ),
         ),
         body: Container(
           decoration: BoxDecoration(
@@ -112,14 +121,19 @@ class _ProfileState extends State<Profile> {
                           Container(
                             child: Text(
                               fullName ?? '',
-                              style: TextStyle(
-                                fontSize: 24.0,
-                                fontWeight: FontWeight.bold,
+                              style: GoogleFonts.kanit(
+                                textStyle: TextStyle(
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
                           Container(
-                            child: Text(email ?? ''),
+                            child: Text(
+                              email ?? '',
+                              style: GoogleFonts.kanit(),
+                            ),
                           ),
                         ],
                       ),
@@ -151,8 +165,14 @@ class _ProfileState extends State<Profile> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('data xxxxxxxxxxxxxxxx ccccccccccccc'),
-                                  Text('data'),
+                                  Text(
+                                    'data xxxxxxxxxxxxxxxx ccccccccccccc',
+                                    style: GoogleFonts.kanit(),
+                                  ),
+                                  Text(
+                                    'data',
+                                    style: GoogleFonts.kanit(),
+                                  ),
                                 ],
                               ),
                             ),

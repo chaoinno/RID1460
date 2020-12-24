@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class OfficerWebView extends StatefulWidget {
@@ -18,7 +19,12 @@ class OfficerWebViewState extends State<OfficerWebView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: Text("สำหรับเจ้าหน้าที่")),
+      appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            "สำหรับเจ้าหน้าที่",
+            style: GoogleFonts.kanit(),
+          )),
       body: Container(
         child: WebView(
           initialUrl: 'https://www.rid.go.th',

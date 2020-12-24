@@ -10,6 +10,7 @@ import 'package:dio/dio.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -49,8 +50,7 @@ class _RegistrationState extends State<Registration> {
     childAreas = [];
     subChildAreas = [];
 
-    parseProvinces(
-        GlobalResources().apiHost + 'wcfrest.svc/GetProvince');
+    parseProvinces(GlobalResources().apiHost + 'wcfrest.svc/GetProvince');
 
     super.initState();
     selectedGender = 'ชาย';
@@ -92,7 +92,7 @@ class _RegistrationState extends State<Registration> {
       CollectionResult collectionResult = CollectionResult.fromJson(map);
       if (collectionResult.result == 'error') {
         normalDialog(context, 'ลงทะเบียนไม่สำเร็จ', collectionResult.msg);
-      }else{
+      } else {
         normalDialog(context, 'ลงทะเบียนสำเร็จ', collectionResult.msg);
         Navigator.of(context).pop();
       }
@@ -195,8 +195,11 @@ class _RegistrationState extends State<Registration> {
       child: Center(
           child: Text(
         title,
-        style: TextStyle(
-            fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.bold),
+        style: GoogleFonts.kanit(
+            textStyle: TextStyle(
+          fontSize: 20.0,
+          color: Colors.white,
+        )),
       )),
     );
   }
@@ -423,7 +426,11 @@ class _RegistrationState extends State<Registration> {
         child: Center(
           child: Text(
             'ลงทะเบียน',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: GoogleFonts.kanit(
+              textStyle: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
       ),
@@ -452,7 +459,11 @@ class _RegistrationState extends State<Registration> {
         child: Center(
           child: Text(
             'ลงทะเบียนด้วย FACEBOOK',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: GoogleFonts.kanit(
+              textStyle: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
       ),
@@ -748,7 +759,12 @@ class _RegistrationState extends State<Registration> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(centerTitle: true, title: Text("ลงทะเบียนสมาชิก")),
+        appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              "ลงทะเบียนสมาชิก",
+              style: GoogleFonts.kanit(),
+            )),
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(

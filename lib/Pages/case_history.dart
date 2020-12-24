@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CaseHistory extends StatelessWidget {
   @override
@@ -36,7 +37,9 @@ class _ListDemoState extends State<ListDemo> {
               onSaved: (String string) {
                 keyword = string;
               },
-              decoration: InputDecoration(hintText: 'ค้นหา...'),
+              decoration: InputDecoration(
+                hintText: 'ค้นหา...',
+              ),
             ),
           ),
           Container(
@@ -67,7 +70,13 @@ class _ListDemoState extends State<ListDemo> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(centerTitle: true, title: Text("ประวัติการแจ้งเรื่อง")),
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            "ประวัติการแจ้งเรื่อง",
+            style: GoogleFonts.kanit(),
+          ),
+        ),
         body: ListTileTheme(
           selectedColor: shrineBrown900,
           child: Container(
@@ -96,18 +105,25 @@ class _ListDemoState extends State<ListDemo> {
                     child: ListTile(
                       title: Row(
                         children: [
-                          Text('รหัสเรื่อง : '),
+                          Text(
+                            'รหัสเรื่อง : ',
+                            style: GoogleFonts.kanit(),
+                          ),
                           Text(
                             '00000$count',
-                            style: TextStyle(
-                              color: Colors.orange,
+                            style: GoogleFonts.kanit(
+                              textStyle: TextStyle(
+                                color: Colors.orange,
+                              ),
                             ),
                           ),
                         ],
                       ),
                       isThreeLine: true,
                       subtitle: Text(
-                          'วันที่แจ้งเรื่อง : 01-01-2020 08:00\nสถานะ : กำลังดำเนินการ'),
+                        'วันที่แจ้งเรื่อง : 01-01-2020 08:00\nสถานะ : กำลังดำเนินการ',
+                        style: GoogleFonts.kanit(),
+                      ),
                       // leading: Column(
                       //   children: [
                       //     Text('รหัสเรื่อง'),

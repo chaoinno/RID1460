@@ -70,24 +70,25 @@ class _ListDemoState extends State<ListDemo> {
   }
 
   Future<void> logOutProcess() async {
-    String url = GlobalResources().apiHost +
-        'wcfrest.svc/logout?sessionid=$sessionId';
+    String url =
+        GlobalResources().apiHost + 'wcfrest.svc/logout?sessionid=$sessionId';
     print(url);
     Dio dio = new Dio();
     try {
       Response response = await dio.delete(url);
       print(response);
       var result = response.data;
-      WebApiResult collection =
-          WebApiResult.fromJson(result, 'logoutResult');
+      WebApiResult collection = WebApiResult.fromJson(result, 'logoutResult');
       Map<dynamic, dynamic> map = jsonDecode(collection.collectionResult);
       CollectionResult collectionResult = CollectionResult.fromJson(map);
       if (collectionResult.result == 'error') {
         normalDialog(context, 'ผิดพลาด', collectionResult.msg);
       } else {
-        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.clear();
-    Navigator.of(context, rootNavigator: true).pushReplacement(_createRoute());
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        sharedPreferences.clear();
+        Navigator.of(context, rootNavigator: true)
+            .pushReplacement(_createRoute());
       }
     } catch (e) {
       print(e);
@@ -128,7 +129,12 @@ class _ListDemoState extends State<ListDemo> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(centerTitle: true, title: Text("เพิ่มเติม",style: GoogleFonts.kanit(),)),
+        appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              "เพิ่มเติม",
+              style: GoogleFonts.kanit(),
+            )),
         body: ListTileTheme(
           selectedColor: shrineBrown900,
           child: Container(
@@ -154,7 +160,10 @@ class _ListDemoState extends State<ListDemo> {
                         ),
                       ),
                       Container(
-                        child: Text(email ?? ''),
+                        child: Text(
+                          email ?? '',
+                          style: GoogleFonts.kanit(),
+                        ),
                       ),
                     ],
                   ),
@@ -172,7 +181,10 @@ class _ListDemoState extends State<ListDemo> {
                   child: ListTile(
                     title: Row(
                       children: [
-                        Text('เชื่อมต่อกับ FACEBOOK'),
+                        Text(
+                          'เชื่อมต่อกับ FACEBOOK',
+                          style: GoogleFonts.kanit(),
+                        ),
                       ],
                     ),
                     trailing: Container(
@@ -181,7 +193,10 @@ class _ListDemoState extends State<ListDemo> {
                         borderRadius: BorderRadius.circular(10.0),
                         color: Colors.grey,
                       ),
-                      child: Text('เชื่อมต่อแล้ว'),
+                      child: Text(
+                        'เชื่อมต่อแล้ว',
+                        style: GoogleFonts.kanit(),
+                      ),
                     ),
                   ),
                 ),
@@ -204,7 +219,10 @@ class _ListDemoState extends State<ListDemo> {
                     child: ListTile(
                       title: Row(
                         children: [
-                          Text('ข้อมูลส่วนตัว'),
+                          Text(
+                            'ข้อมูลส่วนตัว',
+                            style: GoogleFonts.kanit(),
+                          ),
                         ],
                       ),
                     ),
@@ -229,7 +247,10 @@ class _ListDemoState extends State<ListDemo> {
                     child: ListTile(
                       title: Row(
                         children: [
-                          Text('เปลี่ยนรหัสผ่าน'),
+                          Text(
+                            'เปลี่ยนรหัสผ่าน',
+                            style: GoogleFonts.kanit(),
+                          ),
                         ],
                       ),
                     ),
@@ -248,7 +269,10 @@ class _ListDemoState extends State<ListDemo> {
                   child: ListTile(
                     title: Row(
                       children: [
-                        Text('ภาษา'),
+                        Text(
+                          'ภาษา',
+                          style: GoogleFonts.kanit(),
+                        ),
                       ],
                     ),
                     trailing: Container(
@@ -283,7 +307,10 @@ class _ListDemoState extends State<ListDemo> {
                     child: ListTile(
                       title: Row(
                         children: [
-                          Text('สำหรับเจ้าหน้าที่'),
+                          Text(
+                            'สำหรับเจ้าหน้าที่',
+                            style: GoogleFonts.kanit(),
+                          ),
                         ],
                       ),
                     ),
@@ -309,7 +336,10 @@ class _ListDemoState extends State<ListDemo> {
                           Container(
                             child: Icon(Icons.power_settings_new),
                           ),
-                          Text('ออกจากระบบ'),
+                          Text(
+                            'ออกจากระบบ',
+                            style: GoogleFonts.kanit(),
+                          ),
                         ],
                       ),
                     ),

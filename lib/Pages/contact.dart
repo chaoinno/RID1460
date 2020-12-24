@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Contact extends StatefulWidget {
   @override
@@ -7,11 +8,16 @@ class Contact extends StatefulWidget {
 }
 
 class _ContactState extends State<Contact> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: Text("ติดต่อเรา")),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "ติดต่อเรา",
+          style: GoogleFonts.kanit(),
+        ),
+      ),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -45,26 +51,32 @@ class _ContactState extends State<Contact> {
                       ),
                       child: Center(
                         child: Text(
-                            "กองส่งเสริมการมีส่วนร่วมของประชาชนกรมชลประทาน",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
+                          "กองส่งเสริมการมีส่วนร่วมของประชาชนกรมชลประทาน",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.kanit(
+                            textStyle: TextStyle(
                               fontSize: 17.0,
                               color: Colors.white,
-                              //fontWeight: FontWeight.bold
-                            )),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 20.0, left: 30.0),
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("อาคารศูนย์วิศวกรรมการชลประทานชั้น 1",
-                            //textAlign: TextAlign.center,
-                            style: TextStyle(
+                        child: Text(
+                          "อาคารศูนย์วิศวกรรมการชลประทานชั้น 1",
+                          //textAlign: TextAlign.center,
+                          style: GoogleFonts.kanit(
+                            textStyle: TextStyle(
                               fontSize: 16.0,
                               color: Colors.grey[800],
                               //fontWeight: FontWeight.bold
-                            )),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     Container(
@@ -73,9 +85,12 @@ class _ContactState extends State<Contact> {
                         alignment: Alignment.centerLeft,
                         child: Text("811 ถ.สามเสน แขวงถนนนครไชยศรี เขตดุสิต",
                             //textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.grey[800],
+                            style: GoogleFonts.kanit(
+                              textStyle: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.grey[800],
+                              )),
                               //fontWeight: FontWeight.bold
                             )),
                       ),
@@ -86,9 +101,9 @@ class _ContactState extends State<Contact> {
                         alignment: Alignment.centerLeft,
                         child: Text("กรุงเทพฯ 10300",
                             //textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.grey[800],
+                            style: GoogleFonts.kanit(
+                              textStyle: TextStyle(
+                                  fontSize: 16.0, color: Colors.grey[800]),
                               //fontWeight: FontWeight.bold
                             )),
                       ),
@@ -97,39 +112,46 @@ class _ContactState extends State<Contact> {
                       margin: const EdgeInsets.only(top: 20.0, left: 30.0),
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("โทร. 0-2669-3775",
-                            //textAlign: TextAlign.center,
-                            style: TextStyle(
+                        child: Text(
+                          "โทร. 0-2669-3775",
+                          style: GoogleFonts.kanit(
+                            textStyle: TextStyle(
                               fontSize: 16.0,
                               color: Colors.grey[800],
-                              //fontWeight: FontWeight.bold
-                            )),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     Container(
                       margin: const EdgeInsets.only(left: 30.0),
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("หมายเลขภายใน 2825",
-                            // textAlign: TextAlign.center,
-                            style: TextStyle(
+                        child: Text(
+                          "หมายเลขภายใน 2825",
+                          style: GoogleFonts.kanit(
+                            textStyle: TextStyle(
                               fontSize: 16.0,
                               color: Colors.grey[800],
-                              //fontWeight: FontWeight.bold
-                            )),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     Container(
                       margin: const EdgeInsets.only(left: 30.0),
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("แฟกซ์ 0-2669-1460",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
+                        child: Text(
+                          "แฟกซ์ 0-2669-1460",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.kanit(
+                            textStyle: TextStyle(
                               fontSize: 16.0,
                               color: Colors.grey[800],
-                              //fontWeight: FontWeight.bold
-                            )),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     Container(

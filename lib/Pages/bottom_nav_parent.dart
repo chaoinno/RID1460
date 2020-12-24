@@ -4,6 +4,7 @@ import 'package:RID1460/Pages/more.dart';
 import 'package:RID1460/Pages/newcase.dart';
 import 'package:RID1460/Pages/news.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class BottomNavBarParent extends StatefulWidget {
   final int defaultPageNo;
@@ -23,9 +24,7 @@ class _BottomNavBarParentState extends State<BottomNavBarParent>
   @override
   void initState() {
     super.initState();
-    currentPage = widget.defaultPageNo != null
-        ? widget.defaultPageNo
-        : 0;
+    currentPage = widget.defaultPageNo != null ? widget.defaultPageNo : 0;
     tabs = [
       Home(),
       CaseHistory(),
@@ -79,7 +78,10 @@ class _BottomNavBarParentState extends State<BottomNavBarParent>
         },
         items: [
           BottomNavigationBarItem(
-            title: Text('หน้าหลัก'),
+            title: Text(
+              'หน้าหลัก',
+              style: GoogleFonts.kanit(),
+            ),
             icon: Image(
               image: AssetImage("images/home-icon-silhouette.png"),
               height: 25,
@@ -87,7 +89,10 @@ class _BottomNavBarParentState extends State<BottomNavBarParent>
             ),
           ),
           BottomNavigationBarItem(
-            title: Text('ประวัติการแจ้งเรื่อง'),
+            title: Text(
+              'ประวัติการแจ้งเรื่อง',
+              style: GoogleFonts.kanit(),
+            ),
             icon: Image(
               image: AssetImage("images/interface.png"),
               height: 25,
@@ -95,7 +100,10 @@ class _BottomNavBarParentState extends State<BottomNavBarParent>
             ),
           ),
           BottomNavigationBarItem(
-            title: Text('แจ้งเรื่องร้องเรียนใหม่'),
+            title: Text(
+              'แจ้งเรื่องร้องเรียนใหม่',
+              style: GoogleFonts.kanit(),
+            ),
             icon: Image(
               image: AssetImage("images/writing (1).png"),
               height: 25,
@@ -103,7 +111,10 @@ class _BottomNavBarParentState extends State<BottomNavBarParent>
             ),
           ),
           BottomNavigationBarItem(
-            title: Text('ข่าวสาร'),
+            title: Text(
+              'ข่าวสาร',
+              style: GoogleFonts.kanit(),
+            ),
             icon: Image(
               image: AssetImage("images/tools-and-utensils.png"),
               height: 25,
@@ -111,7 +122,10 @@ class _BottomNavBarParentState extends State<BottomNavBarParent>
             ),
           ),
           BottomNavigationBarItem(
-            title: Text('เพิ่มเติม'),
+            title: Text(
+              'เพิ่มเติม',
+              style: GoogleFonts.kanit(),
+            ),
             icon: Image(
               image: AssetImage("images/more.png"),
               height: 25,

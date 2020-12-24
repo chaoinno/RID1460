@@ -6,6 +6,7 @@ import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:RID1460/models/broadcast.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class News extends StatefulWidget {
   final int sessionId;
@@ -115,7 +116,7 @@ class _NewsState extends State<News> {
             centerTitle: true,
             title: Text(
               "ข่าวสาร",
-              style: TextStyle(fontFamily: 'Kanit'),
+              style: GoogleFonts.kanit(),
             )),
         body: ListTileTheme(
           selectedColor: shrineBrown900,
@@ -169,33 +170,44 @@ class _NewsState extends State<News> {
                                   Row(
                                     children: [
                                       Text(
-                                       item.title.length >30? item.title.substring(0,30):item.title.substring(0,item.title.length),
+                                        item.title.length > 30
+                                            ? item.title.substring(0, 30)
+                                            : item.title.substring(
+                                                0, item.title.length),
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,
                                         maxLines: 2,
-                                        
                                         softWrap: true,
+                                        style: GoogleFonts.kanit(),
                                       ),
                                     ],
-                                  ), item.title.length >30? Row(
-                                    children: [
-                                      Text(
-                                        item.title.length >30?  item.title.substring(30,item.title.length):"",
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                        maxLines: 2,
-                                        
-                                        softWrap: true,
-                                      ),
-                                    ],
-                                  ):Container(),
+                                  ),
+                                  item.title.length > 30
+                                      ? Row(
+                                          children: [
+                                            Text(
+                                              item.title.length > 30
+                                                  ? item.title.substring(
+                                                      30, item.title.length)
+                                                  : "",
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.left,
+                                              maxLines: 2,
+                                              softWrap: true,
+                                              style: GoogleFonts.kanit(),
+                                            ),
+                                          ],
+                                        )
+                                      : Container(),
                                 ],
                               ),
                               isThreeLine: true,
                               subtitle: Text(
                                 DateTime.now().toIso8601String(),
-                                style: TextStyle(
-                                  color: Colors.orange,
+                                style: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                    color: Colors.orange,
+                                  ),
                                 ),
                               ),
                               selected: false,

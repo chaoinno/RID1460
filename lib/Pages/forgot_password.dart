@@ -5,6 +5,7 @@ import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:RID1460/models/web_api_result.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ForgotPassword extends StatefulWidget {
   @override
@@ -87,7 +88,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         child: Center(
           child: Text(
             'ตั้งรหัสผ่านใหม่',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: GoogleFonts.kanit(
+              textStyle: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
       ),
@@ -148,8 +153,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       child: Center(
           child: Text(
         "ระบุอีเมลเพื่อตั้งรหัสผ่านใหม่",
-        style: TextStyle(
-            fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.bold),
+        style: GoogleFonts.kanit(
+          textStyle: TextStyle(
+            fontSize: 20.0,
+            color: Colors.white,
+          ),
+        ),
       )),
     );
   }
@@ -170,7 +179,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('ลืมรหัสผ่าน'),
+          title: Text(
+            'ลืมรหัสผ่าน',
+            style: GoogleFonts.kanit(),
+          ),
         ),
         body: Container(
           decoration: BoxDecoration(
