@@ -52,15 +52,30 @@ class _NewsState extends State<News> {
       if (getBroadcastResult.result == 'error') {
         normalDialog(context, 'ผิดพลาด', getBroadcastResult.msg);
       } else {
-        for (var item in getBroadcastResult.list) {
-          BroadcastList list1 = BroadcastList.fromJson(item);
-          broadcastList.add(list1);
-          print(list1.title);
-        }
+        setState(() {
+          broadcastList.clear();
+          for (var item in getBroadcastResult.list) {
+            BroadcastList list1 = BroadcastList.fromJson(item);
+            broadcastList.add(list1);
+            print(list1.title);
+          }
+        });
       }
     } catch (e) {
       print(e);
     }
+  }
+
+  onItemChanged(String value) {
+    setState(() {
+      if (value.length > 0) {
+        broadcastList = broadcastList
+            .where((string) => string.title.contains(value))
+            .toList();
+      } else {
+        this.getBroadcasts();
+      }
+    });
   }
 
 // Widgets
@@ -82,6 +97,7 @@ class _NewsState extends State<News> {
                 keyword = string;
               },
               decoration: InputDecoration(hintText: 'ค้นหา...'),
+              onChanged: onItemChanged,
             ),
           ),
           Container(
@@ -169,36 +185,34 @@ class _NewsState extends State<News> {
                                 children: [
                                   Row(
                                     children: [
-                                      Text(
-                                        item.title.length > 30
-                                            ? item.title.substring(0, 30)
-                                            : item.title.substring(
-                                                0, item.title.length),
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                        maxLines: 2,
-                                        softWrap: true,
-                                        style: GoogleFonts.kanit(),
+                                      Flexible(
+                                        child: Text(
+                                          item.title,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.left,
+                                          maxLines: 1,
+                                          softWrap: true,
+                                          style: GoogleFonts.kanit(
+                                            fontSize: 18,
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
-                                  item.title.length > 30
-                                      ? Row(
-                                          children: [
-                                            Text(
-                                              item.title.length > 30
-                                                  ? item.title.substring(
-                                                      30, item.title.length)
-                                                  : "",
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.left,
-                                              maxLines: 2,
-                                              softWrap: true,
-                                              style: GoogleFonts.kanit(),
-                                            ),
-                                          ],
-                                        )
-                                      : Container(),
+                                  Row(
+                                    children: [
+                                      Flexible(
+                                        child: Text(
+                                          item.detail,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.left,
+                                          maxLines: 1,
+                                          softWrap: true,
+                                          style: GoogleFonts.kanit(),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
                               isThreeLine: true,

@@ -66,13 +66,17 @@ class _NewsDetailState extends State<NewsDetail> {
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: Row(
                         children: [
-                          Text(
-                            widget.title != null ? widget.title : 'Null',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                          Flexible(
+                            child: Text(
+                              widget.title,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              maxLines: 3,
+                              softWrap: true,
+                              style: GoogleFonts.kanit(
+                                fontSize: 20,
+                              ),
                             ),
-                            textAlign: TextAlign.left,
                           ),
                         ],
                       ),
