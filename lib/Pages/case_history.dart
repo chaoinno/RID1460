@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:RID1460/Pages/case_detail.dart';
 import 'package:RID1460/Utilities/global_resources.dart';
 import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:RID1460/models/service_case.dart';
@@ -185,15 +186,11 @@ class _ListDemoState extends State<ListDemo> {
                 for (var item in serviceCaseList)
                   InkWell(
                     onTap: () {
-                      // MaterialPageRoute materialPageRoute = MaterialPageRoute(
-                      //   builder: (BuildContext context) => NewsDetail(
-                      //     id: item.id,
-                      //     title: item.title,
-                      //     detail: item.detail,
-                      //     date: DateTime.now().toIso8601String(),
-                      //   ),
-                      // );
-                      // Navigator.of(context).push(materialPageRoute);
+                      MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            CaseDetail(srId: item.srid),
+                      );
+                      Navigator.of(context).push(materialPageRoute);
                     },
                     child: Container(
                       decoration: BoxDecoration(

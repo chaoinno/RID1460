@@ -16,7 +16,7 @@ class ServiceCaseDetail {
 
 class GetServiceDetailResult {
   var service;
-  List<LsAttach> lsAttach;
+  var lsAttach;
   String result;
   String msg;
 
