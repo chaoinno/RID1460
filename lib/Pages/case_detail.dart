@@ -8,6 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CaseDetail extends StatefulWidget {
   final String srId;
@@ -31,6 +32,14 @@ class _CaseDetailState extends State<CaseDetail> {
   }
 
 // Methods
+  Future<void> _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   Future<void> getServiceCaseDetails() async {
     String url = GlobalResources().apiHost +
         'wcfrest.svc/getServiceDetail?sessionid=${sessionId}&SRID=${widget.srId}';
@@ -160,7 +169,7 @@ class _CaseDetailState extends State<CaseDetail> {
                       padding: const EdgeInsets.all(10),
                       width: MediaQuery.of(context).size.width * 0.50,
                       child: Text(
-                        service.code,
+                        service.code ?? '-',
                         style: GoogleFonts.kanit(
                           textStyle: TextStyle(
                             color: Colors.orange,
@@ -183,7 +192,7 @@ class _CaseDetailState extends State<CaseDetail> {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.30,
                       child: Text(
-                        service.openDate,
+                        service.openDate ?? '-',
                         style: GoogleFonts.kanit(
                           textStyle: TextStyle(
                             color: Colors.orange,
@@ -201,7 +210,7 @@ class _CaseDetailState extends State<CaseDetail> {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.30,
                       child: Text(
-                        service.closeDate,
+                        service.closeDate ?? '-',
                         style: GoogleFonts.kanit(
                           textStyle: TextStyle(
                             color: Colors.orange,
@@ -225,7 +234,7 @@ class _CaseDetailState extends State<CaseDetail> {
                       padding: const EdgeInsets.all(10),
                       width: MediaQuery.of(context).size.width * 0.75,
                       child: Text(
-                        service.statusName,
+                        service.statusName ?? '-',
                         style: GoogleFonts.kanit(
                           textStyle: TextStyle(
                             color: Colors.orange,
@@ -283,7 +292,7 @@ class _CaseDetailState extends State<CaseDetail> {
                       padding: const EdgeInsets.all(10),
                       width: MediaQuery.of(context).size.width * 0.70,
                       child: Text(
-                        service.catagoryName,
+                        service.catagoryName ?? '-',
                         style: GoogleFonts.kanit(
                           textStyle: TextStyle(
                             color: Colors.orange,
@@ -309,7 +318,7 @@ class _CaseDetailState extends State<CaseDetail> {
                       padding: const EdgeInsets.all(10),
                       width: MediaQuery.of(context).size.width * 0.70,
                       child: Text(
-                        service.detail,
+                        service.detail ?? '-',
                         style: GoogleFonts.kanit(
                           textStyle: TextStyle(
                             color: Colors.orange,
@@ -331,17 +340,28 @@ class _CaseDetailState extends State<CaseDetail> {
                         ),
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      width: MediaQuery.of(context).size.width * 0.70,
-                      child: Text(
-                        'getServiceDetailResult.lsAttach',
-                        style: GoogleFonts.kanit(
-                          textStyle: TextStyle(
-                            color: Colors.orange,
+                    Column(
+                      children: [
+                        for (var item in lsAttach)
+                          InkWell(
+                            onTap: () {
+                              this._launchURL(item.remark);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              width: MediaQuery.of(context).size.width * 0.70,
+                              child: Text(
+                                item.name,
+                                style: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                    color: Colors.orange,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
+                      ],
                     ),
                   ],
                 ),
@@ -375,6 +395,22 @@ class _CaseDetailState extends State<CaseDetail> {
           titleform('สรุปผลพิจารณาเรื่อง / การวินิจฉัย'),
           Align(
             alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  width: MediaQuery.of(context).size.width * 0.70,
+                  child: Text(
+                    service.summary ?? '-',
+                    style: GoogleFonts.kanit(
+                      textStyle: TextStyle(
+                        color: Colors.orange,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

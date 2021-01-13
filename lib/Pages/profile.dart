@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:RID1460/Pages/profile_edit.dart';
 import 'package:RID1460/Utilities/global_resources.dart';
 import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:RID1460/models/account_detail.dart';
@@ -147,7 +148,13 @@ class _ProfileState extends State<Profile> {
             Padding(
                 padding: EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            ProfileEdit(),
+                      );
+                      Navigator.of(context).push(materialPageRoute);
+                  },
                   child: Icon(Icons.edit),
                 )),
           ],
