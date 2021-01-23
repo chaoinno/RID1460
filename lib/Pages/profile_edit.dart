@@ -37,26 +37,40 @@ class _ProfileEditState extends State<ProfileEdit> {
       selectedDistrict,
       selectedProvince,
       sessionId;
-  Account account = Account();
+  Account account;
   final fromkey = GlobalKey<FormState>();
 
   static List provinces, childAreas, subChildAreas;
 
+  TextEditingController titleController;
+  TextEditingController firstNameController;
+
   @override
   void initState() {
+    super.initState();
     provinces = [];
     childAreas = [];
     subChildAreas = [];
+    account = Account();
 
     parseProvinces(GlobalResources().apiHost + 'wcfrest.svc/GetProvince');
 
-    super.initState();
     selectedGender = 'ชาย';
     readSharedPreferance();
+    // getAccountDetails();
   }
 
 //Methods
-  Future<void> getAccountDetails() async {
+
+  Future<void> readSharedPreferance() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    List userInfo = sharedPreferences.getStringList('UserInfo');
+    print(userInfo);
+    setState(() {
+      sessionId = userInfo[6];
+    });
+
     String url = GlobalResources().apiHost +
         'wcfrest.svc/getAccountDetail?sessionid=$sessionId';
     print(url);
@@ -82,7 +96,7 @@ class _ProfileEditState extends State<ProfileEdit> {
           account = Account.fromJson(getAccountDetailResult.account);
           print(account.firstname);
           // this.prefixName = account.title ?? '-';
-          // this.firstName = account.firstname ?? '-';
+          firstNameController = TextEditingController()..text = account.firstname ?? '-';
           // this.lastName = account.lastname ?? '-';
           // this.selectedGender = account.gender ?? 'ชาย';
           // this.nationalId = account.citizenid ?? '-';
@@ -97,17 +111,6 @@ class _ProfileEditState extends State<ProfileEdit> {
     } catch (e) {
       print(e);
     }
-  }
-
-  Future<void> readSharedPreferance() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-
-    List userInfo = sharedPreferences.getStringList('UserInfo');
-    print(userInfo);
-    setState(() {
-      sessionId = userInfo[6];
-    });
-    getAccountDetails();
   }
 
   Future<void> normalDialog(
