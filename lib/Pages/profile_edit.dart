@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:RID1460/Utilities/global_resources.dart';
 import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:RID1460/models/account_detail.dart';
@@ -52,12 +54,14 @@ class _ProfileEditState extends State<ProfileEdit> {
     childAreas = [];
     subChildAreas = [];
     account = Account();
+    firstNameController = TextEditingController();
 
     parseProvinces(GlobalResources().apiHost + 'wcfrest.svc/GetProvince');
 
     selectedGender = 'ชาย';
     readSharedPreferance();
     // getAccountDetails();
+
   }
 
 //Methods
@@ -96,7 +100,8 @@ class _ProfileEditState extends State<ProfileEdit> {
           account = Account.fromJson(getAccountDetailResult.account);
           print(account.firstname);
           // this.prefixName = account.title ?? '-';
-          firstNameController = TextEditingController()..text = account.firstname ?? '-';
+          // firstNameController.text = 'kkkkkk';
+          this.firstName = 'lllllll';
           // this.lastName = account.lastname ?? '-';
           // this.selectedGender = account.gender ?? 'ชาย';
           // this.nationalId = account.citizenid ?? '-';
@@ -300,7 +305,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                 labelText: 'ชื่อ *',
                 hintText: 'ชื่อ',
               ),
-              initialValue: account.firstname,
+              // controller: firstNameController,
+              initialValue: this.firstName,
             ),
           ),
         ],
