@@ -24,7 +24,6 @@ class ProfileEdit extends StatefulWidget {
 
 class _ProfileEditState extends State<ProfileEdit> {
 //Fields
-  TextEditingController zipcodeController = new TextEditingController();
 
 //Variables
   String prefixName,
@@ -44,8 +43,13 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   static List provinces, childAreas, subChildAreas;
 
-  TextEditingController titleController;
-  TextEditingController firstNameController;
+  final titleController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final nationalIdController = TextEditingController();
+  final addressController = TextEditingController();
+  final phoneNumberController = TextEditingController();
+  final postalCodeController = TextEditingController();
 
   @override
   void initState() {
@@ -54,14 +58,8 @@ class _ProfileEditState extends State<ProfileEdit> {
     childAreas = [];
     subChildAreas = [];
     account = Account();
-    firstNameController = TextEditingController();
-
-    parseProvinces(GlobalResources().apiHost + 'wcfrest.svc/GetProvince');
-
     selectedGender = 'ชาย';
     readSharedPreferance();
-    // getAccountDetails();
-
   }
 
 //Methods
@@ -90,27 +88,37 @@ class _ProfileEditState extends State<ProfileEdit> {
       // print(map);
       GetAccountDetailResult getAccountDetailResult =
           GetAccountDetailResult.fromJson(map);
-      // print(getAccountDetailResult.account);
-      // print(account);
+      print(getAccountDetailResult.account);
 
       if (getAccountDetailResult.result == 'error') {
         normalDialog(context, 'ผิดพลาด', getAccountDetailResult.msg);
       } else {
         setState(() {
+          parseProvinces(GlobalResources().apiHost + 'wcfrest.svc/GetProvince');
+
           account = Account.fromJson(getAccountDetailResult.account);
-          print(account.firstname);
-          // this.prefixName = account.title ?? '-';
-          // firstNameController.text = 'kkkkkk';
-          this.firstName = 'lllllll';
-          // this.lastName = account.lastname ?? '-';
-          // this.selectedGender = account.gender ?? 'ชาย';
-          // this.nationalId = account.citizenid ?? '-';
-          // this.address = account.address ?? '-';
-          // this.selectedProvince = account.province ?? '-';
-          // this.selectedDistrict = account.district ?? '-';
-          // this.selectedSubDistrict = account.subdistrict ?? '-';
-          // this.postalCode = account.zipcode ?? '-';
-          // this.phoneNumber = account.phone ?? '-';
+          print(account.firstname +
+              ' ' +
+              account.lastname +
+              ' ' +
+              account.province);
+          titleController.text = account.title ?? '-';
+          firstNameController.text = account.firstname ?? '-';
+          lastNameController.text = account.lastname ?? '-';
+          selectedGender = account.gender ?? 'ชาย';
+          nationalIdController.text = account.citizenid ?? '-';
+          addressController.text = account.address ?? '-';
+          selectedProvince = account.province ?? '-';
+          parseChildAreas(GlobalResources().apiHost +
+              'wcfrest.svc/GetChildArea?ref_id=' +
+              selectedProvince);
+          selectedDistrict = account.district ?? '-';
+          parseSubChildAreas(GlobalResources().apiHost +
+              'wcfrest.svc/GetChildArea?ref_id=' +
+              selectedDistrict);
+          selectedSubDistrict = account.subdistrict ?? '-';
+          postalCodeController.text = account.zipcode ?? '-';
+          phoneNumberController.text = account.phone ?? '-';
         });
       }
     } catch (e) {
@@ -218,7 +226,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     GetZipcodeResult zipcodeResults = GetZipcodeResult.fromJson(map);
     print(zipcodeResults.value);
     postalCode = zipcodeResults.value.toString();
-    zipcodeController.text = zipcodeResults.value.toString();
+    postalCodeController.text = zipcodeResults.value.toString();
   }
 
 //Widgets
@@ -278,7 +286,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                 labelText: 'คำนำหน้าชื่อ *',
                 hintText: 'นาย / นางสาว / นาง / ฯลฯ',
               ),
-              initialValue: account.title,
+              controller: titleController,
             ),
           ),
         ],
@@ -305,8 +313,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                 labelText: 'ชื่อ *',
                 hintText: 'ชื่อ',
               ),
-              // controller: firstNameController,
-              initialValue: this.firstName,
+              controller: firstNameController,
             ),
           ),
         ],
@@ -333,6 +340,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                 labelText: 'นามสกุล *',
                 hintText: 'นามสกุล',
               ),
+              controller: lastNameController,
             ),
           ),
         ],
@@ -439,6 +447,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                 labelText: 'รหัสประจำตัวประชาชน *',
                 hintText: 'รหัสประจำตัวประชาชน 13 หลัก',
               ),
+              controller: nationalIdController,
             ),
           ),
         ],
@@ -465,6 +474,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                 labelText: 'ที่อยู่ *',
                 hintText: 'บ้านเลขที่ / ซอย / หมู่ / ถนน',
               ),
+              controller: addressController,
             ),
           ),
         ],
@@ -602,7 +612,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                 labelText: 'รหัสไปรษณีย์ *',
                 hintText: 'รหัสไปรษณีย์',
               ),
-              controller: zipcodeController,
+              controller: postalCodeController,
             ),
           ),
         ],
@@ -632,6 +642,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                 labelText: 'เบอร์โทรศัพท์ *',
                 hintText: 'เบอร์โทรศัพท์',
               ),
+              controller: phoneNumberController,
             ),
           ),
         ],
