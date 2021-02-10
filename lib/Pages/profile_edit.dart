@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:RID1460/Utilities/global_resources.dart';
 import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:RID1460/models/account_detail.dart';
@@ -10,6 +8,7 @@ import 'package:RID1460/models/zip_code.dart';
 import 'package:dio/dio.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
@@ -94,8 +93,6 @@ class _ProfileEditState extends State<ProfileEdit> {
         normalDialog(context, 'ผิดพลาด', getAccountDetailResult.msg);
       } else {
         setState(() {
-          parseProvinces(GlobalResources().apiHost + 'wcfrest.svc/GetProvince');
-
           account = Account.fromJson(getAccountDetailResult.account);
           print(account.firstname +
               ' ' +
@@ -108,15 +105,17 @@ class _ProfileEditState extends State<ProfileEdit> {
           selectedGender = account.gender ?? 'ชาย';
           nationalIdController.text = account.citizenid ?? '-';
           addressController.text = account.address ?? '-';
-          selectedProvince = account.province ?? '-';
+          selectedProvince = account.province ?? '';
+          parseProvinces(GlobalResources().apiHost + 'wcfrest.svc/GetProvince');
           parseChildAreas(GlobalResources().apiHost +
               'wcfrest.svc/GetChildArea?ref_id=' +
               selectedProvince);
-          selectedDistrict = account.district ?? '-';
+          selectedDistrict = account.district ?? '';
+          selectedSubDistrict = account.subdistrict ?? '';
           parseSubChildAreas(GlobalResources().apiHost +
               'wcfrest.svc/GetChildArea?ref_id=' +
               selectedDistrict);
-          selectedSubDistrict = account.subdistrict ?? '-';
+          if (selectedSubDistrict.isNotEmpty) {}
           postalCodeController.text = account.zipcode ?? '-';
           phoneNumberController.text = account.phone ?? '-';
         });
@@ -150,7 +149,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       print(response);
       var result = response.data;
       WebApiResult collection =
-          WebApiResult.fromJson(result, 'editAccountResult');
+          WebApiResult.fromJson(result, 'EditAccountResult');
       Map<dynamic, dynamic> map = jsonDecode(collection.collectionResult);
       CollectionResult collectionResult = CollectionResult.fromJson(map);
       if (collectionResult.result == 'error') {
