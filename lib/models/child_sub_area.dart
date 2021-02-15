@@ -1,27 +1,27 @@
-class ChildArea {
-  var getChildAreaResult;
+class ChildSubArea {
+  var getChildSubAreaResult;
 
-  ChildArea({this.getChildAreaResult});
+  ChildSubArea({this.getChildSubAreaResult});
 
-  ChildArea.fromJson(Map<String, dynamic> json) {
-    getChildAreaResult = json['GetDistrictResult'];
+  ChildSubArea.fromJson(Map<String, dynamic> json) {
+    getChildSubAreaResult = json['GetSubdistrictResult'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['GetDistrictResult'] = this.getChildAreaResult;
+    data['GetSubdistrictResult'] = this.getChildSubAreaResult;
 
     return data;
   }
 }
 
-class GetChildAreaResult {
+class GetChildSubAreaResult {
   String result;
   var value;
 
-  GetChildAreaResult({this.result, this.value});
+  GetChildSubAreaResult({this.result, this.value});
 
-  GetChildAreaResult.fromJson(Map<String, dynamic> json) {
+  GetChildSubAreaResult.fromJson(Map<String, dynamic> json) {
     result = json['result'];
     value = json['value'];
   }
@@ -34,13 +34,13 @@ class GetChildAreaResult {
   }
 }
 
-class ChildAreaValue {
+class ChildSubAreaValue {
   String value;
   String label;
 
-  ChildAreaValue({this.value, this.label});
+  ChildSubAreaValue({this.value, this.label});
 
-  ChildAreaValue.fromJson(Map<String, dynamic> json) {
+  ChildSubAreaValue.fromJson(Map<String, dynamic> json) {
     value = json['value'];
     label = json['label'];
   }

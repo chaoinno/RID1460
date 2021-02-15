@@ -4,12 +4,12 @@ class Zipcode {
   Zipcode({this.getZipcodeResult});
 
   Zipcode.fromJson(Map<String, dynamic> json) {
-    getZipcodeResult = json['GetZipcodeResult'];
+    getZipcodeResult = json['GetZipcodeByNameResult'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['GetZipcodeResult'] = this.getZipcodeResult;
+    data['GetZipcodeByNameResult'] = this.getZipcodeResult;
 
     return data;
   }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:RID1460/Utilities/global_resources.dart';
 import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:RID1460/models/child_area.dart';
+import 'package:RID1460/models/child_sub_area.dart';
 import 'package:RID1460/models/province.dart';
 import 'package:RID1460/models/web_api_result.dart';
 import 'package:RID1460/models/zip_code.dart';
@@ -50,7 +51,7 @@ class _RegistrationState extends State<Registration> {
     childAreas = [];
     subChildAreas = [];
 
-    parseProvinces(GlobalResources().apiHost + 'wcfrest.svc/GetProvince');
+    parseProvinces(GlobalResources().apiHost + 'wcfrest.svc/GetProvinceName');
 
     super.initState();
     selectedGender = 'ชาย';
@@ -105,13 +106,15 @@ class _RegistrationState extends State<Registration> {
     Response response = await Dio().get(url);
 
     var result = response.data;
-    //print(result);
+    // print(result);
     Province collection = Province.fromJson(result);
     Map<dynamic, dynamic> map = jsonDecode(collection.getProvinceResult);
 
     GetProvinceResult provinceResults = GetProvinceResult.fromJson(map);
     provinces = [];
+    // print(provinceResults);
     for (var item in provinceResults.value) {
+      // print(item);
       provinces.add({
         "label": ProvinceValue.fromJson(item).label,
         "value": ProvinceValue.fromJson(item).value
@@ -136,12 +139,12 @@ class _RegistrationState extends State<Registration> {
     }
   }
 
-  static Future<void> parseSubChildAreas(String url) async {
+  static Future<void> parseChildSubAreas(String url) async {
     Response response = await Dio().get(url);
 
     var result = response.data;
-    ChildArea collection = ChildArea.fromJson(result);
-    Map<dynamic, dynamic> map = jsonDecode(collection.getChildAreaResult);
+    ChildSubArea collection = ChildSubArea.fromJson(result);
+    Map<dynamic, dynamic> map = jsonDecode(collection.getChildSubAreaResult);
 
     GetChildAreaResult subChildAreaResults = GetChildAreaResult.fromJson(map);
     subChildAreas = [];
@@ -588,7 +591,7 @@ class _RegistrationState extends State<Registration> {
                   selectedProvince = newvalue;
                   selectedDistrict = null;
                   parseChildAreas(GlobalResources().apiHost +
-                      'wcfrest.svc/GetChildArea?ref_id=' +
+                      'wcfrest.svc/GetDistrict?province_name=' +
                       selectedProvince);
                 });
               },
@@ -623,9 +626,8 @@ class _RegistrationState extends State<Registration> {
                 setState(() {
                   selectedDistrict = newvalue;
                   selectedSubDistrict = null;
-                  parseSubChildAreas(GlobalResources().apiHost +
-                      'wcfrest.svc/GetChildArea?ref_id=' +
-                      selectedDistrict);
+                  parseChildSubAreas(GlobalResources().apiHost +
+                      'wcfrest.svc/GetSubdistrict?province_name=${selectedProvince}&district_name=${selectedDistrict}');
                 });
               },
               dataSource: childAreas,
@@ -659,8 +661,7 @@ class _RegistrationState extends State<Registration> {
                 setState(() {
                   selectedSubDistrict = newvalue;
                   parseZipCode(GlobalResources().apiHost +
-                      'wcfrest.svc/GetZipcode?id=' +
-                      selectedDistrict);
+                      'wcfrest.svc/GetZipcodeByName?province_name=${selectedProvince}&district_name=${selectedDistrict}');
                 });
               },
               dataSource: subChildAreas,

@@ -4,12 +4,12 @@ class Province {
   Province({this.getProvinceResult});
 
   Province.fromJson(Map<String, dynamic> json) {
-    getProvinceResult = json['GetProvinceResult'];
+    getProvinceResult = json['GetProvinceNameResult'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['GetProvinceResult'] = this.getProvinceResult;
+    data['GetProvinceNameResult'] = this.getProvinceResult;
     return data;
   }
 }
