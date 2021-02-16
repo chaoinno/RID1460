@@ -2,6 +2,7 @@ import 'package:RID1460/Utilities/global_resources.dart';
 import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:RID1460/models/account_detail.dart';
 import 'package:RID1460/models/child_area.dart';
+import 'package:RID1460/models/child_sub_area.dart';
 import 'package:RID1460/models/province.dart';
 import 'package:RID1460/models/web_api_result.dart';
 import 'package:RID1460/models/zip_code.dart';
@@ -94,11 +95,6 @@ class _ProfileEditState extends State<ProfileEdit> {
       } else {
         setState(() {
           account = Account.fromJson(getAccountDetailResult.account);
-          print(account.firstname +
-              ' ' +
-              account.lastname +
-              ' ' +
-              account.province);
           titleController.text = account.title ?? '-';
           firstNameController.text = account.firstname ?? '-';
           lastNameController.text = account.lastname ?? '-';
@@ -106,16 +102,19 @@ class _ProfileEditState extends State<ProfileEdit> {
           nationalIdController.text = account.citizenid ?? '-';
           addressController.text = account.address ?? '-';
           selectedProvince = account.province ?? '';
-          parseProvinces(GlobalResources().apiHost + 'wcfrest.svc/GetProvince');
-          parseChildAreas(GlobalResources().apiHost +
-              'wcfrest.svc/GetChildArea?ref_id=' +
-              selectedProvince);
+          parseProvinces(
+              GlobalResources().apiHost + 'wcfrest.svc/GetProvinceName');
+          if (selectedProvince != 'null') {
+            parseChildAreas(GlobalResources().apiHost +
+                'wcfrest.svc/GetDistrict?province_name=' +
+                selectedProvince);
+          }
           selectedDistrict = account.district ?? '';
           selectedSubDistrict = account.subdistrict ?? '';
-          parseSubChildAreas(GlobalResources().apiHost +
-              'wcfrest.svc/GetChildArea?ref_id=' +
-              selectedDistrict);
-          if (selectedSubDistrict.isNotEmpty) {}
+          if (selectedSubDistrict != 'null') {
+            parseSubChildAreas(GlobalResources().apiHost +
+                'wcfrest.svc/GetSubdistrict?province_name=${selectedProvince}&district_name=${selectedDistrict}');
+          }
           postalCodeController.text = account.zipcode ?? '-';
           phoneNumberController.text = account.phone ?? '-';
         });
@@ -141,7 +140,7 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   Future<void> updateProfiileProcess() async {
     String url = GlobalResources().apiHost +
-        'wcfrest.svc/EditAccount?sessionid=${sessionId}&title=${this.prefixName}&firstname=${this.firstName}&lastname=${this.lastName}&gender=${this.selectedGender}&citizenid=${this.nationalId}&address=${this.address}&province=${this.selectedProvince}&district=${this.selectedDistrict}&subdistrict=${this.selectedSubDistrict}&zipcode=${this.postalCode}&tel=${this.phoneNumber}';
+        'wcfrest.svc/EditAccount?sessionid=${sessionId}&title=${prefixName}&firstname=${firstName}&lastname=${lastName}&gender=${selectedGender}&citizenid=${nationalId}&address=${address}&province=${selectedProvince}&district=${selectedDistrict}&subdistrict=${selectedSubDistrict}&zipcode=${postalCode}&tel=${phoneNumber}';
     print(url);
     Dio dio = new Dio();
     try {
@@ -182,6 +181,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
 
   static Future<void> parseChildAreas(String url) async {
+    print(url);
     Response response = await Dio().get(url);
 
     var result = response.data;
@@ -202,15 +202,16 @@ class _ProfileEditState extends State<ProfileEdit> {
     Response response = await Dio().get(url);
 
     var result = response.data;
-    ChildArea collection = ChildArea.fromJson(result);
-    Map<dynamic, dynamic> map = jsonDecode(collection.getChildAreaResult);
+    ChildSubArea collection = ChildSubArea.fromJson(result);
+    Map<dynamic, dynamic> map = jsonDecode(collection.getChildSubAreaResult);
 
-    GetChildAreaResult subChildAreaResults = GetChildAreaResult.fromJson(map);
+    GetChildSubAreaResult subChildAreaResults =
+        GetChildSubAreaResult.fromJson(map);
     subChildAreas = [];
     for (var item in subChildAreaResults.value) {
       subChildAreas.add({
-        "label": ChildAreaValue.fromJson(item).label,
-        "value": ChildAreaValue.fromJson(item).value
+        "label": ChildSubAreaValue.fromJson(item).label,
+        "value": ChildSubAreaValue.fromJson(item).value
       });
     }
   }
@@ -492,7 +493,9 @@ class _ProfileEditState extends State<ProfileEdit> {
             child: DropDownFormField(
               titleText: 'จังหวัด *',
               hintText: 'จังหวัด',
-              value: selectedProvince,
+              value: selectedProvince != 'null'
+                  ? selectedProvince
+                  : "--ไม่ระบุจังหวัด--",
               onSaved: (value) {
                 setState(() {
                   selectedProvince = value;
@@ -503,7 +506,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                   selectedProvince = newvalue;
                   selectedDistrict = null;
                   parseChildAreas(GlobalResources().apiHost +
-                      'wcfrest.svc/GetChildArea?ref_id=' +
+                      'wcfrest.svc/GetDistrict?province_name=' +
                       selectedProvince);
                 });
               },
@@ -539,8 +542,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                   selectedDistrict = newvalue;
                   selectedSubDistrict = null;
                   parseSubChildAreas(GlobalResources().apiHost +
-                      'wcfrest.svc/GetChildArea?ref_id=' +
-                      selectedDistrict);
+                      'wcfrest.svc/GetSubdistrict?province_name=${selectedProvince}&district_name=${selectedDistrict}');
                 });
               },
               dataSource: childAreas,
@@ -574,8 +576,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                 setState(() {
                   selectedSubDistrict = newvalue;
                   parseZipCode(GlobalResources().apiHost +
-                      'wcfrest.svc/GetZipcode?id=' +
-                      selectedDistrict);
+                      'wcfrest.svc/GetZipcodeByName?province_name=${selectedProvince}&district_name=${selectedDistrict}');
                 });
               },
               dataSource: subChildAreas,

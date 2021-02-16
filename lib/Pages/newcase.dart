@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,43 +15,121 @@ class Newcase extends StatefulWidget {
 }
 
 class _NewcaseState extends State<Newcase> {
-  String title;
-  Future<void> readSharedPreferance() async {
-    try {
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      List<String> read = sharedPreferences.getStringList('User');
-      String email = read[0];
-      String password = read[1];
-      print('================>' + email);
-      print('================>' + password);
-    } catch (e) {}
-  }
-
-  Future<void> getApi(String session, userid) async {
-    String url =
-        "http://1.179.246.34/OPPP_Test/webservice.asmx/checksession?sessionid=" +
-            session +
-            "&userid=" +
-            userid;
-    Dio dio = new Dio();
-    try {
-      Response response = await dio.get(url);
-      var result = response.data;
-      print(result);
-    } catch (e) {}
-  }
-
+  //fields
+  final fromkey = GlobalKey<FormState>();
+  String email, sessionId;
+  static List serviceTypes;
   @override
   void initState() {
-    readSharedPreferance();
-    getApi('104', '3');
-    // TODO: implement initState
-    title = widget.title;
     super.initState();
   }
 
-  final List<String> _dropdownValues = ["GET", "DATA", "IN", "DATABASE"];
+  //methods
+  Future<void> readSharedPreferance() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    List userInfo = sharedPreferences.getStringList('UserInfo');
+    print(userInfo);
+    setState(() {
+      email = userInfo[0];
+      sessionId = userInfo[6];
+    });
+  }
+
+  static Future<void> parseServiceTypes(String url) async {
+    Response response = await Dio().get(url);
+
+    var result = response.data;
+    //print(result);
+    // Province collection = Province.fromJson(result);
+    // Map<dynamic, dynamic> map = jsonDecode(collection.getProvinceResult);
+
+    // GetProvinceResult provinceResults = GetProvinceResult.fromJson(map);
+    // serviceTypes = [];
+    // for (var item in provinceResults.value) {
+    //   serviceTypes.add({
+    //     "label": ProvinceValue.fromJson(item).label,
+    //     "value": ProvinceValue.fromJson(item).value
+    //   });
+    // }
+  }
+
+  //widgets
+
+  Future<void> normalDialog(
+      BuildContext context, String title, String massage) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext buildContext) {
+          return AlertDialog(
+            title: showTitile(title, massage),
+            actions: [
+              okButton(context),
+            ],
+          );
+        });
+  }
+
+  Widget titleform(String title) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.08,
+      width: MediaQuery.of(context).size.width * 0.9,
+      // color: Colors.white,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
+        color: Colors.blue,
+        //border: Border.all(color:Colors.red),
+      ),
+      child: Center(
+          child: Text(
+        title,
+        style: GoogleFonts.kanit(
+            textStyle: TextStyle(
+          fontSize: 20.0,
+          color: Colors.white,
+        )),
+      )),
+    );
+  }
+
+  Widget saveButton() {
+    return InkWell(
+      onTap: () {
+        fromkey.currentState.save();
+        // updateProfiileProcess();
+      },
+      child: Container(
+        margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+        height: 40,
+        width: MediaQuery.of(context).size.width * 0.7,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          color: Colors.orange,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12.withOpacity(0.2),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 3), // changes position of shadow
+            )
+          ],
+        ),
+        child: Center(
+          child: Text(
+            'บันทึกข้อมูล',
+            style: GoogleFonts.kanit(
+              textStyle: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,277 +161,105 @@ class _NewcaseState extends State<Newcase> {
               image: AssetImage("images/bg1.png"),
               fit: BoxFit.cover,
             )),
-            child: ListView(
-              children: [
-                Center(
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 25,
-                      ),
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.45,
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        decoration: BoxDecoration(
+            child: ListView(scrollDirection: Axis.vertical, children: <Widget>[
+            Form(
+              key: fromkey,
+              child: Center(
+                child: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 20.0),
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
                           color: Colors.white,
-                        ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset:
+                                  Offset(0, 3), // changes position of shadow
+                            )
+                          ]),
+                      child: Center(
                         child: Column(
                           children: [
+                            titleform("ข้อมูลสมาชิก"),
                             Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.07,
-                                width: MediaQuery.of(context).size.width * 0.9,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(10.0),
-                                      topRight: Radius.circular(10.0)),
-                                  color: Colors.blue,
-                                ),
-                                child: Center(
-                                  child: Text("รายละเอียด",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 20.0,
-                                        color: Colors.white,
-                                        //fontWeight: FontWeight.bold
-                                      )),
-                                )),
-                            Container(
-                              height: 10,
-                            ),
-                            Container(
+                              width: MediaQuery.of(context).size.width * 0.8,
                               child: Row(
                                 children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                        top: 5.0, left: 30.0),
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text("เบอร์โทรศัพท์",
-                                          //textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 14.0,
-                                            color: Colors.black,
-                                            //fontWeight: FontWeight.bold
-                                          )),
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.only(left: 5.0),
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text("*",
-                                          //textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 14.0,
-                                            color: Colors.red,
-                                            //fontWeight: FontWeight.bold
-                                          )),
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  left: 30.0, right: 30.0),
-                              child: TextFormField(
-                                onSaved: (String string) {},
-                                decoration:
-                                    InputDecoration(hintText: 'เบอร์โทรศัพท์'),
-                              ),
-                            ),
-                            Container(
-                              child: Row(
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                        top: 5.0, left: 30.0),
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text("ประเภทเรื่อง",
-                                          //textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 14.0,
-                                            color: Colors.black,
-                                            //fontWeight: FontWeight.bold
-                                          )),
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.only(left: 5.0),
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text("*",
-                                          //textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 14.0,
-                                            color: Colors.red,
-                                            //fontWeight: FontWeight.bold
-                                          )),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  left: 30.0, right: 30.0),
-                              child: DropdownButton(
-                                // dropdownColor: Colors.grey,
-                                items: _dropdownValues
-                                    .map((value) => DropdownMenuItem(
-                                          child: Text(value),
-                                          value: value,
-                                        ))
-                                    .toList(),
-                                onChanged: (String value) {
-                                  setState(() {
-                                    value = value;
-                                  });
-                                },
-                                isExpanded: true,
-                                hint: Text('ประเภทเรื่อง'),
-                              ),
-                            ),
-                            Container(
-                              child: Row(
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                        top: 5.0, left: 30.0),
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text("รายละเอียด",
-                                          //textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 14.0,
-                                            color: Colors.black,
-                                            //fontWeight: FontWeight.bold
-                                          )),
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.only(left: 5.0),
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text("*",
-                                          //textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 14.0,
-                                            color: Colors.red,
-                                            //fontWeight: FontWeight.bold
-                                          )),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  left: 30.0, right: 30.0),
-                              child: TextFormField(
-                                onSaved: (String string) {},
-                                decoration:
-                                    InputDecoration(hintText: 'รายละเอียด'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(
-                          top: 15.0,
-                        ),
-                        height: MediaQuery.of(context).size.height * 0.2,
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: Colors.white,
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.07,
-                                width: MediaQuery.of(context).size.width * 0.9,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(10.0),
-                                      topRight: Radius.circular(10.0)),
-                                  color: Colors.blue,
-                                ),
-                                child: Center(
-                                  child: Text("เอกสารแนบ (ถ้ามี)",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 20.0,
-                                        color: Colors.white,
-                                        //fontWeight: FontWeight.bold
-                                      )),
-                                )),
                             Container(
                               margin: const EdgeInsets.only(top: 10.0),
-                              height: MediaQuery.of(context).size.height * 0.05,
                               width: MediaQuery.of(context).size.width * 0.8,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15.0),
-                                color: Colors.grey,
-                              ),
-                              child: Center(
-                                child: Text("เลือกไฟล์เอกสาร",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 20.0,
-                                      color: Colors.white,
-                                      //fontWeight: FontWeight.bold
-                                    )),
-                              ),
                             ),
                             Container(
-                              height: 5.0,
-                            ),
-                            Container(
-                              child: Center(
-                                child: Text("FileName.file",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 20.0,
-                                      color: Colors.grey,
-                                      //fontWeight: FontWeight.bold
-                                    )),
+                              child: Row(
+                                children: [
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 20.0),
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset:
+                                  Offset(0, 3), // changes position of shadow
+                            )
+                          ]),
+                      child: Center(
+                        child: Column(
+                          children: [
+                            titleform("ข้อมูลสมาชิก"),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: Row(
+                                children: [
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(top: 10.0),
+                              width: MediaQuery.of(context).size.width * 0.8,
+                            ),
+                            Container(
+                              child: Row(
+                                children: [
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: saveButton(),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
+          ]),
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Container(
-            child: Container(
-          height: MediaQuery.of(context).size.height * 0.05,
-          width: MediaQuery.of(context).size.width * 0.8,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.0),
-            color: Colors.orange,
-          ),
-          child: Center(
-            child: Text("บันทึกเรื่อง",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                  //fontWeight: FontWeight.bold
-                )),
-          ),
-        )),
       ),
     );
   }

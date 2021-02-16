@@ -146,12 +146,12 @@ class _RegistrationState extends State<Registration> {
     ChildSubArea collection = ChildSubArea.fromJson(result);
     Map<dynamic, dynamic> map = jsonDecode(collection.getChildSubAreaResult);
 
-    GetChildAreaResult subChildAreaResults = GetChildAreaResult.fromJson(map);
+    GetChildSubAreaResult subChildAreaResults = GetChildSubAreaResult.fromJson(map);
     subChildAreas = [];
     for (var item in subChildAreaResults.value) {
       subChildAreas.add({
-        "label": ChildAreaValue.fromJson(item).label,
-        "value": ChildAreaValue.fromJson(item).value
+        "label": ChildSubAreaValue.fromJson(item).label,
+        "value": ChildSubAreaValue.fromJson(item).value
       });
     }
   }
