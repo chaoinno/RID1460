@@ -113,7 +113,7 @@ class _ProfileEditState extends State<ProfileEdit> {
           selectedSubDistrict = account.subdistrict ?? '';
           if (selectedSubDistrict != 'null') {
             parseSubChildAreas(GlobalResources().apiHost +
-                'wcfrest.svc/GetSubdistrict?province_name=${selectedProvince}&district_name=${selectedDistrict}');
+                'wcfrest.svc/GetSubdistrict?province_name=$selectedProvince&district_name=$selectedDistrict');
           }
           postalCodeController.text = account.zipcode ?? '-';
           phoneNumberController.text = account.phone ?? '-';
@@ -140,7 +140,7 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   Future<void> updateProfiileProcess() async {
     String url = GlobalResources().apiHost +
-        'wcfrest.svc/EditAccount?sessionid=${sessionId}&title=${prefixName}&firstname=${firstName}&lastname=${lastName}&gender=${selectedGender}&citizenid=${nationalId}&address=${address}&province=${selectedProvince}&district=${selectedDistrict}&subdistrict=${selectedSubDistrict}&zipcode=${postalCode}&tel=${phoneNumber}';
+        'wcfrest.svc/EditAccount?sessionid=$sessionId&title=$prefixName&firstname=$firstName&lastname=$lastName&gender=$selectedGender&citizenid=$nationalId&address=$address&province=$selectedProvince&district=$selectedDistrict&subdistrict=$selectedSubDistrict&zipcode=$postalCode&tel=$phoneNumber';
     print(url);
     Dio dio = new Dio();
     try {
@@ -542,7 +542,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                   selectedDistrict = newvalue;
                   selectedSubDistrict = null;
                   parseSubChildAreas(GlobalResources().apiHost +
-                      'wcfrest.svc/GetSubdistrict?province_name=${selectedProvince}&district_name=${selectedDistrict}');
+                      'wcfrest.svc/GetSubdistrict?province_name=$selectedProvince&district_name=$selectedDistrict');
                 });
               },
               dataSource: childAreas,
@@ -576,7 +576,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                 setState(() {
                   selectedSubDistrict = newvalue;
                   parseZipCode(GlobalResources().apiHost +
-                      'wcfrest.svc/GetZipcodeByName?province_name=${selectedProvince}&district_name=${selectedDistrict}');
+                      'wcfrest.svc/GetZipcodeByName?province_name=$selectedProvince&district_name=$selectedDistrict');
                 });
               },
               dataSource: subChildAreas,
