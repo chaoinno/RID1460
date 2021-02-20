@@ -11,6 +11,7 @@ import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Newcase extends StatefulWidget {
@@ -23,6 +24,7 @@ class Newcase extends StatefulWidget {
 class _NewcaseState extends State<Newcase> {
   //fields
   File _image;
+  String base64Image;
   final fromkey = GlobalKey<FormState>();
   String fullName,
       email,
@@ -192,7 +194,45 @@ class _NewcaseState extends State<Newcase> {
       if (collectionResult.result == 'error') {
         normalDialog(context, 'แจ้งเรื่องไม่สำเร็จ', collectionResult.msg);
       } else {
-        normalDialog(context, 'แจ้งเรื่องสำเร็จ', collectionResult.msg);
+        uploadImageProcess(collectionResult.msg);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> uploadImageProcess(String srid) async {
+    String url = GlobalResources().apiHost + 'wcfrest.svc/UploadFileToService';
+    print(url);
+    Dio dio = new Dio();
+    List<int> imageBytes = await _image.readAsBytes();
+    base64Image = base64Encode(imageBytes);
+    var param = {
+      "sessionid": sessionId,
+      "srid": srid,
+      "fileByte": base64Image,
+      "fileName": DateFormat("ddMMyyyyHHmmss").format(DateTime.now()) + ".jpg",
+      "file_description": detail,
+      "file_type":"jpg"
+    };
+    String paramJson = jsonEncode(param);
+    print(paramJson);
+    try {
+      Response response = await dio.post(url,
+          data: paramJson,
+          options: Options(headers: {
+            HttpHeaders.contentTypeHeader: "application/json",
+          }));
+      print(response);
+      var result = response.data;
+      WebApiResult collection =
+          WebApiResult.fromJson(result, 'UploadFileToServiceResult');
+      Map<dynamic, dynamic> map = jsonDecode(collection.collectionResult);
+      CollectionResult collectionResult = CollectionResult.fromJson(map);
+      if (collectionResult.result == 'error') {
+        normalDialog(context, 'upload รูปไม่สำเร็จ ', collectionResult.msg);
+      } else {
+        normalDialog(context, 'แจ้งเรื่องสำเร็จ Ticket Id: $srid', collectionResult.msg);
         // Navigator.of(context).pop();
       }
     } catch (e) {
@@ -345,6 +385,7 @@ class _NewcaseState extends State<Newcase> {
 
   Widget imagePicker() {
     return Container(
+      margin: EdgeInsets.only(top:20),
       child: GestureDetector(
         onTap: () {
           _showPicker(context);

@@ -75,8 +75,7 @@ class _ListDemoState extends State<ListDemo> {
         serviceCaseList = serviceCaseList
             .where((string) =>
                 string.code.contains(value) ||
-                string.detail.contains(value) ||
-                string.summary.contains(value))
+                string.statusName.contains(value))
             .toList();
       } else {
         this.getServiceCases();

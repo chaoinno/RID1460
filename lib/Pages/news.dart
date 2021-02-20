@@ -96,7 +96,9 @@ class _NewsState extends State<News> {
               onSaved: (String string) {
                 keyword = string;
               },
-              decoration: InputDecoration(hintText: 'ค้นหา...'),
+              decoration: InputDecoration(
+                hintText: 'ค้นหา...',
+              ),
               onChanged: onItemChanged,
             ),
           ),
