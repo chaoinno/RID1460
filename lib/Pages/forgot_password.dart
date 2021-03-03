@@ -6,6 +6,7 @@ import 'package:RID1460/models/web_api_result.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class ForgotPassword extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
+  ProgressDialog progressDialog;
   String email;
   final fromkey = GlobalKey<FormState>();
 
@@ -62,13 +64,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Widget submitButton() {
     return InkWell(
       onTap: () {
+        progressDialog.show();
         fromkey.currentState.save();
         if (email.isEmpty) {
           print("email isEmpty");
           normalDialog(context, 'Email', 'กรุณากรอก email');
           return;
         }
-        forgotPasswordProcess();
+        progressDialog.hide().whenComplete(() {
+          forgotPasswordProcess();
+        });
       },
       child: Container(
         height: 40,
@@ -165,6 +170,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
+    progressDialog = ProgressDialog(context, type: ProgressDialogType.Normal);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onPanDown: (_) {

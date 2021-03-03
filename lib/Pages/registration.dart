@@ -12,6 +12,7 @@ import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -23,6 +24,7 @@ class Registration extends StatefulWidget {
 
 class _RegistrationState extends State<Registration> {
 //Fields
+  ProgressDialog progressDialog;
   TextEditingController zipcodeController = new TextEditingController();
 
 //Variables
@@ -146,7 +148,8 @@ class _RegistrationState extends State<Registration> {
     ChildSubArea collection = ChildSubArea.fromJson(result);
     Map<dynamic, dynamic> map = jsonDecode(collection.getChildSubAreaResult);
 
-    GetChildSubAreaResult subChildAreaResults = GetChildSubAreaResult.fromJson(map);
+    GetChildSubAreaResult subChildAreaResults =
+        GetChildSubAreaResult.fromJson(map);
     subChildAreas = [];
     for (var item in subChildAreaResults.value) {
       subChildAreas.add({
@@ -407,8 +410,11 @@ class _RegistrationState extends State<Registration> {
   Widget registerButton() {
     return InkWell(
       onTap: () {
+        progressDialog.show();
         fromkey.currentState.save();
-        registerProcess();
+        progressDialog.hide().whenComplete(() {
+          registerProcess();
+        });
       },
       child: Container(
         margin: const EdgeInsets.only(top: 20.0),
@@ -747,6 +753,7 @@ class _RegistrationState extends State<Registration> {
 
   @override
   Widget build(BuildContext context) {
+    progressDialog = ProgressDialog(context, type: ProgressDialogType.Normal);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onPanDown: (_) {
@@ -779,11 +786,12 @@ class _RegistrationState extends State<Registration> {
               child: Center(
                 child: Column(
                   children: [
+                    // Container(
+                    //   width: MediaQuery.of(context).size.width * 0.7,
+                    //   child: facebookButton(),
+                    // ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      child: facebookButton(),
-                    ),
-                    Container(
+                      margin: const EdgeInsets.only(top: 20.0),
                       padding: const EdgeInsets.only(bottom: 20.0),
                       width: MediaQuery.of(context).size.width * 0.9,
                       decoration: BoxDecoration(
@@ -878,6 +886,7 @@ class _RegistrationState extends State<Registration> {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.7,
                       child: registerButton(),
+                      margin: const EdgeInsets.only(bottom: 20.0),
                     ),
                   ],
                 ),

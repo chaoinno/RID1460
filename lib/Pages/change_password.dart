@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangePassword extends StatefulWidget {
@@ -15,6 +16,7 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
+  ProgressDialog progressDialog;
   String oldPassword, password, confirmPassword, sessionId;
   final fromkey = GlobalKey<FormState>();
 
@@ -76,6 +78,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   Widget submitButton() {
     return InkWell(
       onTap: () {
+        progressDialog.show();
         fromkey.currentState.save();
         if (oldPassword.isEmpty) {
           normalDialog(context, 'ผิดพลาด', 'กรุณากรอกรหัสผ่านใหม่');
@@ -89,7 +92,9 @@ class _ChangePasswordState extends State<ChangePassword> {
           normalDialog(context, 'ผิดพลาด', 'กรุณากรอกรหัสผ่านใหม่');
           return;
         }
-        changePasswordProcess();
+        progressDialog.hide().whenComplete(() {
+          changePasswordProcess();
+        });
       },
       child: Container(
         height: 40,
@@ -268,6 +273,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   @override
   Widget build(BuildContext context) {
+    progressDialog = ProgressDialog(context, type: ProgressDialogType.Normal);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onPanDown: (_) {

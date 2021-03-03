@@ -9,6 +9,7 @@ import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:RID1460/models/web_api_result.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,14 +29,25 @@ class ListDemo extends StatefulWidget {
   _ListDemoState createState() => _ListDemoState();
 }
 
+String prettyPrint(Map json) {
+  JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+  String pretty = encoder.convert(json);
+  return pretty;
+}
+
 class _ListDemoState extends State<ListDemo> {
   Map<int, bool> countToValue = <int, bool>{};
   String fullName, email, sessionId;
+
+  Map<String, dynamic> _userData;
+  AccessToken _accessToken;
+  bool _checking = true;
 
   @override
   void initState() {
     super.initState();
     readSharedPreferance();
+    _checkIfIsLogged();
   }
 
   Widget contactItem() {
@@ -55,7 +67,47 @@ class _ListDemoState extends State<ListDemo> {
     );
   }
 
+  // Medthods
+
+// start facebook log in
+
+  Future<void> _checkIfIsLogged() async {
+    final AccessToken accessToken = await FacebookAuth.instance.isLogged;
+    setState(() {
+      _checking = false;
+    });
+    if (accessToken != null) {
+      print("is Logged:::: ${prettyPrint(accessToken.toJson())}");
+      // now you can call to  FacebookAuth.instance.getUserData();
+      final userData = await FacebookAuth.instance.getUserData();
+      // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
+      _accessToken = accessToken;
+      setState(() {
+        _userData = userData;
+      });
+    }
+  }
+
+  void _printCredentials() {
+    print(
+      prettyPrint(_accessToken.toJson()),
+    );
+  }
+
+  Future<void> _logOut() async {
+    await FacebookAuth.instance.logOut();
+    _accessToken = null;
+    _userData = null;
+    setState(() {});
+  }
+
   Future<void> readSharedPreferance() async {
+
+    final AccessToken accessToken = await FacebookAuth.instance.isLogged;
+    if (accessToken != null) {
+      _checking = true;
+    }
+    
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     List userInfo = sharedPreferences.getStringList('UserInfo');
@@ -87,6 +139,7 @@ class _ListDemoState extends State<ListDemo> {
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
         sharedPreferences.clear();
+        _logOut();
         Navigator.of(context, rootNavigator: true)
             .pushReplacement(_createRoute());
       }
@@ -173,7 +226,7 @@ class _ListDemoState extends State<ListDemo> {
                     color: Colors.white,
                     border: Border(
                       bottom: BorderSide(
-                        color: Colors.grey,
+                        color:_checking == true ? Colors.blueAccent : Colors.grey,
                         width: 1.0,
                       ),
                     ),
@@ -194,7 +247,7 @@ class _ListDemoState extends State<ListDemo> {
                         color: Colors.grey,
                       ),
                       child: Text(
-                        'เชื่อมต่อแล้ว',
+                        _checking == true ? 'เชื่อมต่อแล้ว' : 'ยังไม่เชื่อมต่อ',
                         style: GoogleFonts.kanit(),
                       ),
                     ),

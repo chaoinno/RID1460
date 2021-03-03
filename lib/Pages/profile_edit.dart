@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'dart:convert';
 import 'dart:async';
 
@@ -24,6 +25,7 @@ class ProfileEdit extends StatefulWidget {
 
 class _ProfileEditState extends State<ProfileEdit> {
 //Fields
+  ProgressDialog progressDialog;
 
 //Variables
   String prefixName,
@@ -351,8 +353,11 @@ class _ProfileEditState extends State<ProfileEdit> {
   Widget saveButton() {
     return InkWell(
       onTap: () {
+        progressDialog.show();
         fromkey.currentState.save();
-        updateProfiileProcess();
+        progressDialog.hide().whenComplete(() {
+          updateProfiileProcess();
+        });
       },
       child: Container(
         margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
@@ -654,6 +659,7 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   @override
   Widget build(BuildContext context) {
+    progressDialog = ProgressDialog(context, type: ProgressDialogType.Normal);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onPanDown: (_) {

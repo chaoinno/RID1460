@@ -1,7 +1,22 @@
 PODS:
-  - device_info (0.0.1):
+  - client_information (1.0.0):
     - Flutter
+    - SAMKeychain
+  - FBSDKCoreKit (9.0.1):
+    - FBSDKCoreKit/Basics (= 9.0.1)
+    - FBSDKCoreKit/Core (= 9.0.1)
+  - FBSDKCoreKit/Basics (9.0.1)
+  - FBSDKCoreKit/Core (9.0.1):
+    - FBSDKCoreKit/Basics
+  - FBSDKLoginKit (9.0.1):
+    - FBSDKLoginKit/Login (= 9.0.1)
+  - FBSDKLoginKit/Login (9.0.1):
+    - FBSDKCoreKit (~> 9.0.1)
   - Flutter (1.0.0)
+  - flutter_facebook_auth (1.0.0):
+    - FBSDKCoreKit (~> 9.0.0)
+    - FBSDKLoginKit (~> 9.0.0)
+    - Flutter
   - image_picker (0.0.1):
     - Flutter
   - imei_plugin (0.0.1):
@@ -10,6 +25,7 @@ PODS:
     - Flutter
   - path_provider (0.0.1):
     - Flutter
+  - SAMKeychain (1.5.3)
   - shared_preferences (0.0.1):
     - Flutter
   - url_launcher (0.0.1):
@@ -18,8 +34,9 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - device_info (from `.symlinks/plugins/device_info/ios`)
+  - client_information (from `.symlinks/plugins/client_information/ios`)
   - Flutter (from `Flutter`)
+  - flutter_facebook_auth (from `.symlinks/plugins/flutter_facebook_auth/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - imei_plugin (from `.symlinks/plugins/imei_plugin/ios`)
   - open_file (from `.symlinks/plugins/open_file/ios`)
@@ -28,11 +45,19 @@ DEPENDENCIES:
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
+SPEC REPOS:
+  trunk:
+    - FBSDKCoreKit
+    - FBSDKLoginKit
+    - SAMKeychain
+
 EXTERNAL SOURCES:
-  device_info:
-    :path: ".symlinks/plugins/device_info/ios"
+  client_information:
+    :path: ".symlinks/plugins/client_information/ios"
   Flutter:
     :path: Flutter
+  flutter_facebook_auth:
+    :path: ".symlinks/plugins/flutter_facebook_auth/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
   imei_plugin:
@@ -49,16 +74,20 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
-  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
+  client_information: cd2088b683015ea782082d6562d17e0320ae7097
+  FBSDKCoreKit: fada1a6a0076724678993ff05a633848765ff18c
+  FBSDKLoginKit: d5ffe6d808897019ccf16feb6f0a7ab260bc5cd6
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_facebook_auth: d952ca599c6a76439c54472b0b225004e1b880c4
   image_picker: 9c3312491f862b28d21ecd8fdf0ee14e601b3f09
   imei_plugin: cb1af7c223ac2d82dcd1457a7137d93d65d2a3cd
   open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
   webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
 
-PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+PODFILE CHECKSUM: a75497545d4391e2d394c3668e20cfb1c2bbd4aa
 
 COCOAPODS: 1.10.0

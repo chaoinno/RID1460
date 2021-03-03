@@ -6,12 +6,13 @@ import 'package:RID1460/Pages/registration.dart';
 import 'package:RID1460/Utilities/global_resources.dart';
 import 'package:RID1460/Utilities/nomal_dialog.dart';
 import 'package:RID1460/models/login.dart';
-import 'package:device_info/device_info.dart';
+import 'package:RID1460/models/login_social.dart';
+import 'package:client_information/client_information.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:imei_plugin/imei_plugin.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bottom_nav_parent.dart';
@@ -21,22 +22,31 @@ class Authen extends StatefulWidget {
   _AuthenState createState() => _AuthenState();
 }
 
-class _AuthenState extends State<Authen> {
-  static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-  Map<String, dynamic> _deviceData = <String, dynamic>{};
+String prettyPrint(Map json) {
+  JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+  String pretty = encoder.convert(json);
+  return pretty;
+}
 
+class _AuthenState extends State<Authen> {
 //Fields
+  ProgressDialog progressDialog;
 
   String email, password, confirmPassword;
   final fromkey = GlobalKey<FormState>();
 
   String imeiString;
 
+  Map<String, dynamic> _userData;
+  AccessToken _accessToken;
+  bool _checking = true;
+
   @override
   void initState() {
     super.initState();
-    initPlatformState();
     getImei();
+
+    _checkIfIsLogged();
   }
 
 // Widgets
@@ -190,6 +200,7 @@ class _AuthenState extends State<Authen> {
   Widget loginButton() {
     return InkWell(
       onTap: () {
+        progressDialog.show();
         fromkey.currentState.save();
         if (email.isEmpty) {
           print("email isEmpty");
@@ -201,8 +212,11 @@ class _AuthenState extends State<Authen> {
           normalDialog(context, 'password', 'กรุณากรอก password');
           return;
         }
-        loginApi();
+        // loginApi();
         // print("object");
+        progressDialog.hide().whenComplete(() {
+          loginApi();
+        });
       },
       child: Container(
         margin: const EdgeInsets.only(top: 20.0),
@@ -232,6 +246,11 @@ class _AuthenState extends State<Authen> {
   Widget facebookButton() {
     return InkWell(
       onTap: () {
+        print('Facebook Auth Precessing....');
+        _login();
+        if (_userData != null) {
+          socialLoginApi();
+        }
         // MaterialPageRoute materialPageRoute = MaterialPageRoute(
         //     builder: (BuildContext context) => BottomNavBarParent());
         // Navigator.of(context).push(materialPageRoute);
@@ -257,79 +276,150 @@ class _AuthenState extends State<Authen> {
   }
 
 // Methods
-  Future<void> initPlatformState() async {
-    Map<String, dynamic> deviceData;
+  /// Support on iOS, Android and web project
+  Future<String> getDeviceId() async {
+    return (await ClientInformation.fetch()).deviceId;
+  }
 
-    try {
-      if (Platform.isAndroid) {
-        deviceData = _readAndroidBuildData(await deviceInfoPlugin.androidInfo);
-      } else if (Platform.isIOS) {
-        deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
-      }
-    } on PlatformException {
-      deviceData = <String, dynamic>{
-        'Error:': 'Failed to get platform version.'
-      };
-    }
+  // start facebook log in
 
-    if (!mounted) return;
-
+  Future<void> _checkIfIsLogged() async {
+    final AccessToken accessToken = await FacebookAuth.instance.isLogged;
     setState(() {
-      _deviceData = deviceData;
+      _checking = false;
     });
+    if (accessToken != null) {
+      print("is Logged:::: ${prettyPrint(accessToken.toJson())}");
+      // now you can call to  FacebookAuth.instance.getUserData();
+      final userData = await FacebookAuth.instance.getUserData();
+      // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
+      _accessToken = accessToken;
+      setState(() {
+        _userData = userData;
+      });
+    }
   }
 
-  Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
-    return <String, dynamic>{
-      'version.securityPatch': build.version.securityPatch,
-      'version.sdkInt': build.version.sdkInt,
-      'version.release': build.version.release,
-      'version.previewSdkInt': build.version.previewSdkInt,
-      'version.incremental': build.version.incremental,
-      'version.codename': build.version.codename,
-      'version.baseOS': build.version.baseOS,
-      'board': build.board,
-      'bootloader': build.bootloader,
-      'brand': build.brand,
-      'device': build.device,
-      'display': build.display,
-      'fingerprint': build.fingerprint,
-      'hardware': build.hardware,
-      'host': build.host,
-      'id': build.id,
-      'manufacturer': build.manufacturer,
-      'model': build.model,
-      'product': build.product,
-      'supported32BitAbis': build.supported32BitAbis,
-      'supported64BitAbis': build.supported64BitAbis,
-      'supportedAbis': build.supportedAbis,
-      'tags': build.tags,
-      'type': build.type,
-      'isPhysicalDevice': build.isPhysicalDevice,
-      'androidId': build.androidId,
-      'systemFeatures': build.systemFeatures,
-    };
+  void _printCredentials() {
+    print(
+      prettyPrint(_accessToken.toJson()),
+    );
   }
 
-  Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
-    return <String, dynamic>{
-      'name': data.name,
-      'systemName': data.systemName,
-      'systemVersion': data.systemVersion,
-      'model': data.model,
-      'localizedModel': data.localizedModel,
-      'identifierForVendor': data.identifierForVendor,
-      'isPhysicalDevice': data.isPhysicalDevice,
-      'utsname.sysname:': data.utsname.sysname,
-      'utsname.nodename:': data.utsname.nodename,
-      'utsname.release:': data.utsname.release,
-      'utsname.version:': data.utsname.version,
-      'utsname.machine:': data.utsname.machine,
+  Future<void> _login() async {
+    try {
+      // show a circular progress indicator
+      setState(() {
+        _checking = true;
+      });
+      _accessToken = await FacebookAuth.instance
+          .login(); // by the fault we request the email and the public profile
+      // loginBehavior is only supported for Android devices, for ios it will be ignored
+      // _accessToken = await FacebookAuth.instance.login(
+      //   permissions: ['email', 'public_profile', 'user_birthday', 'user_friends', 'user_gender', 'user_link'],
+      //   loginBehavior:
+      //       LoginBehavior.DIALOG_ONLY, // (only android) show an authentication dialog instead of redirecting to facebook app
+      // );
+      _printCredentials();
+      // get the user data
+      // by default we get the userId, email,name and picture
+      final userData = await FacebookAuth.instance.getUserData();
+      // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
+      _userData = userData;
+      print(_userData['name']);
+    } on FacebookAuthException catch (e) {
+      // if the facebook login fails
+      print(e.message); // print the error message in console
+      // check the error type
+      switch (e.errorCode) {
+        case FacebookAuthErrorCode.OPERATION_IN_PROGRESS:
+          print("You have a previous login operation in progress");
+          break;
+        case FacebookAuthErrorCode.CANCELLED:
+          print("login cancelled");
+          break;
+        case FacebookAuthErrorCode.FAILED:
+          print("login failed");
+          break;
+      }
+    } catch (e, s) {
+      // print in the logs the unknown errors
+      print(e);
+      print(s);
+    } finally {
+      // update the view
+      setState(() {
+        _checking = false;
+      });
+    }
+  }
+
+
+  // end facebook log in
+
+  Future<void> socialLoginApi() async {
+    String url = GlobalResources().apiHost + 'wcfrest.svc/login_social';
+    Dio dio = new Dio();
+
+    var o = _accessToken.toJson();
+
+    var param = {
+      "username": o['userId'],
+      "DeviceName": password,
+      "Searial": imeiString,
+      "SocialName": _userData['name'],
+      "TokenID": o['token'],
+      "OS_Type": Platform.isAndroid
+          ? "android"
+          : Platform.isIOS
+              ? "iOS"
+              : "Unknown"
     };
+
+    String paramJson = jsonEncode(param);
+    print(paramJson);
+    try {
+      Response response = await dio.post(url,
+          data: paramJson,
+          options: Options(headers: {
+            HttpHeaders.contentTypeHeader: "application/json",
+          }));
+      var result = response.data;
+      LogInSocialResult collection = LogInSocialResult.fromJson(result);
+      print(collection.loginSocialResult);
+      Map<dynamic, dynamic> map = jsonDecode(collection.loginSocialResult);
+      LoginResult collectionResult = LoginResult.fromJson(map);
+      if (collectionResult.result == 'success') {
+        List<String> list = List();
+        list.add(collectionResult.email);
+        list.add(collectionResult.firstname);
+        list.add(collectionResult.lastname);
+        list.add(collectionResult.msg);
+        list.add(collectionResult.result);
+        list.add(collectionResult.role);
+        list.add(collectionResult.sessionID);
+        list.add(collectionResult.telephone);
+        list.add(collectionResult.tokenID);
+        list.add(collectionResult.userID);
+
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        sharedPreferences.setStringList('UserInfo', list);
+
+        MaterialPageRoute materialPageRoute = MaterialPageRoute(
+            builder: (BuildContext context) => BottomNavBarParent());
+        Navigator.of(context).pushReplacement(materialPageRoute);
+      } else {
+        normalDialog(context, 'ผิดพลาด', collectionResult.msg);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   getImei() async {
-    var imei = await ImeiPlugin.getImei();
+    // var imei = await ImeiPlugin.getImei();
+    var imei = await getDeviceId();
 
     setState(() {
       imeiString = imei.toString();
@@ -396,6 +486,7 @@ class _AuthenState extends State<Authen> {
 
   @override
   Widget build(BuildContext context) {
+    progressDialog = ProgressDialog(context, type: ProgressDialogType.Normal);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onPanDown: (_) {

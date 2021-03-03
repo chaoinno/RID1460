@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Newcase extends StatefulWidget {
@@ -23,6 +24,7 @@ class Newcase extends StatefulWidget {
 
 class _NewcaseState extends State<Newcase> {
   //fields
+  ProgressDialog progressDialog;
   File _image;
   String base64Image;
   final fromkey = GlobalKey<FormState>();
@@ -213,7 +215,7 @@ class _NewcaseState extends State<Newcase> {
       "fileByte": base64Image,
       "fileName": DateFormat("ddMMyyyyHHmmss").format(DateTime.now()) + ".jpg",
       "file_description": detail,
-      "file_type":"jpg"
+      "file_type": "jpg"
     };
     String paramJson = jsonEncode(param);
     print(paramJson);
@@ -232,7 +234,8 @@ class _NewcaseState extends State<Newcase> {
       if (collectionResult.result == 'error') {
         normalDialog(context, 'upload รูปไม่สำเร็จ ', collectionResult.msg);
       } else {
-        normalDialog(context, 'แจ้งเรื่องสำเร็จ Ticket Id: $srid', collectionResult.msg);
+        normalDialog(
+            context, 'แจ้งเรื่องสำเร็จ Ticket Id: $srid', collectionResult.msg);
         // Navigator.of(context).pop();
       }
     } catch (e) {
@@ -349,8 +352,11 @@ class _NewcaseState extends State<Newcase> {
   Widget saveButton() {
     return InkWell(
       onTap: () {
+        progressDialog.show();
         fromkey.currentState.save();
-        addServiceProcess();
+        progressDialog.hide().whenComplete(() {
+          addServiceProcess();
+        });
         // print(selectedCategory);
       },
       child: Container(
@@ -385,7 +391,7 @@ class _NewcaseState extends State<Newcase> {
 
   Widget imagePicker() {
     return Container(
-      margin: EdgeInsets.only(top:20),
+      margin: EdgeInsets.only(top: 20),
       child: GestureDetector(
         onTap: () {
           _showPicker(context);
@@ -421,6 +427,7 @@ class _NewcaseState extends State<Newcase> {
 
   @override
   Widget build(BuildContext context) {
+    progressDialog = ProgressDialog(context, type: ProgressDialogType.Normal);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onPanDown: (_) {

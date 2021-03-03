@@ -1,4 +1,4 @@
-package com.example.RID1460
+package th.go.rid.RID1460
 
 import io.flutter.embedding.android.FlutterActivity
 
