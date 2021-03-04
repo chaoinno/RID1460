@@ -84,6 +84,7 @@ class _ListDemoState extends State<ListDemo> {
       _accessToken = accessToken;
       setState(() {
         _userData = userData;
+        _checking = true;
       });
     }
   }
@@ -103,11 +104,6 @@ class _ListDemoState extends State<ListDemo> {
 
   Future<void> readSharedPreferance() async {
 
-    final AccessToken accessToken = await FacebookAuth.instance.isLogged;
-    if (accessToken != null) {
-      _checking = true;
-    }
-    
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     List userInfo = sharedPreferences.getStringList('UserInfo');
@@ -226,7 +222,8 @@ class _ListDemoState extends State<ListDemo> {
                     color: Colors.white,
                     border: Border(
                       bottom: BorderSide(
-                        color:_checking == true ? Colors.blueAccent : Colors.grey,
+                        color:
+                            _checking == true ? Colors.blueAccent : Colors.grey,
                         width: 1.0,
                       ),
                     ),
@@ -309,38 +306,38 @@ class _ListDemoState extends State<ListDemo> {
                     ),
                   ),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.grey,
-                        width: 1.0,
-                      ),
-                    ),
-                  ),
-                  child: ListTile(
-                    title: Row(
-                      children: [
-                        Text(
-                          'ภาษา',
-                          style: GoogleFonts.kanit(),
-                        ),
-                      ],
-                    ),
-                    trailing: Container(
-                      padding: EdgeInsets.all(5.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100.0),
-                        color: Colors.orange,
-                      ),
-                      child: Text(
-                        'TH',
-                        style: GoogleFonts.kanit(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
+                // Container(
+                //   decoration: BoxDecoration(
+                //     color: Colors.white,
+                //     border: Border(
+                //       bottom: BorderSide(
+                //         color: Colors.grey,
+                //         width: 1.0,
+                //       ),
+                //     ),
+                //   ),
+                //   child: ListTile(
+                //     title: Row(
+                //       children: [
+                //         Text(
+                //           'ภาษา',
+                //           style: GoogleFonts.kanit(),
+                //         ),
+                //       ],
+                //     ),
+                //     trailing: Container(
+                //       padding: EdgeInsets.all(5.0),
+                //       decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(100.0),
+                //         color: Colors.orange,
+                //       ),
+                //       child: Text(
+                //         'TH',
+                //         style: GoogleFonts.kanit(color: Colors.white),
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 InkWell(
                   onTap: () {
                     MaterialPageRoute materialPageRoute = MaterialPageRoute(

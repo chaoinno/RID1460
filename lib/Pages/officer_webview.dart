@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:RID1460/Utilities/global_resources.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -27,7 +28,7 @@ class OfficerWebViewState extends State<OfficerWebView> {
           )),
       body: Container(
         child: WebView(
-          initialUrl: 'https://www.rid.go.th',
+          initialUrl: GlobalResources().apiHost + 'Login/Login.aspx',
         ),
       ),
     );

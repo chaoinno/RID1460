@@ -15,6 +15,8 @@ import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'bottom_nav_parent.dart';
+
 class Newcase extends StatefulWidget {
   final String title;
   const Newcase({Key key, this.title}) : super(key: key);
@@ -234,9 +236,30 @@ class _NewcaseState extends State<Newcase> {
       if (collectionResult.result == 'error') {
         normalDialog(context, 'upload รูปไม่สำเร็จ ', collectionResult.msg);
       } else {
-        normalDialog(
-            context, 'แจ้งเรื่องสำเร็จ Ticket Id: $srid', collectionResult.msg);
-        // Navigator.of(context).pop();
+        showDialog(
+            context: context,
+            builder: (BuildContext buildContext) {
+              return AlertDialog(
+                title: ListTile(
+                  leading: Icon((Icons.add_alert)),
+                  title: Text('แจ้งเรื่องสำเร็จ Ticket Id: $srid'),
+                  subtitle: Text(collectionResult.msg),
+                ),
+                actions: [
+                  FlatButton(
+                      child: Text('Ok'),
+                      onPressed: () {
+                        MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                BottomNavBarParent(
+                                  defaultPageNo: 2,
+                                ));
+                        Navigator.of(context)
+                            .pushReplacement(materialPageRoute);
+                      }),
+                ],
+              );
+            });
       }
     } catch (e) {
       print(e);

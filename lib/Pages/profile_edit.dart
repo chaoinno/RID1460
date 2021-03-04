@@ -18,6 +18,8 @@ import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'bottom_nav_parent.dart';
+
 class ProfileEdit extends StatefulWidget {
   @override
   _ProfileEditState createState() => _ProfileEditState();
@@ -156,8 +158,29 @@ class _ProfileEditState extends State<ProfileEdit> {
       if (collectionResult.result == 'error') {
         normalDialog(context, 'บันทึกข้อมูลไม่สำเร็จ', collectionResult.msg);
       } else {
-        normalDialog(context, 'บันทึกข้อมูลสำเร็จ', collectionResult.msg);
-        Navigator.of(context).pop();
+        progressDialog.hide();
+        showDialog(
+            context: context,
+            builder: (BuildContext buildContext) {
+              return AlertDialog(
+                title: ListTile(
+                  leading: Icon((Icons.add_alert)),
+                  title: Text('บันทึกข้อมูลสำเร็จ'),
+                  subtitle: Text(collectionResult.msg),
+                ),
+                actions: [
+                  FlatButton(
+                      child: Text('Ok'),
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop('dialog');
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      }),
+                ],
+              );
+            });
+        // normalDialog(context, '', collectionResult.msg);
+        // Navigator.of(context).pop();
       }
     } catch (e) {
       print(e);

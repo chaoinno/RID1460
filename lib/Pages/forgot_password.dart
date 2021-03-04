@@ -51,10 +51,30 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       Map<dynamic, dynamic> map = jsonDecode(collection.collectionResult);
       CollectionResult collectionResult = CollectionResult.fromJson(map);
       if (collectionResult.result == 'error') {
+        progressDialog.hide();
         normalDialog(context, 'ผิดพลาด', collectionResult.msg);
       } else {
-        normalDialog(context, 'ดำเนินการสำเร็จ', collectionResult.msg);
-        Navigator.of(context).pop();
+        progressDialog.hide();
+        showDialog(
+            context: context,
+            builder: (BuildContext buildContext) {
+              return AlertDialog(
+                title: ListTile(
+                  leading: Icon((Icons.add_alert)),
+                  title: Text('ดำเนินการสำเร็จ'),
+                  subtitle: Text(collectionResult.msg),
+                ),
+                actions: [
+                  FlatButton(
+                      child: Text('Ok'),
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true)
+                            .pop('dialog');
+                        Navigator.pop(context);
+                      }),
+                ],
+              );
+            });
       }
     } catch (e) {
       print(e);

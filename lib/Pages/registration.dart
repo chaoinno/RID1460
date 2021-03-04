@@ -17,6 +17,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:async';
 
+import 'authen.dart';
+
 class Registration extends StatefulWidget {
   @override
   _RegistrationState createState() => _RegistrationState();
@@ -94,10 +96,31 @@ class _RegistrationState extends State<Registration> {
       Map<dynamic, dynamic> map = jsonDecode(collection.collectionResult);
       CollectionResult collectionResult = CollectionResult.fromJson(map);
       if (collectionResult.result == 'error') {
+        normalDialog(context, 'ผิดพลาด', collectionResult.msg);
         normalDialog(context, 'ลงทะเบียนไม่สำเร็จ', collectionResult.msg);
       } else {
-        normalDialog(context, 'ลงทะเบียนสำเร็จ', collectionResult.msg);
-        Navigator.of(context).pop();
+        normalDialog(context, 'ผิดพลาด', collectionResult.msg);
+        showDialog(
+            context: context,
+            builder: (BuildContext buildContext) {
+              return AlertDialog(
+                title: ListTile(
+                  leading: Icon((Icons.add_alert)),
+                  title: Text('ลงทะเบียนสำเร็จ'),
+                  subtitle: Text(collectionResult.msg),
+                ),
+                actions: [
+                  FlatButton(
+                      child: Text('Ok'),
+                      onPressed: () {
+                        MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                            builder: (BuildContext context) => Authen());
+                        Navigator.of(context)
+                            .pushReplacement(materialPageRoute);
+                      }),
+                ],
+              );
+            });
       }
     } catch (e) {
       print(e);

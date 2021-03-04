@@ -226,7 +226,7 @@ class _AuthenState extends State<Authen> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
 
-          color: Colors.blue,
+          color: Colors.orange,
 
           //border: Border.all(color:Colors.red),
         ),
@@ -261,7 +261,7 @@ class _AuthenState extends State<Authen> {
         width: MediaQuery.of(context).size.width * 0.7,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
-          color: Colors.orange,
+          color: Colors.blue,
         ),
         child: Center(
           child: Text(
