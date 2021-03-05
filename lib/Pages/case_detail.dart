@@ -201,7 +201,7 @@ class _CaseDetailState extends State<CaseDetail> {
                       ),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.15,
+                      width: MediaQuery.of(context).size.width * 0.10,
                       child: Text(
                         'วันที่ยุติ',
                         style: GoogleFonts.kanit(),
@@ -232,7 +232,7 @@ class _CaseDetailState extends State<CaseDetail> {
                     ),
                     Container(
                       padding: const EdgeInsets.all(10),
-                      width: MediaQuery.of(context).size.width * 0.75,
+                      width: MediaQuery.of(context).size.width * 0.70,
                       child: Text(
                         service.statusName ?? '-',
                         style: GoogleFonts.kanit(
@@ -290,7 +290,7 @@ class _CaseDetailState extends State<CaseDetail> {
                     ),
                     Container(
                       padding: const EdgeInsets.all(10),
-                      width: MediaQuery.of(context).size.width * 0.70,
+                      width: MediaQuery.of(context).size.width * 0.68,
                       child: Text(
                         service.catagoryName ?? '-',
                         style: GoogleFonts.kanit(
@@ -316,7 +316,7 @@ class _CaseDetailState extends State<CaseDetail> {
                     ),
                     Container(
                       padding: const EdgeInsets.all(10),
-                      width: MediaQuery.of(context).size.width * 0.70,
+                      width: MediaQuery.of(context).size.width * 0.68,
                       child: Text(
                         service.detail ?? '-',
                         style: GoogleFonts.kanit(
@@ -349,7 +349,7 @@ class _CaseDetailState extends State<CaseDetail> {
                             },
                             child: Container(
                               padding: const EdgeInsets.all(10),
-                              width: MediaQuery.of(context).size.width * 0.70,
+                              width: MediaQuery.of(context).size.width * 0.68,
                               child: Text(
                                 item.name,
                                 style: GoogleFonts.kanit(

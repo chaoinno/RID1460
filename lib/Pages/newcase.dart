@@ -242,7 +242,7 @@ class _NewcaseState extends State<Newcase> {
               return AlertDialog(
                 title: ListTile(
                   leading: Icon((Icons.add_alert)),
-                  title: Text('แจ้งเรื่องสำเร็จ Ticket Id: $srid'),
+                  title: Text('แจ้งเรื่องสำเร็จ'),
                   subtitle: Text(collectionResult.msg),
                 ),
                 actions: [
@@ -252,7 +252,7 @@ class _NewcaseState extends State<Newcase> {
                         MaterialPageRoute materialPageRoute = MaterialPageRoute(
                             builder: (BuildContext context) =>
                                 BottomNavBarParent(
-                                  defaultPageNo: 2,
+                                  defaultPageNo: 1,
                                 ));
                         Navigator.of(context)
                             .pushReplacement(materialPageRoute);

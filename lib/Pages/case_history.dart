@@ -9,21 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CaseHistory extends StatelessWidget {
+class CaseHistory extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ListDemo(),
-    );
-  }
+  _CaseHistoryState createState() => _CaseHistoryState();
 }
 
-class ListDemo extends StatefulWidget {
-  @override
-  _ListDemoState createState() => _ListDemoState();
-}
-
-class _ListDemoState extends State<ListDemo> {
+class _CaseHistoryState extends State<CaseHistory> {
   Map<int, bool> countToValue = <int, bool>{};
 
   String keyword, email, sessionId;
