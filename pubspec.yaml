@@ -43,10 +43,16 @@ dependencies:
   flutter_facebook_auth: ^2.0.1
   client_information: ^1.0.1
   progress_dialog: ^1.2.2 #Loading..
+  flutter_launcher_icons: "^0.8.0"
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

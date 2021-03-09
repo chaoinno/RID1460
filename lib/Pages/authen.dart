@@ -248,9 +248,6 @@ class _AuthenState extends State<Authen> {
       onTap: () {
         print('Facebook Auth Precessing....');
         _login();
-        if (_userData != null) {
-          socialLoginApi();
-        }
         // MaterialPageRoute materialPageRoute = MaterialPageRoute(
         //     builder: (BuildContext context) => BottomNavBarParent());
         // Navigator.of(context).push(materialPageRoute);
@@ -326,7 +323,11 @@ class _AuthenState extends State<Authen> {
       final userData = await FacebookAuth.instance.getUserData();
       // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
       _userData = userData;
-      print(_userData['name']);
+      print('FacebookUserFullName:' + _userData["name"]);
+
+      if (_userData != null) {
+        socialLoginApi();
+      }
     } on FacebookAuthException catch (e) {
       // if the facebook login fails
       print(e.message); // print the error message in console
@@ -353,7 +354,6 @@ class _AuthenState extends State<Authen> {
       });
     }
   }
-
 
   // end facebook log in
 
@@ -392,7 +392,7 @@ class _AuthenState extends State<Authen> {
       if (collectionResult.result == 'success') {
         List<String> list = List();
         list.add(collectionResult.email);
-        list.add(collectionResult.firstname);
+        list.add(_userData['name']);
         list.add(collectionResult.lastname);
         list.add(collectionResult.msg);
         list.add(collectionResult.result);
